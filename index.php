@@ -32,6 +32,7 @@
   <h1>G'day M8!</h1>
     <?php
 //      echo "Hello World! Welcome to ".$SERVER_IP_ADDRESS."! <br>";
+// Hello Changes
     ?>
     Hello World! Welcome to the http://gdaym8.site web-site! :D<br> 
     <br>Say Something or Hear from Other Peers! <br>
