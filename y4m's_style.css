@@ -1,0 +1,78 @@
+body {
+  background-color: #1E1E1E;
+  color: #ffffff;
+  font-family: monospace;
+  margin: 0!important;
+}
+#default_chatroom_greet,
+#default_chatroom_greet * {
+  display: inline!important;
+}
+#chathere {
+  background-color: #111;
+  color: #fff;
+  height:50%;
+  font-family: monospace;
+  max-height: 660px!important;
+  overflow-y:auto;
+  border:0!important;
+}
+form#formaxis {
+    position: absolute;
+    bottom: 0;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(255,255,255,0.2);
+}
+*::-webkit-scrollbar-thumb{
+  border-radius: 10px;
+  background: rgb(0 196 255);
+}
+*::-webkit-scrollbar-thumb:hover{
+  background: rgba(0,0,0,0.4);
+}
+*::-webkit-scrollbar-thumb:active{
+  background: rgba(0,0,0,.9);
+}
+
+a:visited {
+  color: #0a607a;
+}
+a {
+  color: #00c4ff;
+  font-weight: bold;
+}
+
+#form1 {
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 20px);
+}
+input#btnSubmit {
+    position: absolute;
+    right: 0;
+    top: calc(50% - 40px);
+    appearance: none;
+    background: #444;
+    color: #FFF;
+    border: 3px solid #777;
+    padding: 20px 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 1;
+}
+textarea#txthere {
+    position: relative;
+    width: calc(100% - 10px);
+    bottom: 20px;
+    background: #111;
+    height: 90px;
+    left: 10px;
+}
+

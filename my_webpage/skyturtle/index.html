@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Hi :D - skyturtyl</title>
+<style>
+body {
+  /*background-color: #E6E6FA;*/
+  color:white;
+  background-color: #000000;
+  /*background-image: url('/global/60.242.253.123/bny.jpg');*/
+  /*background-image: url('/global/skyturtle/hills-stars-night-sky.jpg');*/
+  /*background-image: url('Images/DSC00575.JPG');*/
+}
+</style>
+</head>
+
+
+<body>
+<img id="leimage" src="Images/DSC00575.JPG" width=80% height=auto></img>
+<br>
+<audio controls autoplay id="leradio">
+</audio>
+
+<script>
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+  let array_img=[
+    "DSC00263.JPG",
+    "DSC00291.JPG",
+    "DSC00293.JPG",
+    "DSC00348.JPG",
+    "DSC00488.JPG",
+    "DSC00495.JPG",
+    "DSC00562.JPG",
+    "DSC00566.JPG",
+    "DSC00571.JPG",
+    "DSC00575.JPG",
+    "DSC00576.JPG",
+    "DSC00578.JPG",
+    "DSC00579.JPG",
+    "DSC00580.JPG",
+    "DSC00841.JPG",
+    "DSC00867.JPG",
+    "DSC00870.JPG",
+    "DSC00956.JPG",
+    "DSC01081.JPG",
+    "DSC01121.JPG",
+    "DSC01239.JPG"
+  ];
+
+  let array_music=[
+    "<source src='Music/DOGS_07-Tuned-to-a-Different-Station.flac' type='audio/flac'>",
+    "<source src='Yellowcard_02-Breathing.wav' type='audio/wav'>",
+    "<source src='Music/Bloc_Party_02-Helicopter.flac' type='audio/flac'>",
+    "<source src='Music/Linkin_Park_05-Crawling.wav' type='audio/wav'>",
+    "<source src='Music/Linkin_Park_08-In_The_End.wav' type='audio/wav'>",
+    "<source src='Music/Pendulum_06-Sounds_of _Life.flac' type='audio/flac'>"
+  ];
+
+  document.getElementById("leradio").innerHTML = array_music[getRandomInt(array_music.length)];
+  document.getElementById("leimage").src = "Images/" + array_img[getRandomInt(array_img.length)];
+</script>
+
+</body>
+</html>
