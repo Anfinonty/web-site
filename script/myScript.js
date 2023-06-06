@@ -131,8 +131,10 @@ window.addEventListener("load", function()
   //latest txt
     //const regex_beginning=/\[\d+\/\d+\/\d+\s\d+\:\d+\:\d+\]\[\<a\shref\=\'\/global\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\'\>\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\<\/a\>\]\s/ig;
     const regex_normal_ip_address=/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
-    const regex_sqbracket_space = /\]\s(.*)/s;
-    const regex_sqbracket = /\](.*)/s;
+    //const regex_sqbracket_space = /\]\s(.*)/s;
+    const regex_sqbracket_space = /\]\s(.*)/;
+    //const regex_sqbracket = /\](.*)/s;
+    const regex_sqbracket = /\](.*)/;
 
 
     var latest_txt=gchat_arr[_L-start-1];
@@ -144,14 +146,15 @@ window.addEventListener("load", function()
     if (latest_ip_address!=null) {
       display_chat_onscreen_timer[GetIdFromIpAddress(latest_ip_address)]=1000;
     } else {
-      var latest_username=chatbubble_part1.match(/\>\/(.*)\<\/a\>\]/s)[1];
+      //var latest_username=chatbubble_part1.match(/\>\/(.*)\<\/a\>\]/s)[1];
+      var latest_username=chatbubble_part1.match(/\>\/(.*)\<\/a\>\]/)[1];
       display_chat_onscreen_timer[GetIdFromUsername(latest_username)]=1000;
       latest_ip_address=latest_username;
     }
     latest_txt="<div id='a_chat_bubble'>"+chatbubble_part1+"<br>"+chatbubble_part2+_end;
-    latest_txt=latest_txt.replace("\n","");
-    latest_txt=latest_txt.replaceAll("\n","<br>");
-
+    latest_txt=latest_txt.replace("\n",""); //one instance
+//    latest_txt=latest_txt.replaceAll("\n","<br>");
+    latest_txt=latest_txt.replace(/\n/,"<br>");
 
     var sprite_latest_speaker=document.getElementById("name_sprite_"+latest_ip_address);
     try {
@@ -180,9 +183,18 @@ window.addEventListener("load", function()
     chathere.textContent=txt; //display as plaintxt
     txt=chathere.textContent;
 
-    txt=txt.replaceAll("&lt;&gt;","<br>");
-    txt=txt.replaceAll("&lt; d;v=\"\"&gt;","<br>");
-    txt=txt.replaceAll("&lt;=\"\" d;v=\"\"&gt;","<br>");
+//    txt=txt.replaceAll("&lt;&gt;","<br>");
+//    txt=txt.replaceAll("&lt; d;v=\"\"&gt;","<br>");
+//    txt=txt.replaceAll("&lt;=\"\" d;v=\"\"&gt;","<br>");
+
+//    txt=txt.replace("&lt;&gt;","<br>");
+//    txt=txt.replace("&lt; d;v=\"\"&gt;","<br>");
+//    txt=txt.replace("&lt;=\"\" d;v=\"\"&gt;","<br>");
+
+    txt=txt.replace(/\&lt\;\&gt\;/,"<br>");
+    txt=txt.replace(/\&lt\; d\;v\=\"\"\&gt\;/,"<br>");
+    txt=txt.replace(/\&lt\;\=\"\" d\;v\=\"\"\&gt\;/,"<br>");
+
     chathere.innerHTML=txt;      
   }
 //
@@ -452,6 +464,8 @@ window.addEventListener("load", function()
         //chathere.textContent=_t; //debug mode
         //_t = chathere.textContent;
 
+
+/* new version uses replaceAll
         _t = _t.replaceAll("d;v","X_x");//prevents onmouseover overflow
         _t = _t.replaceAll("div","d;v");
 
@@ -541,8 +555,115 @@ window.addEventListener("load", function()
         //Short cuts
         _t = _t.replaceAll("#i#","<img src='");
         _t = _t.replaceAll("#_i#","'>");
+*/
+
+//        _t = _t.replace("d;v","X_x");//prevents onmouseover overflow
+//        _t = _t.replace("div","d;v");
+
+        _t = _t.replace(/d\;v/,"X_x");//prevents onmouseover overflow
+        _t = _t.replace(/div/,"d;v");
+
+        const regex_wrong_src=/\<[Ss][Rr][Cc]/ig;
+        _t = _t.replace(regex_wrong_src,"?_?");
+
+        const regex_gamer=/[Nn][Ii][Gg]{2}[Ee][Rr]/ig;
+        _t = _t.replace(regex_gamer,"Nigeria");
+
+        const regex_gamer2=/[Nn][Ii][Gg]{2}[Aa]/ig;
+        _t = _t.replace(regex_gamer2,"Homie");
+
+        const regex_textarea=/[Tt][Ee][xX][tT][Aa][Rr][Ee][Aa]/ig;
+        _t = _t.replace(regex_textarea,"text@rea");
+
+        const regex_table=/[Tt][Aa][Bb][Ll][Ee]/ig;
+        _t = _t.replace(regex_table,"t@ble");
+
+        const regex_plaintext=/[Pp][Ll][Aa][Ii][Nn][Tt][Ee][Xx][Tt]/ig;
+        _t = _t.replace(regex_plaintext,"pl@intext");
+
+        const regex_object=/[Oo][Bb][Jj][Ee][Cc][Tt]/ig;
+        _t = _t.replace(regex_object,"0bject");
+
+        const regex_php=/[Pp][Hh][Pp]/ig;
+        _t = _t.replace(regex_php,")hp");
+
+        const regex_meta=/[mM][eE][Tt][Aa]/ig;
+        _t = _t.replace(regex_meta,"m3ta");
+
+        const regex_data=/[dD][Aa][Tt][Aa]/ig;
+        _t = _t.replace(regex_data,"d@ta");
+
+       const regex_autoplay=/[Aa][uU][Tt][Oo][Pp][Ll][Aa][Yy]/ig;
+        _t = _t.replace(regex_autoplay,"@utoplay");
+
+        const regex_script=/[Ss][Cc][Rr][Ii][Pp][Tt]/ig;
+        _t = _t.replace(regex_script,"$cript");
+
+        const regex_xss=/[Xx][Ss]{2}/ig;
+        _t = _t.replace(regex_xss,"X_x");
+
+        const regex_body=/[Bb][Oo][Dd][Yy]/ig;
+        _t = _t.replace(regex_body,"bod¥");
+
+        const regex_hidden=/[Hh][Ii][Dd][Dd][Ee][Nn]/ig;
+        _t = _t.replace(regex_hidden,"h1dden");
+
+        const regex_cookie=/[Cc][Oo]{2}[Kk][Ii][Ee]/ig;
+        _t = _t.replace(regex_cookie,"c00kie");
+        
+        const regex_java=/[jJ][Aa][Vv][Aa]/ig;
+        _t = _t.replace(regex_java,"j@va");
+
+        const regex_onerror=/[Oo][Nn][Ee][Rr]{2}[Oo][Rr]/ig;
+        _t = _t.replace(regex_onerror,"0n3rr0r");
+
+        const regex_onload=/[Oo][Nn][Ll][Oo][Aa]/ig;
+        _t = _t.replace(regex_onload,"0nl0a");
+
+        const regex_onproperty=/[Oo][Nn][Pp][Rr][Oo][Pp][Ee][Rr][Tt][Yy]/ig;
+        _t = _t.replace(regex_onproperty,"0npr0perty");
+
+        const regex_statechange=/[Ss][Tt][Aa][Tt][Ee][Cc][Hh][Aa][Nn][Gg][Ee]/ig;
+        _t = _t.replace(regex_statechange,"_st@techange");
+
+        const regex_title=/[Tt][Ii][Tt][Ll][Ee]/ig;
+        _t = _t.replace(regex_title,"t1tle");
+
+        const regex_marquee=/[Mm][Aa][Rr][Qq][Uu][Ee]{2}/ig;
+        _t = _t.replace(regex_marquee,"m@rquee");
+
+        const regex_svg=/[Ss][Vv][Gg]/ig;
+        _t = _t.replace(regex_svg,"$vg");
+
+        const regex_chathere=/[Cc][Hh][Aa][Tt][Hh][Ee][Rr][Ee]/ig;
+        _t = _t.replace(regex_chathere,"ch@there");
+
+        const regex_id=/[Ii][Dd]\=\"/ig; //prevents no style showing
+        _t = _t.replace(regex_id,"1d=''");
+
+//        _t = _t.replace("\/>","XD"); //Wrong End Sharp Bracket
+//        _t = _t.replace("\&\#","XD"); //Encoding Char
+
+//        _t = _t.replace("%28","X_x");            //"(" in an encoded            
 
 
+        _t = _t.replace(/\/\>/,"XD"); //Wrong End Sharp Bracket
+        _t = _t.replace(/\&\#/,"XD"); //Encoding Char
+
+        _t = _t.replace(/\%28/,"X_x");            //"(" in an encoded            
+
+
+        //Short cuts (Backup)
+//        _t = _t.replace("#i#","<img src='");
+//        _t = _t.replace("#_i#","'>");
+
+        //Short cuts
+        _t = _t.replace(/\#i\#/,"<img src='");
+        _t = _t.replace(/\#\_i\#/,"'>");
+
+
+
+//Misc, commented out as they are used
         //const regex_alert=/[Aa][Ll][Ee][Rr][Tt]/ig;
         //_t = _t.replaceAll(regex_alert,"@lert");
 
@@ -588,6 +709,7 @@ window.addEventListener("load", function()
 
         //chathere.innerHTML=_t; //end
         //chathere.textContent=_t;
+
         ViewOrder(1,0,!flip,_t,silent);
       }
     };
@@ -607,7 +729,7 @@ window.addEventListener("load", function()
     timeDisplay.innerHTML=timeTxt;*/
 
     var dateStringUTC = new Date().toLocaleString("en-US", {timeZone: "UTC"});
-    var s2 = dateStringUTC.replace(", ", " / ");
+    var s2 = dateStringUTC.replace(", ", " / "); // one instance only
     var timeTxt = "["+s2+"]: (UTC)";
     var timeDisplay=document.getElementById("timeUTC");
     timeDisplay.innerHTML=timeTxt;
