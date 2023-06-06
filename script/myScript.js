@@ -47,6 +47,7 @@ window.addEventListener("load", function()
 //
 //
 //
+//Gets the integer id based on the unique ip address via for loop
   function GetIdFromIpAddress(_ip_address) {
     var i;
     for (i=0;i<list_of_user_ip_address.length;i++) {
@@ -55,6 +56,7 @@ window.addEventListener("load", function()
     return 0;
   }
 
+//Get the interger id based on the unique username via for loop
   function GetIdFromUsername(_username) {
     var i;
     for (i=0;i<list_of_user_ip_address.length;i++) {
@@ -64,6 +66,7 @@ window.addEventListener("load", function()
   }
 
 //CHAT FUNCTIONS
+  //get the latest part of the chat
   function get_start_reverse(_a,_L) {
     var start=0;
     for (i=0;i<_L;i++) {
@@ -73,6 +76,8 @@ window.addEventListener("load", function()
     return 0;
   }
 
+
+  //view in earliest-to-latest or latest-to-earliest
   ViewOrder=function(o,f,w,_chathere_txt,silent) {
     var i;      
     var chathere_txt=_chathere_txt;//chathere.innerHTML;
@@ -94,7 +99,7 @@ window.addEventListener("load", function()
       //const regex_usplit=/[\$|\#]e[\$|\#]/ig //Legacy
       const regex_usplit=/[\#]e[\#]/ig
       const _arr=chathere_txt.split(regex_usplit);
-    //latest chat
+    //latest chat line
       for (i=0;i<_arr.length-1;i++) {
         arr_str=_arr[i];
         ip_address="";
@@ -108,7 +113,7 @@ window.addEventListener("load", function()
         }
 
         if (is_anon) {
-          try { //Link IP address to account
+          try { //Link IP address to account - Legacy
             ip_address=regex_ip_address.exec(arr_str)[1];            
             href_ip_address="[<a href='/global/"+ip_address+"'>"+ip_address+"</a>]";
           } catch(err) {}
@@ -131,9 +136,12 @@ window.addEventListener("load", function()
   //latest txt
     //const regex_beginning=/\[\d+\/\d+\/\d+\s\d+\:\d+\:\d+\]\[\<a\shref\=\'\/global\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\'\>\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\<\/a\>\]\s/ig;
     const regex_normal_ip_address=/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
+
+    //old const with /s at the end - not supported in older browsers
     //const regex_sqbracket_space = /\]\s(.*)/s;
-    const regex_sqbracket_space = /\]\s(.*)/;
     //const regex_sqbracket = /\](.*)/s;
+
+    const regex_sqbracket_space = /\]\s(.*)/;
     const regex_sqbracket = /\](.*)/;
 
 
@@ -146,18 +154,23 @@ window.addEventListener("load", function()
     if (latest_ip_address!=null) {
       display_chat_onscreen_timer[GetIdFromIpAddress(latest_ip_address)]=1000;
     } else {
+
+      // /s is not supported in older browsers
       //var latest_username=chatbubble_part1.match(/\>\/(.*)\<\/a\>\]/s)[1];
-      var latest_username=chatbubble_part1.match(/\>\/(.*)\<\/a\>\]/)[1];
+
+      var latest_username=chatbubble_part1.match(/\>\/(.*)\<\/a\>\]/ig)[1];
       display_chat_onscreen_timer[GetIdFromUsername(latest_username)]=1000;
       latest_ip_address=latest_username;
     }
     latest_txt="<div id='a_chat_bubble'>"+chatbubble_part1+"<br>"+chatbubble_part2+_end;
     latest_txt=latest_txt.replace("\n",""); //one instance
-//    latest_txt=latest_txt.replaceAll("\n","<br>");
-    latest_txt=latest_txt.replace(/\n/,"<br>");
+    latest_txt=latest_txt.replace(/\n/ig,"<br>"); //replace all instances of /n via regex
+
+    //replaceAll is not supported in older browsers
+    //latest_txt=latest_txt.replaceAll("\n","<br>");
 
     var sprite_latest_speaker=document.getElementById("name_sprite_"+latest_ip_address);
-    try {
+    try { //attempt at finding latest speaker if he exists
       sprite_latest_speaker.innerHTML=latest_txt;
     } catch (err) {}
 
@@ -170,31 +183,30 @@ window.addEventListener("load", function()
       for (i=start;i<_L;i++) {
         txt+="<div class='a_chat'>"+gchat_arr[_L-i-1]+_end;
       }
-      if (!silent) {a.play();}
+      if (!silent) {a.play();} //play flip audio if not silent
     } else {
       for (i=0;i<_L;i++) {txt+="<div class='a_chat'>"+gchat_arr[i]+_end;}
-      if (!silent) {a2.play();}
+      if (!silent) {a2.play();} //play unflip audio if not silent
     }
-    if (f) {flip=!w;}
-    chathere.innerHTML=txt;
+    if (f) {flip=!w;} //bool/unbool
 
+    chathere.innerHTML=txt;
   //Clean Fragments
     txt=chathere.innerHTML; //Get html after above process
     chathere.textContent=txt; //display as plaintxt
-    txt=chathere.textContent;
+    txt=chathere.textContent; //assign to var
 
+    //replaceAll is not supported in older browsers
 //    txt=txt.replaceAll("&lt;&gt;","<br>");
 //    txt=txt.replaceAll("&lt; d;v=\"\"&gt;","<br>");
 //    txt=txt.replaceAll("&lt;=\"\" d;v=\"\"&gt;","<br>");
 
-//    txt=txt.replace("&lt;&gt;","<br>");
-//    txt=txt.replace("&lt; d;v=\"\"&gt;","<br>");
-//    txt=txt.replace("&lt;=\"\" d;v=\"\"&gt;","<br>");
+    //begin clearing fragments
+    txt=txt.replace(/\&lt\;\&gt\;/ig,"<br>");
+    txt=txt.replace(/\&lt\; d\;v\=\"\"\&gt\;/ig,"<br>");
+    txt=txt.replace(/\&lt\;\=\"\" d\;v\=\"\"\&gt\;/ig,"<br>");
 
-    txt=txt.replace(/\&lt\;\&gt\;/,"<br>");
-    txt=txt.replace(/\&lt\; d\;v\=\"\"\&gt\;/,"<br>");
-    txt=txt.replace(/\&lt\;\=\"\" d\;v\=\"\"\&gt\;/,"<br>");
-
+    //show txt in chatbox
     chathere.innerHTML=txt;      
   }
 //
@@ -202,7 +214,7 @@ window.addEventListener("load", function()
 //
 //
 //
-//
+//Get list of users from Sessions.joined users
   function GetUsersList() {
     var i;
     req = new XMLHttpRequest();
@@ -220,6 +232,7 @@ window.addEventListener("load", function()
     req.send();
   }
 
+//Check if user has a chat-icon
   function IsUserIconExists(_ip_address,_ext) {
     var request;
     if (window.XMLHttpRequest)
@@ -235,6 +248,7 @@ window.addEventListener("load", function()
   }
 
 
+//initialize live-peers chat icons
   function InitUsersDiv() {
     var i;
     var _ip_address="";
@@ -245,6 +259,8 @@ window.addEventListener("load", function()
       _ip_address=list_of_usernames[i];
       if (IsUserIconExists(_ip_address,"gif")) {
         set_icon_link="/global/"+_ip_address+"/chat_icon.gif";
+      } else if (IsUserIconExists(_ip_address,"apng")) {
+        set_icon_link="/global/"+_ip_address+"/chat_icon.apng";
       } else if (IsUserIconExists(_ip_address,"png")) {
         set_icon_link="/global/"+_ip_address+"/chat_icon.png";
       } else if (IsUserIconExists(_ip_address,"jpg")) {
@@ -269,6 +285,7 @@ window.addEventListener("load", function()
     document.getElementById("users_onscreen").innerHTML=txt;
   }
 
+//initialize style of the user chat-icon
   function InitUsersDivStyle() {
     var i;
     var d;
@@ -293,6 +310,7 @@ window.addEventListener("load", function()
     }
   }
 
+//Initialize the invisible buttons that allow touchscreen/cursor hover = move chat_icon along
  function InitMouseClickButtons() {
     var x,y;
     for (y=0;y<GR_HEIGHT;y+=CURSOR_GAP) {
@@ -311,7 +329,8 @@ window.addEventListener("load", function()
     }
   }
 
-  function InitAbsoluteAxisScreen() {
+//Legacy -- Make screen absolute
+/*  function InitAbsoluteAxisScreen() {
     var bx1=document.getElementById("btnXMinus");
     var bx2=document.getElementById("btnXPlus");
     var by1=document.getElementById("btnYMinus");
@@ -374,8 +393,10 @@ window.addEventListener("load", function()
     chathere.style.width=GR_WIDTH+"px";
     chathere.style.zIndex="1";
 
-  }
+  }*/
 
+
+//Initialize peers graphics
   function PeersScreenInit() {
     GetUsersList();
     var luser_len=list_of_user_ip_address.length;
@@ -384,8 +405,8 @@ window.addEventListener("load", function()
       var a2=new Audio("../audio/user_join.mp3");
       if (saved_list_of_user_ip_address_size>0) { //valid change
         if (enable_live_peers) { //peers is ON
-          if (luser_len>saved_list_of_user_ip_address_size) {a2.play();
-          } else {a1.play();}//join or leave
+          if (luser_len>saved_list_of_user_ip_address_size) {a2.play(); //play userjoin audio
+          } else {a1.play();}//play user leave audio
         }
         updated_peers_screen_init=1;
       }
@@ -462,11 +483,10 @@ window.addEventListener("load", function()
           return 0;
         }
         //chathere.textContent=_t; //debug mode
-        //_t = chathere.textContent;
+        //_t = chathere.textContent; //debug mode
 
-
-/* new version uses replaceAll
-        _t = _t.replaceAll("d;v","X_x");//prevents onmouseover overflow
+        //Older browser versions do not support replaceAll
+        /*_t = _t.replaceAll("d;v","X_x");//prevents onmouseover overflow
         _t = _t.replaceAll("div","d;v");
 
         const regex_wrong_src=/\<[Ss][Rr][Cc]/ig;
@@ -560,8 +580,8 @@ window.addEventListener("load", function()
 //        _t = _t.replace("d;v","X_x");//prevents onmouseover overflow
 //        _t = _t.replace("div","d;v");
 
-        _t = _t.replace(/d\;v/,"X_x");//prevents onmouseover overflow
-        _t = _t.replace(/div/,"d;v");
+        _t = _t.replace(/d;v/ig,"X_x");//prevents onmouseover overflow
+        _t = _t.replace(/div/ig,"d;v");
 
         const regex_wrong_src=/\<[Ss][Rr][Cc]/ig;
         _t = _t.replace(regex_wrong_src,"?_?");
@@ -641,25 +661,16 @@ window.addEventListener("load", function()
         const regex_id=/[Ii][Dd]\=\"/ig; //prevents no style showing
         _t = _t.replace(regex_id,"1d=''");
 
-//        _t = _t.replace("\/>","XD"); //Wrong End Sharp Bracket
-//        _t = _t.replace("\&\#","XD"); //Encoding Char
+        _t = _t.replace(/\/\>/ig,"XD"); //Wrong End Sharp Bracket
+        _t = _t.replace(/\&\#/ig,"XD"); //Encoding Char
 
-//        _t = _t.replace("%28","X_x");            //"(" in an encoded            
+        _t = _t.replace(/\%28/ig,"X_x");            //"(" in an encoded            
 
-
-        _t = _t.replace(/\/\>/,"XD"); //Wrong End Sharp Bracket
-        _t = _t.replace(/\&\#/,"XD"); //Encoding Char
-
-        _t = _t.replace(/\%28/,"X_x");            //"(" in an encoded            
-
-
-        //Short cuts (Backup)
-//        _t = _t.replace("#i#","<img src='");
-//        _t = _t.replace("#_i#","'>");
 
         //Short cuts
-        _t = _t.replace(/\#i\#/,"<img src='");
-        _t = _t.replace(/\#\_i\#/,"'>");
+        _t = _t.replace(/\#i\#/ig,"<img src='");
+        _t = _t.replace(/\#\_i\#/ig,"'>");
+
 
 
 
