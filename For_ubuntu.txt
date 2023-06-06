@@ -1,0 +1,126 @@
+*Added on 2023/06/07 by Anfinonty
+
+
+//To install apache2 on ubuntu:
+sudo apt install apache2
+
+
+//To install php on ubuntu:
+//https://ubuntu.com/server/docs/programming-php
+sudo apt install php libapache2-mod-php
+
+
+
+//Check the service status
+sudo systemctl status apache2
+
+
+//stop apache2
+sudo service apache2 stop
+
+//start apache2
+sudo service apache2 start
+
+//restart apache2
+sudo service apache2 restart
+
+
+
+
+/*
+##### Router
+Conditions for Server to Run on your Router
+
+*The IP Address of the Main Router is also the Default Gateway
+*Your Public Address is the Same as the Router's
+    -Ask an internet-search-engine from your device to state your Public IP Address
+    -If it's not the same, your router is new-school which means you have less control over it
+
+*Advanced Settings -> NAT Forwarding -> Virtual Servers
+    -> Internal IP: (Your own Device/Server IP Address) (ifconfig)
+    -> External Port: 80 (HTTP)
+    -> Internal Port: 80 (HTTP)
+    -> External Port: 443 (HTTPS)
+    -> Internal Port: 443 (HTTPS)
+    -> Protocol: TCP
+
+*/
+
+
+/*
+##### Gufw Firewall 20.04.1:
+(Public)
+->Incoming: Deny
+->Outgoing: Allow
+
+i.e.
+1. 80/tcp ALLOW IN Anywhere
+2. 80/tcp ALLOW IN Anywhere (v6)
+*/
+
+
+
+
+
+///Updating a file on website example:
+//i.e.1
+sudo cp ~/Desktop/Programming/web-site/index.php /var/www/html/index.php
+
+
+//i.e.2 PHP settings (for larger file uploads, etc)
+sudo cp ~/Desktop/_php.ini /etc/php/7.4/apache2/php.ini
+
+
+
+
+
+
+//HTTPS via Let's Encrypt by y4my4m, https://github.com/y4my4my4m ,(Thanks! :D) 
+//1.
+sudo certbot certonly --apache --agree-tos --email your-email-address -d mysite.com 
+
+//1.1 (only if you have sub-domains) (optional)
+sudo certbot certonly --apache --agree-tos --email your-email-address -d mysite.com -d *.mysite.com
+
+//2.
+edit /etc/apache2/sites-enabled/000-default.conf add this to your virtualhost:
+
+//3.
+SSLEngine on
+SSLCertificateFile /etc/letsencrypt/live/mysite.com/cert.pem
+SSLCertificateKeyFile /etc/letsencrypt/live/mysite.com/privkey.pem
+SSLCertificateChainFile /etc/letsencrypt/live/mysite.com/chain.pem
+
+
+//3.1 make sure its virtualhost:*443 in the .conf file - you want it to know its 443 (https)
+
+
+//4.
+sudo systemctl restart apache2
+
+
+
+//Other important conditions or prerequisites for https:
+/*
+//turn on sslengine
+sudo a2enmod ssl
+sudo systemctl restart apache2
+
+//install python3-cert-bot-apache (otherwise an error pops up) 
+//  Could not choose appropriate plugin: authenticator could not be determined or is not installed
+//  authenticator could not be determined or is not installed
+sudo apt-get update
+sudo apt-get install python3-certbot-apache
+
+
+//remove www (if you put it on accident) and running the command twice works 
+//  (if running correct command once doesn't yield success)
+*/
+
+
+
+
+
+//disable apache2 auto-starting when device is turned on
+sudo update-rc.d apache2 disable
+
