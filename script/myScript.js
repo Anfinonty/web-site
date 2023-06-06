@@ -91,7 +91,7 @@ window.addEventListener("load", function()
 
   //Split chat by #e#
     if (o) {
-    //const regex_usplit=/[\$|\#]e[\$|\#]/ig //Legacy
+      //const regex_usplit=/[\$|\#]e[\$|\#]/ig //Legacy
       const regex_usplit=/[\#]e[\#]/ig
       const _arr=chathere_txt.split(regex_usplit);
     //latest chat
