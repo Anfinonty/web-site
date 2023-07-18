@@ -70,7 +70,7 @@
   </form>
   <br>
   <?php
-    $extensions= array("html","js","css","txt","mp3","flac","wav","gif","png","apng","bmp","jpg","jpeg","mov","mp4","mkv");
+    $extensions= array("html","js","css","txt","mp3","flac","wav","gif","png","apng","bmp","jpg","jpeg","mov","mp4","mkv","zip");
     echo "Files Allowed: ";
     for ($i=0;$i<sizeof($extensions);$i++) {
       echo $extensions[$i].", ";
