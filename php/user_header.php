@@ -408,11 +408,11 @@
     echo "<a href='/php/recharge.php' id='session_limit'></a>";
     echo "<span id='user_session_expiry' hidden>{$user_time_expiry}</span>";
 
-    echo "{$S}<span id='self_ip'>{$S}u:$USER_IP_ADDRESS{$S}</span>{$S}";
-
     //echo "{$S}<span id='timeUTC' style='display:inline'></span>{$S}";
 
     echo "{$S}<span id='timeUser' style='display:inline'></span>{$S}";
+
+    echo "{$S}<span id='self_ip'>{$S}u:$USER_IP_ADDRESS{$S}</span>{$S}";
 
     echo "<br><div id='random_tips' style='display:inline;'>~{$S}".$PROTIPS[$RAND_TIP]."{$S}~</div>";
 
