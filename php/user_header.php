@@ -410,10 +410,10 @@
 
     //echo "{$S}<span id='timeUTC' style='display:inline'></span>{$S}";
 
-    echo "{$S}<span id='timeUser' style='display:inline'></span>{$S}";
-
     echo "{$S}<span id='self_ip'>{$S}u:$USER_IP_ADDRESS{$S}</span>{$S}";
 
+
+    echo "{$S}<span id='timeUser' style='display:inline'></span>{$S}";
     echo "<br><div id='random_tips' style='display:inline;'>~{$S}".$PROTIPS[$RAND_TIP]."{$S}~</div>";
 
     echo "</div>";
