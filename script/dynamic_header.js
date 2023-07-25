@@ -25,4 +25,5 @@ function DisplaySessionTimer() {
   timeDisplayUser.innerHTML=timeTxtUser;
 }
 
+
 setInterval(DisplaySessionTimer,1000);

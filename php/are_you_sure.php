@@ -14,12 +14,11 @@
   </script>
 </head>
 <body>
-<h1>Are you sure you want to Eject?</h1>
+<h1>Are you sure you want to Eject and Log Out?</h1>
 <h2>All unsaved progress will be lost.</h2>
 <a href="user_act_folder.php">&nbspBack&nbsp</a>&nbsp
 <a href="save_disc.php">&nbspSave&nbsp</a>&nbsp
 <a href="eject_disc.php">&nbspEject&nbsp</a>
 </body>
 </html>
-
 

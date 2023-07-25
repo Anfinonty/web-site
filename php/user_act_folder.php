@@ -125,8 +125,7 @@
         } else {
           echo "<br> Subfolder Creation Unsuccessful :( <br>";
         }
-      } else {
-        echo "<br> Folder Not Found, Check your Spelling :/<br>";    
+      } else {        echo "<br> Folder Not Found, Check your Spelling :/<br>";    
       }
       $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
       header('Location: '.$redirect_url); //go back to home
@@ -189,7 +188,6 @@
       $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
       header('Location: '.$redirect_url); //go back to home
     }
-
     //FILE Delete
     $back="\.\.";
     if (isset($_POST['delete2'])){
@@ -205,3 +203,4 @@
   ?>
 </body>
 </html>
+

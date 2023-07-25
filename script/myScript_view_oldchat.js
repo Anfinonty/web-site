@@ -1,4 +1,4 @@
-if ( window.history.replaceState ) { //prevent refresh n submit
+﻿if ( window.history.replaceState ) { //prevent refresh n submit
     window.history.replaceState( null, null, window.location.href );
 }
 //
@@ -15,12 +15,14 @@ const MAX_MSG_COOLDOWN=1;
 
 //
 const gchat_arr=[];
+
 //BOOLS
 var flip=0;
 var enable_live_chat=0;
 var enable_live_peers=0;
 
 //int
+
 var saved_gchat_size=0;
 var saved_list_of_user_ip_address_size=0;
 var afk_timer=0;
@@ -29,7 +31,6 @@ var msg_cooldown=0;
 //Misc
 let LivePeersInterval;
 let LiveChatInterval;
-
 //call ON LOAD
 window.addEventListener("load", function()
 {
@@ -82,13 +83,13 @@ window.addEventListener("load", function()
         ip_address="";
         href_ip_address="";
         username="";
-        href_username="";
+
+       href_username="";
 
         is_anon=0;
         if (arr_str.match(/\]\[\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/g)!=null) {
           is_anon=1;
         }
-
         if (is_anon) {
           try { //Link IP address to account
             ip_address=regex_ip_address.exec(arr_str)[1];            
@@ -149,9 +150,9 @@ window.addEventListener("load", function()
 //
 //
 //
-//
+// 
 
-  //Function to Update Chat
+//Function to Update Chat
   UpdateChat=function(silent,silent2) {
     var i;
     //chathere.innerHTML="";
@@ -250,9 +251,8 @@ window.addEventListener("load", function()
         _t = _t.replace(regex_chathere,"ch@there");
 
         const regex_id=/[Ii][Dd]\=\"/ig; //prevents no style showing
-        _t = _t.replace(regex_id,"1d=''");
-
-        _t = _t.replace(/\/\>/ig,"XD"); //Wrong End Sharp Bracket
+        _t = _t.replace(regex_id,"1d=''");        
+	_t = _t.replace(/\/\>/ig,"XD"); //Wrong End Sharp Bracket
         _t = _t.replace(/\&\#/ig,"XD"); //Encoding Char
 
         _t = _t.replace(/\%28/ig,"X_x");            //"(" in an encoded            
@@ -264,7 +264,7 @@ window.addEventListener("load", function()
 
 
 
-//Misc, commented out as they are used
+//Misc, commented out as they arent used
         //const regex_alert=/[Aa][Ll][Ee][Rr][Tt]/ig;
         //_t = _t.replaceAll(regex_alert,"@lert");
 
@@ -272,12 +272,8 @@ window.addEventListener("load", function()
         //_t = _t.replaceAll(regex_xml,"X_x");
 
         //const regex_form=/[Ff][Oo][Rr][Mm]/ig;
-        //_t = _t.replaceAll(regex_form,"f0rm");
-
-        //const regex_xlink=/[xX][Ll][Ii][Nn][Kk]/ig;
-        //_t = _t.replaceAll(regex_xlink,"xl1nk_");
-
-        //const regex_window=/[Ww][Ii][Nn][Dd][Oo][Ww]/ig;
+        //_t = _t.replaceAll(regex_form,"f0rm");        //const regex_xlink=/[xX][Ll][Ii][Nn][Kk]/ig;
+        //_t = _t.replaceAll(regex_xlink,"xl1nk_");        //const regex_window=/[Ww][Ii][Nn][Dd][Oo][Ww]/ig;
         //_t = _t.replaceAll(regex_window,"w1ndow");
        
         //const regex_worksinie=/[wW][Oo][rR][Kk][Ss][Ii][Nn][Ii][Ee]/ig;
@@ -285,9 +281,6 @@ window.addEventListener("load", function()
 
         //const regex_ifphp=/[iI][fF][rR][aA][M][eE][pP][Hh][pP]/ig;
         //_t = _t.replaceAll(regex_ifphp,"1fr4mephp");
-
-
-
         //const regex_vulnerable=/[Vv][Uu][Ll][Nn][Ee][Rr][Aa][Bb][Ll][Ee]/ig;
         //_t = _t.replaceAll(regex_vulnerable,"vulner@bl3");
 
@@ -342,8 +335,7 @@ window.addEventListener("load", function()
     is_focus_txthere=0;
   }
 
-//=================
-//
+//=================//
 //
 //
 //Start On Load

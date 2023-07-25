@@ -1,7 +1,5 @@
 
-<?php 
-  include $_SERVER['DOCUMENT_ROOT']."/php/user_header.php"; 
-?>
+<?php include $_SERVER['DOCUMENT_ROOT']."/php/user_header.php"; ?>
 <?php
   //Recharge Session
   $user_details=htmlspecialchars(strval(file_get_contents($SELF_USER_SESSION)));

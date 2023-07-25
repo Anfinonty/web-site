@@ -1,7 +1,48 @@
-  <?php
+﻿  <?php
+
+//
+//
+//
+//Hashing
+    function MyHash($input) {
+      $input_size=strlen($input);
+      $split_at=$input_size/2;
+      $part1="";
+      for ($i=0;$i<$split_at-1;$i++) {
+        $part1=$part1.$input[$i];
+      }
+      $part2="";
+      for ($i=$split_at;$i<$input_size;$i++) {
+        $part2=$part2.$input[$i];
+      }
+      return md5(md5($part1).md5($part2));
+    }
+//
+//
+//
+//
+//
+//Generate Random String
+    function GenRandString($string_len) {
+      $lechars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-+!@#.~`*";
+      $lechars_len=strlen($lechars);
+      $randString="";
+      for ($i=0;$i<$string_len;$i++) {
+	$randString.=$lechars[rand(0,($lechars_len-1))];
+      }
+      return $randString;
+   }
+//
+//
+//
 //Fixed GLOBALS
     $SERVER_IP_ADDRESS=$_SERVER['HTTP_HOST'];
-    $USER_IP_ADDRESS=$_SERVER['REMOTE_ADDR'];
+
+
+//generate user_id
+    $USER_IP_ADDRESS = MyHash($_SERVER['REMOTE_ADDR']);
+
+
     $CHAT_DIR="global/lechat.txt";
     $USER_MAX_FOLDER_NUM=10;
 
@@ -10,7 +51,10 @@
     $CURSOR_GAP=8*4;
 
     $GLOBAL_FOLDER=$_SERVER['DOCUMENT_ROOT']."/global";
-        /**/$SESSIONS_DIR=$GLOBAL_FOLDER."/Sessions";
+        /**/$REG_USERS_DIR=$GLOBAL_FOLDER."/{RegisteredUsers}";
+        /**/$REG_EMAILS_DIR=$GLOBAL_FOLDER."/{RegisteredEmails}";
+        /**/$REG_Q_DIR=$GLOBAL_FOLDER."/{RegQ}";
+        /**/$SESSIONS_DIR=$GLOBAL_FOLDER."/{Sessions}";
               /**/$TOKEN_DIR=$SESSIONS_DIR."/token.txt";
               /**/$JUSERS_DIR=$SESSIONS_DIR."/joined_users.txt";
               /**/$SELF_USER_SESSION=$SESSIONS_DIR."/".$USER_IP_ADDRESS.".txt";
@@ -37,7 +81,8 @@
 //    $MAX_STORAGE=10485760;
 //    $MAX_STORAGE=104857600;
 //    $MAX_STORAGE=36700160; //35MB
-    $MAX_STORAGE=1048576000; //1000MB
+//    $MAX_STORAGE=1048576000; //1000MB
+    $MAX_STORAGE=734003200; //700MB
 
 //
 //
@@ -95,9 +140,10 @@
 //
 //
 //Debug: Create Folders
-   // mkdir($SESSIONS_DIR,0777,true);
-   // mkdir($GLOBAL_FOLDER."/RegistrationKeys",0777,true);
-   // mkdir($GLOBAL_FOLDER."/RegisteredUsers",0777,true);
+    mkdir($SESSIONS_DIR,0777,true);
+    mkdir($REG_Q_DIR,0777,true);
+    mkdir($REG_EMAILS_DIR,0777,true);
+    mkdir($REG_USERS_DIR,0777,true);
 
 //
 //
@@ -146,7 +192,8 @@
             case 0: // Printing
               for ($j=0;$j<$n;$j++) {echo "___";}
               echo "__→";
-              echo "<a href='".str_replace("/var/www/html","",$a_f)."'>".$a[$i]."</a>";
+              //echo "<a href='".str_replace("/var/www/html","",$a_f)."'>".$a[$i]."</a>"; //legacy
+              echo "<a href='".str_replace("C:/Apache2.2/htdocs","",$a_f)."'>".$a[$i]."</a>"; ///for windowsxp
               if (!is_dir($a_f)) {
                 $a_f_size=filesize($a_f);
                 echo " ".GetConvertedFilesize($a_f_size);
@@ -189,14 +236,12 @@
       $_t = preg_replace("/{$au2}/i","'></audio>",$_t);
 
       return $_t;
-    }
+    }    
 
     function TheFilter($txt) {
-        $_t = htmlspecialchars($txt);
-
-        $regex_php="[Pp][Hh][Pp]";
+        $_t = htmlspecialchars($txt);        
+	$regex_php="[Pp][Hh][Pp]";
         $_t = preg_replace("/{$regex_php}/i",")hp",$_t);
-
         $regex_meta="[mM][eE][Tt][Aa]";
         $_t = preg_replace("/{$regex_meta}/i","m3ta",$_t);
 
@@ -226,10 +271,8 @@
 
         $regex_statechange="[Ss][Tt][Aa][Tt][Ee][Cc][Hh][Aa][Nn][Gg][Ee]";
         $_t = preg_replace("/{$regex_statechange}/i","_st@techange",$_t);
-
         $regex_marquee="[Mm][Aa][Rr][Qq][Uu][Ee]{2}";
         $_t = preg_replace("/{$regex_marquee}/i","m@rquee",$_t);
-
         $regex_svg="[Ss][Vv][Gg]";
         $_t = preg_replace("/{$regex_svg}/i","$vg",$_t);
 
@@ -241,23 +284,7 @@
 
         return $_t;
     }
-//
-//
-//
-//Hashing
-    function MyHash($input) {
-      $input_size=strlen($input);
-      $split_at=$input_size/2;
-      $part1="";
-      for ($i=0;$i<$split_at-1;$i++) {
-        $part1=$part1.$input[$i];
-      }
-      $part2="";
-      for ($i=$split_at;$i<$input_size;$i++) {
-        $part2=$part2.$input[$i];
-      }
-      return md5(md5($part1).md5($part2));
-    }
+
 //
 //
 //
@@ -306,7 +333,7 @@
        $session_user_expiry_time=$file_content_arr[2];      
        if (time()>$session_user_expiry_time) {//Delete expired session user
          unlink($GLOBAL_FOLDER."/WEB_SITE_DISC_".GetUsernameFromIpAddress($session_user_ip_address).".zip");
-         PrintDir($GLOBAL_FOLDER."/".GetUsernameFromIpAddress($session_user_ip_address),-1,0);//autoeject
+         //PrintDir($GLOBAL_FOLDER."/".GetUsernameFromIpAddress($session_user_ip_address),-1,0);//autoeject - legacy
          unlink($SESSIONS_DIR."/".$session_file_name);
        } else {
          $juser_txt=$juser_txt.$session_user_ip_address."#".GetUsernameFromIpAddress($session_user_ip_address).",";
@@ -365,10 +392,14 @@
       if (GetDirectorySize($SELF_USER_FOLDER_NAME)>0) {
         echo "<a class='default_server_header_txt' href='/php/save_disc.php'>{$S}Save Disc{$S}</a>{$S}";
       }
-      echo "<a class='default_server_header_txt' href='/php/are_you_sure.php'>{$S}Eject{$S}</a>{$S}";
+      echo "<a class='default_server_header_txt' href='/php/are_you_sure.php'>{$S}Log Out{$S}</a>{$S}";
 
-    } else {
-      echo "<a class='default_server_header_txt' href='/php/insert_disc.php'>{$S}Insert Disc{$S}</a>{$S}";
+    } else { //not logged in:
+
+      //echo "<a class='default_server_header_txt' href='/php/insert_disc.php'>{$S}Insert Disc{$S}</a>{$S}"; //legacy
+      echo "<a class='default_server_header_txt' href='/php/user_login.php'>{$S}Login{$S}</a>{$S}";
+      echo "<a class='default_server_header_txt' href='/php/user_registration.php'>{$S}Get Code{$S}</a>{$S}";
+      echo "<a class='default_server_header_txt' href='/php/user_registration2.php'>{$S}Register{$S}</a>{$S}";
     }
     $user_details=htmlspecialchars(strval(file_get_contents($SELF_USER_SESSION)));
     $user_details_arr=explode(",",$user_details);
@@ -377,7 +408,7 @@
     echo "<a href='/php/recharge.php' id='session_limit'></a>";
     echo "<span id='user_session_expiry' hidden>{$user_time_expiry}</span>";
 
-    echo "{$S}<span id='self_ip'>{$S}ip:$USER_IP_ADDRESS{$S}</span>{$S}";
+    echo "{$S}<span id='self_ip'>{$S}u:$USER_IP_ADDRESS{$S}</span>{$S}";
 
     //echo "{$S}<span id='timeUTC' style='display:inline'></span>{$S}";
 
@@ -390,4 +421,5 @@
     //
     //
   ?>
+
 

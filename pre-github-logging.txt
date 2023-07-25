@@ -265,7 +265,18 @@ PLAN:
 -----------------------------------------------------
 05/21/2023
 Moved to git-hub
+-----------------------------------------------------
 
+07/21/2023
+Implementing ID instead of using IP Address
+
+
+07/22/2023
+Re-added Login and Registration (php)
+
+
+07/24/2023
+Email side complete (C_ServerTask - WindowsXP)
 
 
 

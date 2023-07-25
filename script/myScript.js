@@ -1,4 +1,4 @@
-if ( window.history.replaceState ) { //prevent refresh n submit
+﻿if ( window.history.replaceState ) { //prevent refresh n submit
     window.history.replaceState( null, null, window.location.href );
 }
 //
@@ -12,6 +12,8 @@ const GR_WIDTH=640*5;
 const GR_HEIGHT=480*5;
 const CURSOR_GAP=8*4;
 const MAX_MSG_COOLDOWN=1;
+
+
 
 //
 const gchat_arr=[];
@@ -84,10 +86,10 @@ window.addEventListener("load", function()
     var ip_address="";
     var username="";
     var href_ip_address=""; 
-    var href_username="";
-    var arr_str;
+    var href_username="";    var arr_str;
     var latest_ip_address="";
     var is_anon=0;
+
     const regex_ip_address=/\[(\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\]/g;
     const regex_username=/\[(\/[A-Za-z0-9_]{1,16})\]/g;
 
@@ -111,7 +113,6 @@ window.addEventListener("load", function()
         if (arr_str.match(/\]\[\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/g)!=null) {
           is_anon=1;
         }
-
         if (is_anon) {
           try { //Link IP address to account - Legacy
             ip_address=regex_ip_address.exec(arr_str)[1];            
@@ -135,7 +136,8 @@ window.addEventListener("load", function()
 
   //latest txt
     //const regex_beginning=/\[\d+\/\d+\/\d+\s\d+\:\d+\:\d+\]\[\<a\shref\=\'\/global\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\'\>\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\<\/a\>\]\s/ig;
-    const regex_normal_ip_address=/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/;
+    //const regex_normal_ip_address=/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/; //Legacy
+    const regex_normal_ip_address=/[a-zA-Z0-9]{32,32}/;
 
     //old const with /s at the end - not supported in older browsers
     //const regex_sqbracket_space = /\]\s(.*)/s;
@@ -149,12 +151,10 @@ window.addEventListener("load", function()
     var chatbubble_arr=latest_txt.split(regex_sqbracket_space);
     var chatbubble_part2=chatbubble_arr[1];
     var chatbubble_part1=chatbubble_arr[0].split(regex_sqbracket)[1]+"]";
-
     latest_ip_address=chatbubble_part1.match(regex_normal_ip_address);
     if (latest_ip_address!=null) {
       display_chat_onscreen_timer[GetIdFromIpAddress(latest_ip_address)]=1000;
     } else {
-
       // /s is not supported in older browsers
       //var latest_username=chatbubble_part1.match(/\>\/(.*)\<\/a\>\]/s)[1];
 
@@ -175,8 +175,8 @@ window.addEventListener("load", function()
     } catch (err) {}
 
   //audio
-    var a=new Audio("/audio/button_audio_flip1.mp3");
-    var a2=new Audio("/audio/button_audio_flip2.mp3");
+    var a=new Audio("/audio/button_audio_flip1_new.mp3");
+    var a2=new Audio("/audio/button_audio_flip2_new.mp3");
     var txt="";
     if (w) {
       //var start=0;
@@ -200,12 +200,10 @@ window.addEventListener("load", function()
 //    txt=txt.replaceAll("&lt;&gt;","<br>");
 //    txt=txt.replaceAll("&lt; d;v=\"\"&gt;","<br>");
 //    txt=txt.replaceAll("&lt;=\"\" d;v=\"\"&gt;","<br>");
-
     //begin clearing fragments
     txt=txt.replace(/\&lt\;\&gt\;/ig,"<br>");
     txt=txt.replace(/\&lt\; d\;v\=\"\"\&gt\;/ig,"<br>");
     txt=txt.replace(/\&lt\;\=\"\" d\;v\=\"\"\&gt\;/ig,"<br>");
-
     //show txt in chatbox
     chathere.innerHTML=txt;      
   }
@@ -297,7 +295,6 @@ window.addEventListener("load", function()
       d.style.position = "absolute";
       d.style.width="2%";
       d.style.display="inline";
-
       dimg=document.getElementById("img_sprite_"+list_of_usernames[i]);
       dimg.style.height = "auto";
       dimg.style.maxWidth = "100%";
@@ -355,7 +352,7 @@ window.addEventListener("load", function()
     bx2.style.left="80px";
 
     bx1.style.top="64px";
-    by1.style.top="64px";
+    by1.style.top="64px";    
     by2.style.top="64px";
     bx2.style.top="64px";
 
@@ -404,9 +401,12 @@ window.addEventListener("load", function()
       var a1=new Audio("../audio/user_leave.mp3");
       var a2=new Audio("../audio/user_join.mp3");
       if (saved_list_of_user_ip_address_size>0) { //valid change
-        if (enable_live_peers) { //peers is ON
-          if (luser_len>saved_list_of_user_ip_address_size) {a2.play(); //play userjoin audio
-          } else {a1.play();}//play user leave audio
+        if (enable_live_peers) { //peers is ON          
+	  if (luser_len>saved_list_of_user_ip_address_size) {
+	    a2.play(); //play userjoin audio
+          } else {
+	    a1.play();
+	  }//play user leave audio
         }
         updated_peers_screen_init=1;
       }
@@ -475,8 +475,7 @@ window.addEventListener("load", function()
 //        console.log(_t);
         if (saved_gchat_size!=_t.length) {
           saved_gchat_size=_t.length;
-          if (!silent2) {
-            var a=new Audio("/audio/chat_update.mp3")
+          if (!silent2) {            var a=new Audio("/audio/chat_update.mp3")
             a.play();
           }        
         } else {
@@ -486,14 +485,15 @@ window.addEventListener("load", function()
         //_t = chathere.textContent; //debug mode
 
         //Older browser versions do not support replaceAll
-        /*_t = _t.replaceAll("d;v","X_x");//prevents onmouseover overflow
+
+       /*_t = _t.replaceAll("d;v","X_x");//prevents onmouseover overflow
         _t = _t.replaceAll("div","d;v");
 
         const regex_wrong_src=/\<[Ss][Rr][Cc]/ig;
         _t = _t.replaceAll(regex_wrong_src,"?_?");
 
         const regex_gamer=/[Nn][Ii][Gg]{2}[Ee][Rr]/ig;
-        _t = _t.replaceAll(regex_gamer,"Nigeria");
+        _t = _t.replaceAll(regex_gamer,"Buddy");
 
         const regex_gamer2=/[Nn][Ii][Gg]{2}[Aa]/ig;
         _t = _t.replaceAll(regex_gamer2,"Homie");
@@ -591,13 +591,11 @@ window.addEventListener("load", function()
 
         const regex_gamer2=/[Nn][Ii][Gg]{2}[Aa]/ig;
         _t = _t.replace(regex_gamer2,"Homie");
-
         const regex_textarea=/[Tt][Ee][xX][tT][Aa][Rr][Ee][Aa]/ig;
         _t = _t.replace(regex_textarea,"text@rea");
 
         const regex_table=/[Tt][Aa][Bb][Ll][Ee]/ig;
         _t = _t.replace(regex_table,"t@ble");
-
         const regex_plaintext=/[Pp][Ll][Aa][Ii][Nn][Tt][Ee][Xx][Tt]/ig;
         _t = _t.replace(regex_plaintext,"pl@intext");
 
@@ -609,7 +607,6 @@ window.addEventListener("load", function()
 
         const regex_meta=/[mM][eE][Tt][Aa]/ig;
         _t = _t.replace(regex_meta,"m3ta");
-
         const regex_data=/[dD][Aa][Tt][Aa]/ig;
         _t = _t.replace(regex_data,"d@ta");
 
@@ -660,7 +657,6 @@ window.addEventListener("load", function()
 
         const regex_id=/[Ii][Dd]\=\"/ig; //prevents no style showing
         _t = _t.replace(regex_id,"1d=''");
-
         _t = _t.replace(/\/\>/ig,"XD"); //Wrong End Sharp Bracket
         _t = _t.replace(/\&\#/ig,"XD"); //Encoding Char
 
@@ -674,7 +670,7 @@ window.addEventListener("load", function()
 
 
 
-//Misc, commented out as they are used
+//Misc, commented out as they arent used
         //const regex_alert=/[Aa][Ll][Ee][Rr][Tt]/ig;
         //_t = _t.replaceAll(regex_alert,"@lert");
 
@@ -745,7 +741,7 @@ window.addEventListener("load", function()
     var timeDisplay=document.getElementById("timeUTC");
     timeDisplay.innerHTML=timeTxt;
 
-//Other functions/s
+//Other functions
     if (enable_live_peers) {
       PeersScreenInit();
     }
@@ -872,10 +868,10 @@ window.addEventListener("load", function()
       e3.hidden=true;
       clearInterval(LivePeersInterval);
       a.play();
-    }
+   }
     afk_timer=0;
     enable_live_peers=!enable_live_peers;
-  }
+ }
 
   ClearTxtButton=function(){
     afk_timer=0;
@@ -896,7 +892,7 @@ window.addEventListener("load", function()
   //InitAbsoluteAxisScreen();
   UpdateChat(1,1);
   setInterval(LiveTimer, 1000);
-});
 
+});
 
 

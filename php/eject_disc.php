@@ -13,13 +13,13 @@
       unlink($SELF_USER_SESSION);
     }
 
-
+    //remove zip
     if (file_exists($GLOBAL_FOLDER."/".$SELF_USER_NAME.".zip")) {
       unlink($GLOBAL_FOLDER."/".$SELF_USER_NAME.".zip");
     }
 
     //remove own folder
-    PrintDir($SELF_USER_FOLDER_NAME,-1,0);
+    //PrintDir($SELF_USER_FOLDER_NAME,-1,0); //legacy
 
     //redirect to home
     $redirect_url="http://".$_SERVER['HTTP_HOST'];;
