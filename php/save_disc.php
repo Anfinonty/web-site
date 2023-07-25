@@ -1,4 +1,3 @@
-
 <?php include $_SERVER['DOCUMENT_ROOT']."/php/user_header.php"; ?>
 <?php
   //Recharge Session
