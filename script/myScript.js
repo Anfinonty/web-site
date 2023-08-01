@@ -226,7 +226,7 @@ window.addEventListener("load", function()
         }
       }
     };
-    req.open("GET","global/Sessions/joined_users.txt",true);
+    req.open("GET","global/{Sessions}/joined_users.txt",true);
     req.send();
   }
 
@@ -429,7 +429,7 @@ window.addEventListener("load", function()
         var user_time=xy[2];
       }
     };
-    req.open("GET","/global/Sessions/"+ip_address+".txt",true);
+    req.open("GET","/global/{Sessions}/"+ip_address+".txt",true);
     req.send();
   }
 
@@ -475,7 +475,8 @@ window.addEventListener("load", function()
 //        console.log(_t);
         if (saved_gchat_size!=_t.length) {
           saved_gchat_size=_t.length;
-          if (!silent2) {            var a=new Audio("/audio/chat_update.mp3")
+          if (!silent2) {            
+	    var a=new Audio("/audio/chat_update.mp3")
             a.play();
           }        
         } else {
