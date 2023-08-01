@@ -13,5 +13,12 @@
   ?>
     <br>
   </div>
+  <h2>DVD of The Day</h2>
+  <div id='showfiletree'>
+  <?php
+    //PrintDir("F:/",0,0);
+    PrintDir($DVD_DIR,0,0);
+  ?>
+  </div>
 </body>
 </html>
