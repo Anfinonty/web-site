@@ -1,3 +1,4 @@
+
 function DisplaySessionTimer() {
   var dateStringUTC = Math.floor(Date.now()/1000);
   var s1 = parseInt(document.getElementById("user_session_expiry").innerHTML);
