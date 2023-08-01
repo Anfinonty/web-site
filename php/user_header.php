@@ -24,7 +24,7 @@
 //
 //Generate Random String
     function GenRandString($string_len) {
-      $lechars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-+!@#.~`*";
+      $lechars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-!@#.*`";
       $lechars_len=strlen($lechars);
       $randString="";
       for ($i=0;$i<$string_len;$i++) {
@@ -37,6 +37,7 @@
 //
 //Fixed GLOBALS
     $SERVER_IP_ADDRESS=$_SERVER['HTTP_HOST'];
+    $S="&nbsp";
 
 
 //generate user_id
@@ -50,6 +51,7 @@
     $GR_HEIGHT=480*5;
     $CURSOR_GAP=8*4;
 
+    $DVD_DIR=$_SERVER['DOCUMENT_ROOT']."/dvd";
     $GLOBAL_FOLDER=$_SERVER['DOCUMENT_ROOT']."/global";
         /**/$REG_USERS_DIR=$GLOBAL_FOLDER."/{RegisteredUsers}";
         /**/$REG_EMAILS_DIR=$GLOBAL_FOLDER."/{RegisteredEmails}";
@@ -67,13 +69,15 @@
 "Upload A chat_icon.jpg/png/gif into your folder to set your chat icon.",
 
 //"This web-site's Minecraft Server goes by the same URL or IP Address.",
-"This web-site's Minecraft Server Address is: $SERVER_IP_ADDRESS",
+//"This web-site's Minecraft Server Address is: $SERVER_IP_ADDRESS",
 "This web-site's Live Updates is faster on Private Browsing modes.",
 "HTML Works in the Chat.",
 "#i# [image/gif link] #_i# is a shortcut for embedding gifs or images.",
 "#au# [audio link] #_au# is a shortcut for embedding audio.",
 "If the page isn't updating properly, clear your cache.",
-"Sound Effects are From www.fesliyanstudios.com."
+"Sound Effects are From www.fesliyanstudios.com.",
+"WinXP Symlink by Masatoshi Kimura https://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html",
+"This website supports both http:// and https://."
 );
 
 
@@ -113,7 +117,7 @@
 //
 //
 //
-//No Caching
+//No Caching Attempts
     //https://www.php.net/manual/en/function.header.php
     //header("Cache-Control: no-cache, must-revalidate"); // HTTP 1.1.
     //header("Pragma: no-cache"); // HTTP 1.0.
@@ -122,8 +126,6 @@
     //header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
     //header("Cache-Control: post-check=0, pre-check=0", false);
     //header("Pragma: no-cache");
-
-
 
     //https://stackoverflow.com/questions/13640109/how-to-prevent-browser-cache-for-php-site
     //header('Expires: Sun, 01 Jan 2014 00:00:00 GMT');
@@ -135,7 +137,7 @@
     header("Cache-Control: no-cache, no-store, must-revalidate"); //HTTP 1.1
     header("Pragma: no-cache"); //HTTP 1.0
     header("Expires: 0"); //Proxies
-//    header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+//  header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 //
 //
 //
@@ -171,15 +173,34 @@
     }
 
     function PrintDir($folder,$type,$n) {
+      global $S;
       global $USER_TOTAL_FOLDER_NUM;
       global $USER_FOLDERS_ARR;
       global $USER_FILES_ARR;
       global $SELF_USER_FOLDER_NAME;
+      global $REG_USERS_DIR;
+      global $REG_EMAILS_DIR;
+      global $REG_Q_DIR;
+      global $SESSIONS_DIR;
+      global $DVD_DIR;
+      if ($folder!=$REG_USERS_DIR &&
+	  $folder!=$REG_EMAILS_DIR &&
+	  $folder!=$REG_Q_DIR &&
+	  $folder!=$SESSIONS_DIR
+	) {
       $a = scandir($folder);
       $dir_size=sizeof($a);
       if ($dir_size>2) {
         if ($type==0) {
-          echo "<details open><summary>";
+	  if ($n>0) {
+	    if ($folder!=$DVD_DIR."/AVRIL_LAVIGNE") {
+              echo "<details><summary>";
+	    } else {
+              echo "<details open><summary>";
+	    }
+	  } else {
+            echo "<details open><summary>";
+	  }
           for ($j=0;$j<$n;$j++) {echo "___";}
           echo"|</summary>";
         }
@@ -190,17 +211,141 @@
               unlink($a_f);
               break;
             case 0: // Printing
-              for ($j=0;$j<$n;$j++) {echo "___";}
-              echo "__→";
-              //echo "<a href='".str_replace("/var/www/html","",$a_f)."'>".$a[$i]."</a>"; //legacy
-              echo "<a href='".str_replace("C:/Apache2.2/htdocs","",$a_f)."'>".$a[$i]."</a>"; ///for windowsxp
-              if (!is_dir($a_f)) {
-                $a_f_size=filesize($a_f);
-                echo " ".GetConvertedFilesize($a_f_size);
-              } else {
-                echo " (".GetConvertedFilesize(GetDirectorySize($a_f)).")";
-              }
-              echo "<br>";
+	      //echo str_replace("C:/Apache2.2/htdocs","",$a_f);
+	      //manual encoding
+	      $href_filename=str_replace("C:/Apache2.2/htdocs","",$a_f);
+	      $href_filename=str_replace(" ","%20",$href_filename);
+	      $href_filename=str_replace("'","%27",$href_filename);
+	      $file_extension=strtolower(end(explode('.',$a_f)));
+	      $is_image=false;
+	      $is_audio=false;
+	      $is_video=false;
+	      if (!is_dir($a_f)) { //its a file
+		//determiine file type
+		if ($file_extension=="png" ||
+		    $file_extension=="jpg" ||
+		    $file_extension=="jpeg" ||
+		    $file_extension=="apng" ||
+		    $file_extension=="bmp" ||
+		    $file_extension=="gif") {
+		  $is_image=true;
+		} else if (
+		  $file_extension=="mp3" ||
+		  $file_extension=="ogg" ||
+		  $file_extension=="flac" ||
+		  $file_extension=="wav"
+		) {
+		  $is_audio=true;
+		} else if (
+		  $file_extension=="mp4" ||
+		  $file_extension=="mk4" ||
+		  $file_extension=="mov"
+		) {
+		  $is_video=true;
+		}
+		$a_f_size=filesize($a_f);
+
+		//--- image files ---
+	        if ($is_image) {
+		  echo "<table class='image_icon_main' style='display:inline-table;'>";
+		  echo "<tr>";	  
+		    echo "<th class='table_image_icon'><img src='".$href_filename."' style='width:256px;height:auto;'></img></th>";
+		  echo "</tr><tr>";	  	
+		    echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
+		  echo "</tr>";
+		  echo "<tr class='image_metadata'><td>";
+		    if (filemtime($a_f)!=NULL) { 		//print date creation
+		      echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
+		    }
+		    if ($a_f_size!=NULL) {		//print filesize
+                      echo "[".GetConvertedFilesize($a_f_size)."]"." ";
+		    }
+		  echo "</td></tr>";
+		  echo "</table>";
+
+		//--- video files ---
+		} else if ($is_video) {
+		  echo "<table class='video_icon_main' style='display:inline-table;'>";
+		  echo "<tr>";	  
+		    echo "<th class='table_video_icon'><video width='256px' height='auto' controls><source type='video/".$file_extension."' src='".$href_filename."'></video></th>";
+		  echo "</tr><tr>";	  	
+		    echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
+		  echo "</tr>";
+		  echo "<tr class='video_metadata'><td>";
+		    if (filemtime($a_f)!=NULL) { 		//print date creation
+		      echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
+		    }
+		    if ($a_f_size!=NULL) {		//print filesize
+                      echo "[".GetConvertedFilesize($a_f_size)."]"." ";
+		    }
+		  echo "</td></tr>";
+		  echo "</table>";
+
+		//--- music files ---
+		} else if ($is_audio) { //display music
+		  echo "<table class='music_icon_main'>";
+		  echo "<tr>";
+		    echo "<td rowspan='2' class='table_music_icon'>";
+                      for ($j=0;$j<$n;$j++) {echo "___";} //audio branch printing
+		      echo "__→";
+	              echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //music bmp		    
+		    echo "</td>";
+		    echo "<td>";
+		      echo "<a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a>"; //music href
+		  echo "</td></tr>";
+
+		  echo "<tr class='music_metadata'><td>";
+		    if (filemtime($a_f)!=NULL) { 		//print date creation
+		      echo " [".date("m/d/Y H:i:s",filectime($a_f))."]";
+		    }
+		    if ($a_f_size!=NULL) {		//print filesize
+                      echo " ".GetConvertedFilesize($a_f_size)." ";
+		    }
+		  echo "</td></tr>";
+
+		  echo "<tr><td class='music_player' colspan='2'>";
+                    for ($j=0;$j<$n;$j++) {echo "___";} //audio blank branch printing
+		    echo "__→";
+     		    echo"<audio controls><source type='audio/".$file_extension."' src='".$href_filename."'></audio>";//music player
+		  echo "</td></tr>";
+		  echo "</table>";
+
+		//--- regular files ---
+		} else {
+		  echo "<table class='file_icon_main' style='display:inline-table;'>";
+		  echo "<tr>";
+		    echo "<th rowspan='2' class='table_file_icon'><img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img></th>"; //normal file bmp
+		    echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
+		  echo "</tr>";
+		  echo "<tr class='file_metadata'><td>";
+		    if (filemtime($a_f)!=NULL) { 		//print date creation
+		      echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
+		    }
+		    if ($a_f_size!=NULL) {		//print filesize
+                      echo "[".GetConvertedFilesize($a_f_size)."]"." ";
+		    }
+		  echo "</td></tr>";
+		  echo "</table>";
+		  //if ($i-2%3==0) {
+		    //echo "<br>";
+		  //}
+		}
+	      } else {//its a folder
+		//echo "<br>";
+		echo "<table class='folder_icon_main'>";
+		echo "<tr>";
+		  echo "<th rowspan='2' class='table_folder_icon'>";
+                  for ($j=0;$j<$n;$j++) {echo "___";} //print branch
+                  echo "__→";
+		  echo "<img src='/images/folder.bmp' style='width:32px;height:auto;'></img></th>";
+                  echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
+		echo "</tr>";
+		echo "<tr class='folder_metadata'><td>";
+		  echo " [".date("F/d/Y H:i:s",filectime($a_f))."]";
+                  echo " (".GetConvertedFilesize(GetDirectorySize($a_f)).")";
+		echo "</td></tr>";
+		echo "</table>";
+	      }
               break;
             case 1: //Count Folders
               if (is_dir($a_f)) {$USER_TOTAL_FOLDER_NUM++;}
@@ -215,7 +360,7 @@
           PrintDir($a_f,$type,$n+1);
         }
         if ($type==0){echo "</details>";}        
-      }
+      }}
       if ($type==-1) {rmdir($folder);}
     }
 //
@@ -382,7 +527,6 @@
 //
 //
     //Header For navigation
-    $S="&nbsp";
     echo "<div id='default_server_header'>";
     echo "<a class='default_server_header_txt' href='/'>{$S}@{$S}</a>{$S}";
     echo "<a class='default_server_header_txt' href='/global'>{$S}View Site Content{$S}</a>{$S}";
@@ -408,12 +552,12 @@
     echo "<a href='/php/recharge.php' id='session_limit'></a>";
     echo "<span id='user_session_expiry' hidden>{$user_time_expiry}</span>";
 
-    //echo "{$S}<span id='timeUTC' style='display:inline'></span>{$S}";
-
     echo "{$S}<span id='self_ip'>{$S}u:$USER_IP_ADDRESS{$S}</span>{$S}";
 
+    //echo "{$S}<span id='timeUTC' style='display:inline'></span>{$S}";
 
     echo "{$S}<span id='timeUser' style='display:inline'></span>{$S}";
+
     echo "<br><div id='random_tips' style='display:inline;'>~{$S}".$PROTIPS[$RAND_TIP]."{$S}~</div>";
 
     echo "</div>";

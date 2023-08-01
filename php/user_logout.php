@@ -14,9 +14,9 @@
     if (file_exists($SELF_USER_SESSION)) {
       unlink($SELF_USER_SESSION);
     }    
-    $redirect_url="http://".$_SERVER['HTTP_HOST'];
+    //redirect to home
+    $redirect_url="http://".$_SERVER['HTTP_HOST'];;
     header('Location: '.$redirect_url); //go back to home
-
   ?>
 </body>
 </html>

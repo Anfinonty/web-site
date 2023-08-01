@@ -7,7 +7,7 @@
     //https://stackoverflow.com/questions/478121/how-to-get-directory-size-in-php
 
   if (!file_exists($SELF_USER_FOLDER_NAME)) { //no username
-    $redirect_url="http://".$_SERVER['HTTP_HOST'];
+    $redirect_url="https://".$_SERVER['HTTP_HOST'];
     header('Location: '.$redirect_url); //go back to home
   }
 ?>
@@ -70,7 +70,7 @@
   </form>
   <br>
   <?php
-    $extensions= array("html","js","css","txt","mp3","flac","wav","gif","png","apng","bmp","jpg","jpeg","mov","mp4","mkv","zip");
+    $extensions= array("html","js","css","txt","mp3","ogg","flac","wav","mid","gif","png","apng","bmp","jpg","jpeg","mov","mp4","mkv","zip");
     echo "Files Allowed: ";
     for ($i=0;$i<sizeof($extensions);$i++) {
       echo $extensions[$i].", ";
@@ -110,7 +110,7 @@
       } else {
         echo "<br> Folder Creation Unsuccessful :( <br>";
       }
-      $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
+      $redirect_url="https://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
       header('Location: '.$redirect_url); //go back to home
     }
 
@@ -127,7 +127,7 @@
         }
       } else {        echo "<br> Folder Not Found, Check your Spelling :/<br>";    
       }
-      $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
+      $redirect_url="https://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
       header('Location: '.$redirect_url); //go back to home
     }
 
@@ -137,7 +137,7 @@
       if ($set_foldername!="" && $set_foldername!="/") {
         PrintDir($SELF_USER_FOLDER_NAME."/".$set_foldername,-1,0); //Recursive delete
       }
-      $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
+      $redirect_url="https://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
       header('Location: '.$redirect_url); //go back to home
     }
 
@@ -185,7 +185,7 @@
       } else { //Folder not found
         echo "<br> Folder Not Found, Try Again :/ <br>";
       }
-      $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
+      $redirect_url="https://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
       header('Location: '.$redirect_url); //go back to home
     }
     //FILE Delete
@@ -197,7 +197,7 @@
       } else {
         echo "<br> File Deletion Unsuccessful :( <br>";
       }
-      $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
+      $redirect_url="https://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
       header('Location: '.$redirect_url); //go back to home
     }
   ?>

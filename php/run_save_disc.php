@@ -41,10 +41,10 @@
   if($zip -> open($zipcreated, ZipArchive::CREATE ) === TRUE) {
     ZipFolder($pathdir,"",$zip);
     $zip ->close();
-    $redirect_url="http://".$_SERVER['HTTP_HOST']."/global/"."WEB_SITE_DISC_".$user_name.".zip";
+    $redirect_url="/global/"."WEB_SITE_DISC_".$user_name.".zip";
     header('Location: '.$redirect_url);
   } else {
-    $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/save_disc.php";
+    $redirect_url="/php/save_disc.php";
     header('Location: '.$redirect_url); //go back to home
   }
 ?>

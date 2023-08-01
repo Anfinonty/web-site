@@ -13,7 +13,7 @@
   fwrite($fp,$user_x.",".$user_y.",".$time_expire.",".$user_name);
   fclose($fp);
 
-  $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
+  $redirect_url="/php/user_act_folder.php";
   header('Location: '.$redirect_url); //go back to home
 ?>
 

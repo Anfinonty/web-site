@@ -51,7 +51,7 @@
         fwrite($fp,"0,0,".$time_expire.",".$user_name); //cause of log in
         fclose($fp);
 
-        $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php"; //goto user act folder
+        $redirect_url="/php/user_act_folder.php"; //goto user act folder
         header('Location: '.$redirect_url); //go back to home
       }
     }
