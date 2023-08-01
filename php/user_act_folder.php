@@ -50,12 +50,12 @@
   if ($USER_TOTAL_FOLDER_NUM<$USER_MAX_FOLDER_NUM) {
   echo '
   <br>
-  <form method="post" id="form1">
+  <form method="post" id="form1" action="/php/user_act_folder.php">
     <input type="text" placeholder="Enter New Folder Name" id="txthere" name="txthere" maxlength="128">
     <input type="submit" name="submit" value="Create Folder">
   </form>
 
-  <form method="post" id="form1_1">
+  <form method="post" id="form1_1" action="/php/user_act_folder.php">
     <input list="available_folders" placeholder="Enter Existing Folder" type="text" id="txthere0" name="txthere0" maxlength="128">
     <input type="text" id="txthere1" placeholder="Enter New Folder Name" name="txthere1" maxlength="128">
     <input type="submit" name="submit1" value="Create Subfolder">
@@ -64,24 +64,24 @@
   }
   ?>
 
-  <form method="post" id="form2">
+  <form method="post" id="form2" action="/php/user_act_folder.php">
     <input placeholder="Enter Existing Folder" list="available_folders" type="text" id="txthere2" name="txthere2" maxlength="128">
     <input type="submit" name="delete" value="Delete Folder">
   </form>
   <br>
   <?php
-    $extensions= array("html","js","css","txt","mp3","ogg","flac","wav","mid","gif","png","apng","bmp","jpg","jpeg","mov","mp4","mkv","zip");
+    $extensions= array("html","js","css","txt","mp3","ogg","flac","wav","mid","gif","png","apng","bmp","jpg","jpeg","mkv","mp4","mov","webm","webp","zip");
     echo "Files Allowed: ";
     for ($i=0;$i<sizeof($extensions);$i++) {
       echo $extensions[$i].", ";
     }
   ?>
-  <form method="post" enctype="multipart/form-data" id="form3">
+  <form method="post" enctype="multipart/form-data" id="form3" action="/php/user_act_folder.php">
     <input list="available_folders" type="text" id="txthere3" name="txthere3" maxlength="128" placeholder="Enter Existing Folder"> <input type="submit" name="submit_files" value="Upload File(s)"/><br>
     <input type="file" id="files" name="files[]" multiple directory="" moxkitdirectory="">
   </form>
 
-  <form method="post" id="form4">
+  <form method="post" id="form4" action="/php/user_act_folder.php">
     <input type="text" placeholder="Enter Existing File" list="available_files" id="txthere4" name="txthere4">
     <input type="submit" name="delete2" value="Delete File">
   </form>
@@ -149,11 +149,14 @@
         $total_size=$self_size;
         $total_folder_num=$USER_TOTAL_FOLDER_NUM;
         foreach($_FILES['files']['name'] as $i => $name) {
+	  $tmp_filename=$_FILES['files']['name'][$i];
           $file_ext=strtolower(end(explode('.',$_FILES['files']['name'][$i]))); //lwrcase
           $file_size=$_FILES['files']['size'][$i];
           if ($total_size+$file_size<$MAX_STORAGE) { //Sizecheck
-            if(in_array($file_ext,$extensions)===true) { //Allow non php extension
-              $folders_array=explode(">",$_FILES['files']['name'][$i]);//Check for folder ">", make array of folder names
+	    $regex_nosymbols="/([\:\#\<\>\%\&\*\{\}\?\@\$\+\!\`\|\=\/])/";
+	    //$regex_nosymbols="/([\:])/";
+            if(in_array($file_ext,$extensions)===true && !preg_match($regex_nosymbols,$tmp_filename)) { //Allow non php extension
+              $folders_array=explode(">",$_FILES['files']['name'][$i]);//Check for folder ">", make array of folder names //legacy but im not touching it
               $sizeof_folder_arr=sizeof($folders_array)-1;
               $_f = $GLOBAL_FOLDER."/".$SELF_USER_NAME."/".$upload_to_folder."/";
               if ($total_folder_num<$USER_MAX_FOLDER_NUM) { //if folders not maxxed out

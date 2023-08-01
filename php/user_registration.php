@@ -41,7 +41,9 @@
       //Email
       $existing_users_email_arr=scandir($REG_EMAILS_DIR);
       $regex_valid_email="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/";
-      if (in_array(MyHash($user_email).".txt",$existing_users_email_arr)) {
+      if (in_array(MyHash($user_email).".txt",$existing_users_email_arr) ||
+	  in_array(MyHash2($user_email).".txt",$existing_users_email_arr)
+	) {
         echo "<p style='color:red'>Email already in use</p>";
         $error=1;
       } else {
@@ -87,8 +89,8 @@
           fwrite($fp,$user_email.",".$RegCode);
           fclose($fp);
 
-          $fp=fopen($REG_Q_DIR."/".MyHash($user_email).".txt","w");
-          fwrite($fp,MyHash($RegCode).",".MyHash($user_password));
+          $fp=fopen($REG_Q_DIR."/".MyHash2($user_email).".txt","w");
+          fwrite($fp,MyHash2($RegCode).",".MyHash2($user_password));
           fclose($fp);
        }
      } else {

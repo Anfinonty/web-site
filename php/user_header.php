@@ -1,5 +1,4 @@
 ﻿  <?php
-
 //
 //
 //
@@ -9,6 +8,20 @@
       $split_at=$input_size/2;
       $part1="";
       for ($i=0;$i<$split_at-1;$i++) {
+        $part1=$part1.$input[$i];
+      }
+      $part2="";
+      for ($i=$split_at;$i<$input_size;$i++) {
+        $part2=$part2.$input[$i];
+      }
+      return md5(md5($part1).md5($part2));
+    }
+
+    function MyHash2($input) {
+      $input_size=strlen($input);
+      $split_at=$input_size/2;
+      $part1="";
+      for ($i=0;$i<$split_at;$i++) {
         $part1=$part1.$input[$i];
       }
       $part2="";
@@ -41,7 +54,7 @@
 
 
 //generate user_id
-    $USER_IP_ADDRESS = MyHash($_SERVER['REMOTE_ADDR']);
+    $USER_IP_ADDRESS = MyHash2($_SERVER['REMOTE_ADDR']);
 
 
     $CHAT_DIR="global/lechat.txt";
@@ -77,7 +90,10 @@
 "If the page isn't updating properly, clear your cache.",
 "Sound Effects are From www.fesliyanstudios.com.",
 "WinXP Symlink by Masatoshi Kimura https://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html",
-"This website supports both http:// and https://."
+"This website supports both http:// and https://.",
+"spider.bmp drawn by hoobsug.",
+"Website pen-tested by clovis.",
+"HTTPS assist by Professor8404 and y4my4m."
 );
 
 
@@ -183,185 +199,220 @@
       global $REG_Q_DIR;
       global $SESSIONS_DIR;
       global $DVD_DIR;
+      global $GLOBAL_FOLDER;
       if ($folder!=$REG_USERS_DIR &&
 	  $folder!=$REG_EMAILS_DIR &&
 	  $folder!=$REG_Q_DIR &&
 	  $folder!=$SESSIONS_DIR
 	) {
-      $a = scandir($folder);
-      $dir_size=sizeof($a);
-      if ($dir_size>2) {
-        if ($type==0) {
-	  if ($n>0) {
-	    if ($folder!=$DVD_DIR."/AVRIL_LAVIGNE") {
-              echo "<details><summary>";
-	    } else {
-              echo "<details open><summary>";
+        $a = scandir($folder);
+        $dir_size=sizeof($a);
+        if (is_dir($folder)) {
+	  if ($type==0) {	  
+	    //foldername
+	    if ($n>0) {
+	      $folder_name=end(explode('/',$folder));
+	      //for href and div_id
+	      $div_id=str_replace("C:/Apache2.2/htdocs","",$folder);
+	      $div_id=str_replace(" ","%20",$div_id);
+	      $div_id=str_replace("'","%27",$div_id);
+
+	      
+
+	      echo "<button id='".$div_id."_button' onclick=ToggleTreeView('".$div_id."')>";
+	      //Draw folder button
+
+
+              echo "<table class='folder_button'>";
+	      echo "<tr>";
+	      echo "<th rowspan='2' class='table_folder_icon'>";
+
+	      echo "<div style='display:none;' id='".$div_id."_branch'>";
+                for ($j=0;$j<$n-1;$j++) {echo "___";} //branch printing
+                echo "__→";
+              echo "</div>";
+
+              echo "<img src='/images/folder.bmp' style='width:32px;height:auto;'></img></th>";
+              echo "<td><a style='font-size:20px;' href='".$div_id."'>".$folder_name."</a></td>"; //print foldername
+	        echo "</tr>";
+	        echo "<tr class='folder_metadata'><td>";
+	          echo " [".date("F/d/Y H:i:s",filectime($folder))."]";
+                echo " (".GetConvertedFilesize(GetDirectorySize($folder)).")";
+              echo "</td></tr>";
+	      echo "</table>";
+	      echo "</button>";
 	    }
-	  } else {
-            echo "<details open><summary>";
-	  }
-          for ($j=0;$j<$n;$j++) {echo "___";}
-          echo"|</summary>";
-        }
-        for ($i=2;$i<$dir_size;$i++) {
-          $a_f=$folder."/".$a[$i];
-          switch ($type) {
-            case -1: //Recursive removal of files
-              unlink($a_f);
-              break;
-            case 0: // Printing
-	      //echo str_replace("C:/Apache2.2/htdocs","",$a_f);
-	      //manual encoding
-	      $href_filename=str_replace("C:/Apache2.2/htdocs","",$a_f);
-	      $href_filename=str_replace(" ","%20",$href_filename);
-	      $href_filename=str_replace("'","%27",$href_filename);
-	      $file_extension=strtolower(end(explode('.',$a_f)));
-	      $is_image=false;
-	      $is_audio=false;
-	      $is_video=false;
-	      if (!is_dir($a_f)) { //its a file
-		//determiine file type
-		if ($file_extension=="png" ||
-		    $file_extension=="jpg" ||
-		    $file_extension=="jpeg" ||
-		    $file_extension=="apng" ||
-		    $file_extension=="bmp" ||
-		    $file_extension=="gif") {
-		  $is_image=true;
-		} else if (
-		  $file_extension=="mp3" ||
-		  $file_extension=="ogg" ||
-		  $file_extension=="flac" ||
-		  $file_extension=="wav"
-		) {
-		  $is_audio=true;
-		} else if (
-		  $file_extension=="mp4" ||
-		  $file_extension=="mk4" ||
-		  $file_extension=="mov"
-		) {
-		  $is_video=true;
-		}
-		$a_f_size=filesize($a_f);
 
-		//--- image files ---
-	        if ($is_image) {
-		  echo "<table class='image_icon_main' style='display:inline-table;'>";
-		  echo "<tr>";	  
-		    echo "<th class='table_image_icon'><img src='".$href_filename."' style='width:256px;height:auto;'></img></th>";
-		  echo "</tr><tr>";	  	
-		    echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
-		  echo "</tr>";
-		  echo "<tr class='image_metadata'><td>";
-		    if (filemtime($a_f)!=NULL) { 		//print date creation
-		      echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
-		    }
-		    if ($a_f_size!=NULL) {		//print filesize
-                      echo "[".GetConvertedFilesize($a_f_size)."]"." ";
-		    }
-		  echo "</td></tr>";
-		  echo "</table>";
-
-		//--- video files ---
-		} else if ($is_video) {
-		  echo "<table class='video_icon_main' style='display:inline-table;'>";
-		  echo "<tr>";	  
-		    echo "<th class='table_video_icon'><video width='256px' height='auto' controls><source type='video/".$file_extension."' src='".$href_filename."'></video></th>";
-		  echo "</tr><tr>";	  	
-		    echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
-		  echo "</tr>";
-		  echo "<tr class='video_metadata'><td>";
-		    if (filemtime($a_f)!=NULL) { 		//print date creation
-		      echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
-		    }
-		    if ($a_f_size!=NULL) {		//print filesize
-                      echo "[".GetConvertedFilesize($a_f_size)."]"." ";
-		    }
-		  echo "</td></tr>";
-		  echo "</table>";
-
-		//--- music files ---
-		} else if ($is_audio) { //display music
-		  echo "<table class='music_icon_main'>";
-		  echo "<tr>";
-		    echo "<td rowspan='2' class='table_music_icon'>";
-                      for ($j=0;$j<$n;$j++) {echo "___";} //audio branch printing
-		      echo "__→";
-	              echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //music bmp		    
-		    echo "</td>";
-		    echo "<td>";
-		      echo "<a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a>"; //music href
-		  echo "</td></tr>";
-
-		  echo "<tr class='music_metadata'><td>";
-		    if (filemtime($a_f)!=NULL) { 		//print date creation
-		      echo " [".date("m/d/Y H:i:s",filectime($a_f))."]";
-		    }
-		    if ($a_f_size!=NULL) {		//print filesize
-                      echo " ".GetConvertedFilesize($a_f_size)." ";
-		    }
-		  echo "</td></tr>";
-
-		  echo "<tr><td class='music_player' colspan='2'>";
-                    for ($j=0;$j<$n;$j++) {echo "___";} //audio blank branch printing
-		    echo "__→";
-     		    echo"<audio controls><source type='audio/".$file_extension."' src='".$href_filename."'></audio>";//music player
-		  echo "</td></tr>";
-		  echo "</table>";
-
-		//--- regular files ---
-		} else {
-		  echo "<table class='file_icon_main' style='display:inline-table;'>";
-		  echo "<tr>";
-		    echo "<th rowspan='2' class='table_file_icon'><img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img></th>"; //normal file bmp
-		    echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
-		  echo "</tr>";
-		  echo "<tr class='file_metadata'><td>";
-		    if (filemtime($a_f)!=NULL) { 		//print date creation
-		      echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
-		    }
-		    if ($a_f_size!=NULL) {		//print filesize
-                      echo "[".GetConvertedFilesize($a_f_size)."]"." ";
-		    }
-		  echo "</td></tr>";
-		  echo "</table>";
-		  //if ($i-2%3==0) {
-		    //echo "<br>";
-		  //}
-		}
-	      } else {//its a folder
-		//echo "<br>";
-		echo "<table class='folder_icon_main'>";
-		echo "<tr>";
-		  echo "<th rowspan='2' class='table_folder_icon'>";
-                  for ($j=0;$j<$n;$j++) {echo "___";} //print branch
-                  echo "__→";
-		  echo "<img src='/images/folder.bmp' style='width:32px;height:auto;'></img></th>";
-                  echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
-		echo "</tr>";
-		echo "<tr class='folder_metadata'><td>";
-		  echo " [".date("F/d/Y H:i:s",filectime($a_f))."]";
-                  echo " (".GetConvertedFilesize(GetDirectorySize($a_f)).")";
-		echo "</td></tr>";
-		echo "</table>";
+	    if ($n>0) {
+	      if ($folder!=$DVD_DIR."/AVRIL_LAVIGNE") { //files below surface are closed
+	        echo "<div style='display:none;' id='".$div_id."'><br>";
+	      } else { //dvd slot, folders are displayed
+	        echo "<div style='border-width:thick;border-style:solid;margin-bottom:-40px;' id='".$div_id."'><br>";
 	      }
-              break;
-            case 1: //Count Folders
-              if (is_dir($a_f)) {$USER_TOTAL_FOLDER_NUM++;}
-              break;
-            case 10:
-              if (is_dir($a_f)) {array_push($USER_FOLDERS_ARR,str_replace($SELF_USER_FOLDER_NAME,"",$a_f));}
-              break;
-            case 11:
-              if (!is_dir($a_f)) {array_push($USER_FILES_ARR,str_replace($SELF_USER_FOLDER_NAME,"",$a_f));}
-              break;
-          }
-          PrintDir($a_f,$type,$n+1);
-        }
-        if ($type==0){echo "</details>";}        
-      }}
-      if ($type==-1) {rmdir($folder);}
+	    } else { //files on surface are open
+	      echo "<script src='/script/toggletreeview.js'></script>";//call script on surface
+	      echo "<div id='".$div_id."'>";
+	    }
+	  }// end of if type==0 beginning
+
+	  //for each file & folder in folder
+          for ($i=0;$i<$dir_size;$i++) {
+	    if ($a[$i]!=="." && $a[$i]!=="..") {
+              $a_f=$folder."/".$a[$i];
+              switch ($type) {
+                case -1: //Recursive removal of files
+                  unlink($a_f);
+                  break;
+                case 0: // Printing files
+	          //echo $a_f."<br>";
+	          //manual encoding
+	          $href_filename=str_replace("C:/Apache2.2/htdocs","",$a_f);
+	          $href_filename=str_replace(" ","%20",$href_filename);
+	          $href_filename=str_replace("'","%27",$href_filename);
+	          $file_extension=strtolower(end(explode('.',$a_f)));
+	          $is_image=false;
+	          $is_audio=false;
+	          $is_video=false;
+	          if (!is_dir($a_f)) { //its a file
+		  //determiine file type
+		    if ($file_extension=="png" ||
+		        $file_extension=="jpg" ||
+		        $file_extension=="jpeg" ||
+		        $file_extension=="apng" ||
+		        $file_extension=="bmp" ||
+		        $file_extension=="gif") {
+		      $is_image=true;
+		    } else if (
+		      $file_extension=="mp3" ||
+		      $file_extension=="ogg" ||
+		      $file_extension=="flac" ||
+		      $file_extension=="wav"
+		    ) {
+		      $is_audio=true;
+		    } else if (
+		      $file_extension=="mp4" ||
+		      $file_extension=="mk4" ||
+		      $file_extension=="mov"
+		    ) {
+		      $is_video=true;
+		    }
+		    $a_f_size=filesize($a_f);
+
+		    //--- image files ---
+	            if ($is_image) {
+		      echo "<table class='image_icon_main' style='display:inline-table;'>";
+		      echo "<tr>";	  
+		      echo "<th colspan='2' class='table_image'><img src='".$href_filename."' style='width:256px;height:auto;'></img></th>";
+		      echo "</tr><tr>";
+		      echo "<th rowspan='2' class='table_image_icon'>";
+		      if (!($file_extension=="gif" || $file_extension=="apng")) {
+	                echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //still image bmp			
+		      } else {
+	                echo "<img src='/images/".$file_extension.".gif' style='width:32px;height:auto;'></img>"; //moving image bmp
+		      }
+		      echo "</th>";
+		      echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
+		      echo "</tr>";
+		      echo "<tr class='image_metadata'><td>";
+		      if (filemtime($a_f)!=NULL) { 		//print date creation
+		        echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
+		      }
+		      if ($a_f_size!=NULL) {		//print filesize
+                        echo " ".GetConvertedFilesize($a_f_size);
+		      }
+		      echo "</td></tr>";
+		      echo "</table>";
+
+		    //--- video files ---
+		    } else if ($is_video) {
+		      echo "<table class='video_icon_main' style='display:inline-table;'>";
+		      echo "<tr>";	  
+		      echo "<th colspan='2' class='table_video'><video width='256px' height='auto' controls><source type='video/".$file_extension."' src='".$href_filename."'></video></th>";
+		      echo "</tr><tr>";
+		      echo "<th rowspan='2' class='table_video_icon'>";
+	                echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //video bmp			
+		      echo "</th>";
+		      echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
+		      echo "</tr>";
+		      echo "<tr class='video_metadata'><td>";
+		      if (filemtime($a_f)!=NULL) { 		//print date creation
+		        echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
+		      }
+		      if ($a_f_size!=NULL) {		//print filesize
+                        echo " ".GetConvertedFilesize($a_f_size);
+		      }
+		      echo "</td></tr>";
+		      echo "</table>";
+
+		    //--- music files ---
+		    } else if ($is_audio) { //display music
+		      echo "<table class='music_icon_main'>";
+		      echo "<tr>";
+		        echo "<td rowspan='2' class='table_music_icon'>";
+                          //for ($j=0;$j<$n;$j++) {echo "___";} //audio branch printing
+		          //echo "__→";
+	                  echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //music bmp		    
+		        echo "</td>";
+		        echo "<td>";
+		          echo "<a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a>"; //music href
+		      echo "</td></tr>";
+
+		      echo "<tr class='music_metadata'><td>";
+		      if (filemtime($a_f)!=NULL) { 		//print date creation
+		        echo " [".date("m/d/Y H:i:s",filectime($a_f))."]";
+		      }
+		      if ($a_f_size!=NULL) {		//print filesize
+                        echo " ".GetConvertedFilesize($a_f_size);
+		      }
+		      echo "</td></tr>";
+
+		      echo "<tr><td></td>";
+		      echo "<td class='music_player' colspan='2'>";                    
+     		      echo"<audio controls><source type='audio/".$file_extension."' src='".$href_filename."'></audio>";//music player
+		      echo "</td></tr>";
+		      echo "</table><br>";
+
+		    //--- regular files ---
+		    } else {
+		      echo "<table class='file_icon_main' style='display:inline-table;'>";
+		      echo "<tr>";
+		        echo "<th rowspan='2' class='table_file_icon'><img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img></th>"; //normal file bmp
+		        echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
+		      echo "</tr>";
+		      echo "<tr class='file_metadata'><td>";
+		      if (filemtime($a_f)!=NULL) { 		//print date creation
+		        echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
+		      }
+		      if ($a_f_size!=NULL) {		//print filesize
+                        echo " ".GetConvertedFilesize($a_f_size);
+		      }
+		      echo "</td></tr>";
+		      echo "</table>";
+		    }
+	          } //end of if files
+                  break;
+                case 1: //Count Folders
+                  if (is_dir($a_f)) {$USER_TOTAL_FOLDER_NUM++;}
+                  break;
+                case 10:
+                  if (is_dir($a_f)) {array_push($USER_FOLDERS_ARR,str_replace($SELF_USER_FOLDER_NAME,"",$a_f));}
+                  break;
+                case 11:
+                  if (!is_dir($a_f)) {array_push($USER_FILES_ARR,str_replace($SELF_USER_FOLDER_NAME,"",$a_f));}
+                  break;
+              } //end switch actions
+	    } //end of . or ..
+            PrintDir($a_f,$type,$n+1);
+          } //end for loop, before loop is a div
+	  if ($type==0) {
+            if ($n>0 && $folder!=$DVD_DIR."/AVRIL_LAVIGNE") {
+	      echo "<br>";
+            }
+	    echo "<br></div>";
+	  } //close div of folder
+        }//end main, if is dir
+      }//end if non-valid files
+      if ($type==-1) {rmdir($folder);} //recursive remove folder
     }
 //
 //
@@ -559,9 +610,9 @@
     echo "{$S}<span id='timeUser' style='display:inline'></span>{$S}";
 
     echo "<br><div id='random_tips' style='display:inline;'>~{$S}".$PROTIPS[$RAND_TIP]."{$S}~</div>";
+    echo '<script src="/script/dynamic_header.js"></script>';
 
     echo "</div>";
-    echo '<script src="/script/dynamic_header.js"></script>';
     //
     //
   ?>

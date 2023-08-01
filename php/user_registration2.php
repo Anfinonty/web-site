@@ -37,10 +37,10 @@
       //Posting
     if (isset($_POST['btnRegSubmit'])) {
       //user credentials
-      $reg_code=MyHash($_POST["inputRegCode"]);
-      $user_email=MyHash($_POST["inputEmail"]);
+      $reg_code=MyHash2($_POST["inputRegCode"]);
+      $user_email=MyHash2($_POST["inputEmail"]);
       $user_name=$_POST["inputUsername"];
-      $user_password=MyHash($_POST["inputPassword"]);
+      $user_password=MyHash2($_POST["inputPassword"]);
       $error=0;
       $saved_password=-1;
       $saved_reg_code=-1;
