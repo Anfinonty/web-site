@@ -265,6 +265,8 @@ window.addEventListener("load", function()
         set_icon_link="/global/"+_ip_address+"/chat_icon.jpg";
       } else if (IsUserIconExists(_ip_address,"jpeg")) {
         set_icon_link="/global/"+_ip_address+"/chat_icon.jpeg";
+      } else if (IsUserIconExists(_ip_address,"bmp")) {
+        set_icon_link="/global/"+_ip_address+"/chat_icon.bmp";
       } else {
         set_icon_link=default_icon_link;
       }
