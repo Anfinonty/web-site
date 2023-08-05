@@ -95,8 +95,9 @@
         echo "Folders [".$USER_TOTAL_FOLDER_NUM."/".$USER_MAX_FOLDER_NUM."]<br><br>";
         echo $PROTIPS[0]."<br>";
         echo $PROTIPS[1]."<br>";
-        echo $PROTIPS[2]."<br><br>";
-        PrintDir($SELF_USER_FOLDER_NAME,0,0);
+        echo $PROTIPS[2]."<br>";
+        echo $PROTIPS[3]."<br><br>";
+        PrintDir($SELF_USER_FOLDER_NAME,0,-1);
         echo "<br>";
     ?>
   </div>
@@ -153,7 +154,7 @@
           $file_ext=strtolower(end(explode('.',$_FILES['files']['name'][$i]))); //lwrcase
           $file_size=$_FILES['files']['size'][$i];
           if ($total_size+$file_size<$MAX_STORAGE) { //Sizecheck
-	    $regex_nosymbols="/([\:\#\<\>\%\&\*\{\}\?\@\$\+\!\`\|\=\/])/";
+	    $regex_nosymbols="/([\:\<\>\*\?\"\|\/])/";
 	    //$regex_nosymbols="/([\:])/";
             if(in_array($file_ext,$extensions)===true && !preg_match($regex_nosymbols,$tmp_filename)) { //Allow non php extension
               $folders_array=explode(">",$_FILES['files']['name'][$i]);//Check for folder ">", make array of folder names //legacy but im not touching it

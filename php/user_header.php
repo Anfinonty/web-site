@@ -93,7 +93,42 @@
 "This website supports both http:// and https://.",
 "spider.bmp drawn by hoobsug.",
 "Website pen-tested by clovis.",
-"HTTPS assist by Professor8404 and y4my4m."
+"HTTPS assist by Professor8404 and y4my4m.",
+
+//Misc
+"OCT 8 2023 PENDULUM PERFORMS AT RAC ARENA - WA",
+
+//Music ACDC
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/Back%20in%20Black.wav'></audio> ACDC - Back In Black",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/T.N.T..wav'></audio> ACDC - T.N.T.",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/Thunderstruck.wav'></audio> ACDC - Thunderstruck",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/Highway%20To%20Hell.wav'></audio> ACDC - Highway To Hell",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/The%20Razor%29s%20Edge.wav'></audio> ACDC - The Razor's Edge",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/You%20Shook%20Me%20All%20Night%20Long.wav'></audio> ACDC - You Shook Me All Night Long",
+
+//Music Men At Work
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Men%20At%20Work/Who%20Can%20It%20Be%20Now.wav'></audio> Men At Work - Who Can It Be Now?",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Men%20At%20Work/Down%20Under.wav'></audio> Men At Work - Down Under",
+
+//Music Pendulum
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/9,000%20Miles.wav'></audio> Pendulum - 9,000 Miles",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/Blood%20Sugar.wav'></audio> Pendulum - Blood Sugar",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/Fasten%20your%20Seatbelt.wav'></audio> Pendulum - Fasten Your Seatbelt",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/Crush.wav'></audio> Pendulum - Crush",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/Hold%20Your%20Colour.wav'></audio>",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/Granite.wav'></audio> Pendulum - Granite",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/Propane%20Nightmares.wav'></audio> Pendulum - Propane Nightmares",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/Slam.wav'></audio> Pendulum - Slam",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/Sounds%20of%20Life.wav'></audio> Pendulum - Sounds of Life",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/The%20Island%20-%20Pt.%201%20(Dawn).wav'></audio> Pendulum - The Island - Pt. 1 (Dawn)",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/The%20Island%20-%20Pt.%202%20(Dusk).wav'></audio> Pendulum - The Island - Pt. 2 (Dusk)",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/The%20Tempest.wav'></audio> Pendulum - The Tempest",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/The%20Vulture.wav'></audio> Pendulum - The Vulture",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/Watercolour.wav'></audio> Pendulum - Watercolour",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Pendulum/Witchcraft.wav'></audio> Pendulum - Witchcraft",
+
+//Music Wolfmother
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/Wolfmother/Joker%20&%20The%20Thief.wav'></audio> Wolfmother - Joker & The Thief"
 );
 
 
@@ -210,18 +245,18 @@
         if (is_dir($folder)) {
 	  if ($type==0) {	  
 	    //foldername
-	    if ($n>0) {
+	    if ($n>0 || $n==-1) {
+	      if ($n==-1) {
+	        echo "<script src='/script/toggletreeview.js'></script>";//call script on surface
+	      }	
 	      $folder_name=end(explode('/',$folder));
 	      //for href and div_id
 	      $div_id=str_replace("C:/Apache2.2/htdocs","",$folder);
 	      $div_id=str_replace(" ","%20",$div_id);
 	      $div_id=str_replace("'","%27",$div_id);
 
-	      
-
 	      echo "<button id='".$div_id."_button' onclick=ToggleTreeView('".$div_id."')>";
 	      //Draw folder button
-
 
               echo "<table class='folder_button'>";
 	      echo "<tr>";
@@ -232,8 +267,24 @@
                 echo "__→";
               echo "</div>";
 
-              echo "<img src='/images/folder.bmp' style='width:32px;height:auto;'></img></th>";
-              echo "<td><a style='font-size:20px;' href='".$div_id."'>".$folder_name."</a></td>"; //print foldername
+	      //Draw Folder Icon
+	      if (file_exists($folder."/folder_icon.gif")) {
+                echo "<img src='".$div_id."/folder_icon.gif"."' style='width:64px;height:auto;'></img></th>";
+	      } else if (file_exists($folder."/folder_icon.apng")) {
+                echo "<img src='".$div_id."/folder_icon.apng"."' style='width:64px;height:auto;'></img></th>";
+	      } else if (file_exists($folder."/folder_icon.png")) {
+                echo "<img src='".$div_id."/folder_icon.png"."' style='width:64px;height:auto;'></img></th>";
+	      } else if (file_exists($folder."/folder_icon.jpg")) {
+                echo "<img src='".$div_id."/folder_icon.jpg"."' style='width:64px;height:auto;'></img></th>";
+	      } else if (file_exists($folder."/folder_icon.jpeg")) {
+                echo "<img src='".$div_id."/folder_icon.jpeg"."' style='width:64px;height:auto;'></img></th>";
+	      } else if (file_exists($folder."/folder_icon.bmp")) {
+                echo "<img src='".$div_id."/folder_icon.bmp"."' style='width:64px;height:auto;'></img></th>";
+	      } else {
+                echo "<img src='/images/folder.bmp' style='width:32px;height:auto;'></img></th>";
+	      }
+
+              echo "<td class='folder_name' style='font-size:20px;'>".$folder_name." [<a href='".$div_id."'>visit</a>]</td>"; //print foldername
 	        echo "</tr>";
 	        echo "<tr class='folder_metadata'><td>";
 	          echo " [".date("F/d/Y H:i:s",filectime($folder))."]";
@@ -241,14 +292,11 @@
               echo "</td></tr>";
 	      echo "</table>";
 	      echo "</button>";
-	    }
 
-	    if ($n>0) {
-	      if ($folder!=$DVD_DIR."/AVRIL_LAVIGNE") { //files below surface are closed
-	        echo "<div style='display:none;' id='".$div_id."'><br>";
-	      } else { //dvd slot, folders are displayed
-	        echo "<div style='border-width:thick;border-style:solid;margin-bottom:-40px;' id='".$div_id."'><br>";
+	      if ($n==-1) { //exception
+		$n=1;
 	      }
+	      echo "<div style='display:none;' id='".$div_id."'><br>";
 	    } else { //files on surface are open
 	      echo "<script src='/script/toggletreeview.js'></script>";//call script on surface
 	      echo "<div id='".$div_id."'>";
@@ -273,7 +321,7 @@
 	          $is_image=false;
 	          $is_audio=false;
 	          $is_video=false;
-	          if (!is_dir($a_f)) { //its a file
+	          if (!is_dir($a_f) && $a_f!==$folder."/index.php" && $a_f!==$folder."/lechat.txt") { //its a file
 		  //determiine file type
 		    if ($file_extension=="png" ||
 		        $file_extension=="jpg" ||
@@ -302,7 +350,7 @@
 	            if ($is_image) {
 		      echo "<table class='image_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";	  
-		      echo "<th colspan='2' class='table_image'><img src='".$href_filename."' style='width:256px;height:auto;'></img></th>";
+		      echo "<th colspan='2' class='table_image'><img class='".$div_id."' id='".$href_filename."' style='width:256px;height:auto;'></img></th>"; //show image
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_image_icon'>";
 		      if (!($file_extension=="gif" || $file_extension=="apng")) {
@@ -327,7 +375,7 @@
 		    } else if ($is_video) {
 		      echo "<table class='video_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";	  
-		      echo "<th colspan='2' class='table_video'><video width='256px' height='auto' controls><source type='video/".$file_extension."' src='".$href_filename."'></video></th>";
+		      echo "<th colspan='2' class='table_video'><video width='256px' height='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."' /></video></th>";
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_video_icon'>";
 	                echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //video bmp			
@@ -349,9 +397,7 @@
 		      echo "<table class='music_icon_main'>";
 		      echo "<tr>";
 		        echo "<td rowspan='2' class='table_music_icon'>";
-                          //for ($j=0;$j<$n;$j++) {echo "___";} //audio branch printing
-		          //echo "__→";
-	                  echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //music bmp		    
+	                  echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //music bmp
 		        echo "</td>";
 		        echo "<td>";
 		          echo "<a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a>"; //music href
@@ -368,7 +414,7 @@
 
 		      echo "<tr><td></td>";
 		      echo "<td class='music_player' colspan='2'>";                    
-     		      echo"<audio controls><source type='audio/".$file_extension."' src='".$href_filename."'></audio>";//music player
+     		      echo "<audio controls class='".$div_id."_audio'><source type='audio/".$file_extension."' class='".$div_id."' id='".$href_filename."'/></audio>";//music player
 		      echo "</td></tr>";
 		      echo "</table><br>";
 
