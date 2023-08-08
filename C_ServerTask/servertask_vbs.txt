@@ -2,24 +2,23 @@ set x=createobject("wscript.shell")
 const SUBJECT="GDaym8-Registration-Code"
 const Q = """"
 x.run "cmd"
-wscript.sleep 2000
+wscript.sleep 8000
 x.sendkeys Q & "C:/Program Files/Outlook Express/msimn.exe" & Q & "/mailurl:mailto:" & Q & RCPEMAIL & "?subject=" & SUBJECT & "&body=" & BODY & "{enter}"
 
-wscript.sleep 4000
+wscript.sleep 8000
 x.sendkeys "^{enter}"
 
-wscript.sleep 4000
+wscript.sleep 120000
 x.sendkeys "{enter}"
 
-wscript.sleep 8000
+wscript.sleep 120000
 x.sendkeys "%{F4}"
 
-wscript.sleep 2000
+wscript.sleep 12000
 x.sendkeys "{enter}"
 
 wscript.sleep 6000
 x.sendkeys "del " & Q & "C:\Apache2.2\htdocs\global\" & "{{}" & "RegQ" & "{}}" & "\in_progress.txt" & Q & "{enter}"
 x.sendkeys "del " & Q & "server_send_email.vbs" & Q & "{enter}" 
 x.sendkeys "exit{enter}"
-
 

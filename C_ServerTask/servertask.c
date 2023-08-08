@@ -41,36 +41,6 @@ void CreateToken() { //Create Token.txt - used by users to make changes to htdoc
 }
 
 
-
-//vbs-script
-/*
-const RCPEMAIL="alienboi2726@gmail.com"\r\n
-const BODY="The-Code-Is-123456"\r\n
-
-set x=createobject("wscript.shell")
-const SUBJECT="GDaym8-Registration-Code"
-const Q = """"
-const s = "%20"
-x.run "cmd"
-wscript.sleep 2000
-x.sendkeys Q & "C:/Program Files/Outlook Express/msimn.exe" & Q & "/mailurl:mailto:" & Q & RCPEMAIL & "?subject=" & SUBJECT & "&body=" & BODY & "{enter}"
-
-wscript.sleep 2000
-x.sendkeys "^{enter}"
-
-wscript.sleep 2000
-x.sendkeys "{enter}"
-
-wscript.sleep 8000
-x.sendkeys "%{F4}"
-
-wscript.sleep 4000
-x.sendkeys "{enter}"
-
-wscript.sleep 3000
-x.sendkeys "exit{enter}"
-*/
-
 void AnimateServerTask() { //server task
   FILE *a_file;
   const char *f_name_regq="C:/Apache2.2/htdocs/global/{RegQ}/registerQ.txt";
@@ -161,11 +131,12 @@ void AnimateServerTask() { //server task
 
   	//read file to get string for vbs script
   	  a_file=fopen("servertask_vbs.txt","r");//open file
-  	  int vbs_txt_pos=0;
+
+ 	  int vbs_txt_pos=0;
   	  do {
             character = fgetc(a_file);
     	    vbs_txt[vbs_txt_pos]=character;
-    	    vbs_txt_pos++;
+   	    vbs_txt_pos++;
   	  } while (character != EOF); //read while not end of file
 
 	  fclose(a_file);//close file
@@ -191,7 +162,7 @@ void AnimateServerTask() { //server task
         }
       } 
       //printf("tick\n");
-    } else if (time>maxtick) {
+   } else if (time>maxtick) {
       time=0;
     }
   }
