@@ -80,6 +80,7 @@
 "Upload A index.html into your folder to set up your webpage.",
 "Upload A style.css into your folder to change your Theme and Wallpaper.",
 "Upload A chat_icon.jpg/png/gif into your folder to set your chat icon.",
+"Upload A folder_icon.jpg/png/gif (1MB) into your folder to set your folder icon.",
 
 //"This web-site's Minecraft Server goes by the same URL or IP Address.",
 //"This web-site's Minecraft Server Address is: $SERVER_IP_ADDRESS",
@@ -103,7 +104,7 @@
 "<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/T.N.T..wav'></audio> ACDC - T.N.T.",
 "<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/Thunderstruck.wav'></audio> ACDC - Thunderstruck",
 "<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/Highway%20To%20Hell.wav'></audio> ACDC - Highway To Hell",
-"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/The%20Razor%29s%20Edge.wav'></audio> ACDC - The Razor's Edge",
+"<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/The%20Razor%27s%20Edge.wav'></audio> ACDC - The Razor's Edge",
 "<img src='/images/wav.bmp'></img><audio controls><source type='audio/wav' src='/audio/Music/ACDC/You%20Shook%20Me%20All%20Night%20Long.wav'></audio> ACDC - You Shook Me All Night Long",
 
 //Music Men At Work
@@ -246,45 +247,75 @@
 	  if ($type==0) {	  
 	    //foldername
 	    if ($n>0 || $n==-1) {
-	      if ($n==-1) {
+	      if ($n==-1) { //exception
 	        echo "<script src='/script/toggletreeview.js'></script>";//call script on surface
 	      }	
-	      $folder_name=end(explode('/',$folder));
+
+	      //for branch display
+	      $tmp_folder_name=str_replace("C:/Apache2.2/htdocs/global/","",$folder);
+	      $folder_name_arr=explode('/',$tmp_folder_name);
+	      $folder_name=end($folder_name_arr);
+
+
 	      //for href and div_id
 	      $div_id=str_replace("C:/Apache2.2/htdocs","",$folder);
 	      $div_id=str_replace(" ","%20",$div_id);
 	      $div_id=str_replace("'","%27",$div_id);
 
-	      echo "<button id='".$div_id."_button' onclick=ToggleTreeView('".$div_id."')>";
-	      //Draw folder button
+	      echo "<div style='display:inline-table;' id='".$div_id."_button'>";
+	      echo "<button class='folder_button' onclick=ToggleTreeView('".$div_id."')>";
 
+	      //Draw folder button
               echo "<table class='folder_button'>";
 	      echo "<tr>";
 	      echo "<th rowspan='2' class='table_folder_icon'>";
 
-	      echo "<div style='display:none;' id='".$div_id."_branch'>";
-                for ($j=0;$j<$n-1;$j++) {echo "___";} //branch printing
-                echo "__→";
-              echo "</div>";
+	      //Draw Folder Icon branch
+	      echo "<table style='display:none;' class='opened_folder_branch' id='".$div_id."_branch'>";
+	      for ($j=0;$j<$n-1;$j++) { //for every previous folder
+		echo "<tr><td>";
+                for ($k=0;$k<$j;$k++) {echo "____";} //branch printing
+                echo "|__→";
+		echo "<u>".$folder_name_arr[$j]."</u></td></tr>";
+	      }
+	      echo "</table>";
 
-	      //Draw Folder Icon
-	      if (file_exists($folder."/folder_icon.gif")) {
-                echo "<img src='".$div_id."/folder_icon.gif"."' style='width:64px;height:auto;'></img></th>";
-	      } else if (file_exists($folder."/folder_icon.apng")) {
-                echo "<img src='".$div_id."/folder_icon.apng"."' style='width:64px;height:auto;'></img></th>";
-	      } else if (file_exists($folder."/folder_icon.png")) {
-                echo "<img src='".$div_id."/folder_icon.png"."' style='width:64px;height:auto;'></img></th>";
-	      } else if (file_exists($folder."/folder_icon.jpg")) {
-                echo "<img src='".$div_id."/folder_icon.jpg"."' style='width:64px;height:auto;'></img></th>";
-	      } else if (file_exists($folder."/folder_icon.jpeg")) {
-                echo "<img src='".$div_id."/folder_icon.jpeg"."' style='width:64px;height:auto;'></img></th>";
-	      } else if (file_exists($folder."/folder_icon.bmp")) {
-                echo "<img src='".$div_id."/folder_icon.bmp"."' style='width:64px;height:auto;'></img></th>";
-	      } else {
-                echo "<img src='/images/folder.bmp' style='width:32px;height:auto;'></img></th>";
+	      //Draw folder icon image
+	      for ($i=0;$i<7;$i++) {
+		if ($i<6) {
+		  $folder_icon_ext="";
+		  switch ($i) {
+		    case 0;
+		      $folder_icon_ext="gif";
+		      break;
+		    case 1;
+		      $folder_icon_ext="apng";
+		      break;
+		    case 2;
+		      $folder_icon_ext="png";
+		      break;
+		    case 3;
+		      $folder_icon_ext="jpg";
+		      break;
+		    case 4;
+		      $folder_icon_ext="jpeg";
+		      break;
+		    case 5;
+		      $folder_icon_ext="bmp";
+		      break;
+		  }
+		  if (file_exists($folder."/folder_icon.".$folder_icon_ext)) {
+		    if (filesize($folder."/folder_icon.".$folder_icon_ext)<1000000) {
+                      echo "<img src='".$div_id."/folder_icon.".$folder_icon_ext."' style='height:64px;width:auto;'></img></th>";
+		      break;
+		    }
+		  }
+	        } else { //default icon
+                  echo "<img src='/images/folder.bmp' style='width:32px;height:auto;'></img></th>";
+		}
 	      }
 
-              echo "<td class='folder_name' style='font-size:20px;'>".$folder_name." [<a href='".$div_id."'>visit</a>]</td>"; //print foldername
+              echo "<td class='folder_name' style='font-size:20px;'>".$folder_name." <span style='font-size:16px;'>[<a href='".$div_id."'>visit</a>]</span></td>"; //print foldername
 	        echo "</tr>";
 	        echo "<tr class='folder_metadata'><td>";
 	          echo " [".date("F/d/Y H:i:s",filectime($folder))."]";
@@ -292,14 +323,42 @@
               echo "</td></tr>";
 	      echo "</table>";
 	      echo "</button>";
+	      //end of button
+
+	      if (file_exists($folder."/index.html")) {	      //only if index exists
+              	echo "<div style='display:none;' id='".$div_id."_folder_tab'>";
+	        echo "<iframe width='100%' height='100%' class='".$div_id."' id='https://gdaym8.site/".$div_id."/'></iframe>";
+		echo "</div>";
+	      } else {
+		echo "<br>";
+	      }
+
+	      //print last branch
+	      echo "<div class='showfiletree_branch' style='display:none;' id='".$div_id."_last_branch'>"; //start of final branch
+	      echo "<span style='font-size:16px;'>";	      
+
+              for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing
+              echo "|<br>";
+	      
+              for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing
+              echo "|__→</span>";
+	      echo "[<a href='".$div_id."'>".$folder_name."</a>]<br>";
+
+	      echo "<span style='font-size:16px;'>";
+              for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing
+              echo "|</span><br>";
+
+	      echo "</div>"; //end of final branch
+
+	      echo "</div>";//end of folder div
 
 	      if ($n==-1) { //exception
 		$n=1;
 	      }
-	      echo "<div style='display:none;' id='".$div_id."'><br>";
+	      echo "<div style='display:none;' id='".$div_id."'>"; //begin div
 	    } else { //files on surface are open
 	      echo "<script src='/script/toggletreeview.js'></script>";//call script on surface
-	      echo "<div id='".$div_id."'>";
+	      echo "<div id='".$div_id."'>";		
 	    }
 	  }// end of if type==0 beginning
 
@@ -312,7 +371,6 @@
                   unlink($a_f);
                   break;
                 case 0: // Printing files
-	          //echo $a_f."<br>";
 	          //manual encoding
 	          $href_filename=str_replace("C:/Apache2.2/htdocs","",$a_f);
 	          $href_filename=str_replace(" ","%20",$href_filename);
@@ -340,7 +398,9 @@
 		    } else if (
 		      $file_extension=="mp4" ||
 		      $file_extension=="mk4" ||
-		      $file_extension=="mov"
+		      $file_extension=="mov" ||
+		      $file_extension=="webm" ||
+		      $file_extension=="webp"
 		    ) {
 		      $is_video=true;
 		    }
@@ -374,8 +434,8 @@
 		    //--- video files ---
 		    } else if ($is_video) {
 		      echo "<table class='video_icon_main' style='display:inline-table;'>";
-		      echo "<tr>";	  
-		      echo "<th colspan='2' class='table_video'><video width='256px' height='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."' /></video></th>";
+		      echo "<tr>";
+		      echo "<th colspan='2' class='table_video'><video width='256px' height='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."'></video></th>";
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_video_icon'>";
 	                echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //video bmp			
@@ -394,6 +454,7 @@
 
 		    //--- music files ---
 		    } else if ($is_audio) { //display music
+		      echo "<div style='border: 2px solid;width:100%' class='music_row'>";
 		      echo "<table class='music_icon_main'>";
 		      echo "<tr>";
 		        echo "<td rowspan='2' class='table_music_icon'>";
@@ -414,9 +475,9 @@
 
 		      echo "<tr><td></td>";
 		      echo "<td class='music_player' colspan='2'>";                    
-     		      echo "<audio controls class='".$div_id."_audio'><source type='audio/".$file_extension."' class='".$div_id."' id='".$href_filename."'/></audio>";//music player
+     		      echo "<audio controls class='".$div_id."_audio'><source type='audio/".$file_extension."' class='".$div_id."' id='".$href_filename."'></audio>";//music player
 		      echo "</td></tr>";
-		      echo "</table><br>";
+		      echo "</table></div>";
 
 		    //--- regular files ---
 		    } else {
@@ -451,10 +512,7 @@
             PrintDir($a_f,$type,$n+1);
           } //end for loop, before loop is a div
 	  if ($type==0) {
-            if ($n>0 && $folder!=$DVD_DIR."/AVRIL_LAVIGNE") {
-	      echo "<br>";
-            }
-	    echo "<br></div>";
+	    echo "</div>";
 	  } //close div of folder
         }//end main, if is dir
       }//end if non-valid files
@@ -609,8 +667,8 @@
   <style>
     #showfiletree {
       border:2px solid;
-      overflow-y: auto;
-      max-height: 480px;
+      /*overflow-y: auto;
+      max-height: 480px;*/
     }
   </style>";
     echo "<link rel='stylesheet' href='/global/".$SELF_USER_NAME."/style.css'>";

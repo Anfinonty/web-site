@@ -70,7 +70,7 @@
   </form>
   <br>
   <?php
-    $extensions= array("html","js","css","txt","mp3","ogg","flac","wav","mid","gif","png","apng","bmp","jpg","jpeg","mkv","mp4","mov","webm","webp","zip");
+    $extensions= array("html","js","css","txt","mp3","ogg","flac","wav","mid","gif","png","apng","bmp","jpg","jpeg","mkv","mp4","mpg","mpeg","mov","webm","webp","zip");
     echo "Files Allowed: ";
     for ($i=0;$i<sizeof($extensions);$i++) {
       echo $extensions[$i].", ";
@@ -96,9 +96,9 @@
         echo $PROTIPS[0]."<br>";
         echo $PROTIPS[1]."<br>";
         echo $PROTIPS[2]."<br>";
-        echo $PROTIPS[3]."<br><br>";
+        echo $PROTIPS[3]."<br>";
+        echo $PROTIPS[4]."<br><br>";
         PrintDir($SELF_USER_FOLDER_NAME,0,-1);
-        echo "<br>";
     ?>
   </div>
   <?php    
