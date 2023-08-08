@@ -8,10 +8,12 @@
   <h2>Site Content</h2>
   <div id='showfiletree'>
   <?php
-    echo "Total Size: ".GetConvertedFilesize(GetDirectorySize($GLOBAL_FOLDER))."<br><br>";
+    echo "<a href='/php/show_oldchat_index.php'> View Archived Chat </a> ".$S;
+    echo "<a href='/global/lechat.txt'> View Current Chat File </a> ".$S;
+    echo "<a href='/oldchat/totalchat.txt'> View Archived Chat File </a> ".$S;
+    echo "<br>Total Size: ".GetConvertedFilesize(GetDirectorySize($GLOBAL_FOLDER))."<br><br>";
     PrintDir($GLOBAL_FOLDER,0,0);
   ?>
-    <br>
   </div>
   <h2>DVD of The Day</h2>
   <div id='showfiletree'>
