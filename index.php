@@ -10,8 +10,8 @@
   <style>
     #chathere {
       border:2px solid;
-      overflow-y: auto;
-      max-height: 480px;
+      /*overflow-y: auto;
+      max-height: 480px;*/
     }
   </style>
 </head>
