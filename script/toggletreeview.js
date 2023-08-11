@@ -1,17 +1,22 @@
 //Toggle Tree View for PrintDir
   function ToggleTreeView(_e) {   
     var i;
-    e = document.getElementById(_e); //folder directory
-    e2=document.getElementById(_e.concat("_branch"));
-    e3=document.getElementById(_e.concat("_button"));
-    e4=document.getElementById(_e.concat("_folder_tab"));
-    e5=document.getElementById(_e.concat("_last_branch"));
-    const folder_files=document.getElementsByClassName(_e);
-    const folder_video_files=document.getElementsByClassName(_e.concat("_video"));
-    const folder_audio_files=document.getElementsByClassName(_e.concat("_audio"));
+    var e = document.getElementById(_e); //folder directory
+    var e2=document.getElementById(_e.concat("_branch"));
+    var e3=document.getElementById(_e.concat("_button"));
+    var e4=document.getElementById(_e.concat("_folder_tab"));
+    var e5=document.getElementById(_e.concat("_last_branch"));
+    var e6=document.getElementById(_e.concat("_footer"));
+    var e7=document.getElementById(_e.concat("_footer_table"));
+    var e8=document.getElementById(_e.concat("_footer_break"));
+    var e9=document.getElementById(_e.concat("_footer_anchor"));
+
+    var a=new Audio("/audio/folder_open_sound3.mp3");
+    var a2=new Audio("/audio/folder_close_sound.mp3");
 
     _dvd="/dvd/AVRIL_LAVIGNE";
     if (e.style.display=="none") { //open
+      a.play();
       e.style.display="block"; //folder open, causes the break
       e.style.borderWidth="thick"; //folder border size
       e.style.borderStyle="solid"; //folder border type
@@ -21,43 +26,59 @@
       e3.style.borderStyle="solid"; //button border type
 
       if (_e!=_dvd) {
-        //e.style.marginBottom="32px"; //folder bottom margin
-        //e3.style.marginTop="32px"; //button margin top open
-
         e2.style.display="inline-table"; //branch in button open
         e5.style.display="inline-table"; //final branch open
 
-        try {
-	  e4.style.display="block";
-	  e3.style.display="block";
+        try { //if index.html exists
+	  e4.style.display="block"; //open website
+	  e3.style.display="block"; //<br> the button
           e5.style.display="block"; //final branch open
-	  e4.style.width="100%";
+	  e4.style.width="100%"; //fill out the user screen
 	  e4.style.height="100%";
-	} catch (error) {}; //folder tab open
+	} catch (error) {};
+
+
+	//footer
+        e6.style.display="block"; //display footer
+        e8.style.display="block"; //footer break
+
+	//style='text_align:center;border-style:solid;border-width:thick;width:100%;'>
+	e7.style.display="block"; //footer table
+	e7.style.textAlign="center";	
+	e7.style.borderStyle="solid";
+	e7.style.borderWidth="thick";
+
+	e9.style.display="inline-table";
+	e9.style.marginTop="-50%";
       }
-      for (i=0;i<folder_files.length;i++) {	//open branch class folder
-	folder_files[i].src=folder_files[i].id;
-      }
-      for (i=0;i<folder_video_files.length;i++) {	//open branch class videos in folder
-	folder_video_files[i].load();
-      }
-      for (i=0;i<folder_audio_files.length;i++) {	//open branch class audios in folder
-	folder_audio_files[i].load();
+      if (!e.classList.contains("folder_opened")) { //occurs once only
+        const folder_files=document.getElementsByClassName(_e);
+        const folder_video_files=document.getElementsByClassName(_e.concat("_video"));
+        const folder_audio_files=document.getElementsByClassName(_e.concat("_audio"));
+
+        e.classList.add("folder_opened");
+        for (i=0;i<folder_files.length;i++) {	//open branch class folder
+	  folder_files[i].src=folder_files[i].id;
+        }
+        for (i=0;i<folder_video_files.length;i++) {	//open branch class videos in folder
+	  folder_video_files[i].load();
+        }
+        for (i=0;i<folder_audio_files.length;i++) {	//open branch class audios in folder
+	  folder_audio_files[i].load();
+        }
       }
     } else { //close
+      a2.play();
       e.style.display="none"; // folder close
       e2.style.display="none"; //branch in button close
       e3.style.display="inline-table"; //button snap back
-      e3.style.borderWidth="none";
+      e3.style.borderWidth="none"; //button folder thick border disappear
       e3.style.borderStyle="none";
-
       try {e4.style.display="none";} catch (error) {} //iframe in button close
       e5.style.display="none"; //branch in button close
-
-
-      //e3.style.marginTop="0px"; //button margin top close
-      /*for (i=0;i<folder_files.length;i++) {	//close branch class folder
-	folder_files[i].src="";
-      }*/
+      e6.style.display="none"; // folder footer close
+      e7.style.display="none"; // folder footer close
+      e8.style.display="none"; // folder footer close
+      e9.style.display="none"; // folder footer close
     }
   }

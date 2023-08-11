@@ -158,7 +158,7 @@ window.addEventListener("load", function()
       // /s is not supported in older browsers
       //var latest_username=chatbubble_part1.match(/\>\/(.*)\<\/a\>\]/s)[1];
 
-      var latest_username=chatbubble_part1.match(/\>\/(.*)\<\/a\>\]/ig)[1];
+      var latest_username=chatbubble_part1.match(/\>\/(.*)\<\/a\>\]/)[1];
       display_chat_onscreen_timer[GetIdFromUsername(latest_username)]=1000;
       latest_ip_address=latest_username;
     }
