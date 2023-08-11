@@ -10,6 +10,9 @@
   <style>
     #chathere {
       border:2px solid;
+      word-wrap: break-word;
+      overflow-x: auto;
+      max-width: 100%;
       /*overflow-y: auto;
       max-height: 480px;*/
     }
@@ -42,7 +45,7 @@
 
   <!-- Webpage @ Greeting -->
   <div id="default_chatroom_greet">
-  <h1>G'day M8!</h1>
+  <h1 id="header">G'day M8!</h1>
     <?php
 //      echo "Hello World! Welcome to ".$SERVER_IP_ADDRESS."! <br>";
 // Hello Changes
@@ -55,6 +58,9 @@
 
   <!-- For Page Refresh Without Page Reload -->
   <iframe name="nfresh" style="display:none;"></iframe>
+
+
+  <!-- for live peers -->
   <div id="users_onscreen" hidden></div>
 
 
@@ -83,6 +89,8 @@
     <input type="submit" id="btnSubmit" name="btnSubmit" value="Say Something" onclick="SubmitMsg(this)"><br>
     <textarea onfocus="TxtHereOnFocus()" onblur="TxtHereOnBlur()" id="txthere" name="txthere" rows="4" cols="80" value="" maxlength="9001"></textarea>
   </form>
+  <?php echo "<a href='#footer'>Dive Down</a><br>"; ?>
+
   <?php
     //Posting
     if (isset($_POST['btnSubmit'])){
@@ -122,7 +130,7 @@
       echo htmlspecialchars(strval(file_get_contents($_SERVER['DOCUMENT_ROOT']."/".$CHAT_DIR)));
     ?>
   </div>
-
+  <div id="footer"><a href="#default_server_header">Back to Top</a></div>
 
 
   <?php

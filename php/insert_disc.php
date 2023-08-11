@@ -1,4 +1,4 @@
-<?php 
+﻿<?php 
   include $_SERVER['DOCUMENT_ROOT']."/php/user_header.php"; 
   if (file_exists($SELF_USER_FOLDER_NAME)) {//User is logged in
     $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
@@ -18,7 +18,7 @@
 </head>
 <body>
   <form method="post" enctype="multipart/form-data">
-    <h2>Insert Disc</h2>
+    <h2>Insert Disc (Page is not in use)</h2>
     <input type="submit" id="btnRegSubmit" name="btnRegSubmit" value="[^]">
     <input id="inputUsername" name="inputUsername" placeholder="Enter Your Name">&nbsp<input type="file" name="files[]" id="files" multiple directory="" webkitdirectory="" moxkitdirectory="">
   </form>
@@ -27,7 +27,7 @@
     Disc must be ≤1GB and have no .php files.
   </div>
 
-  <?php
+  <?php /*
     //Posting
     if (isset($_POST['btnRegSubmit'])){
       //user credentials
@@ -62,7 +62,7 @@
       //Create User Folder
         mkdir($GLOBAL_FOLDER."/".$user_name,0755,true);
       //Folder upload
-        $total_size=0;
+       $total_size=0;
         $total_folder_num=0;
         foreach($_FILES['files']['name'] as $i => $name) {
           $file_ext=strtolower(end(explode('.',$_FILES['files']['name'][$i]))); //lwrcase
@@ -96,10 +96,11 @@
 
         $redirect_url="http://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
         header('Location: '.$redirect_url); //go back to home
-      }
+      }*/
     }
 //
 //
   ?>
 </body>
 </html>
+

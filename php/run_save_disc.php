@@ -1,4 +1,8 @@
 <?php  include $_SERVER['DOCUMENT_ROOT']."/php/user_header.php"; 
+  if (!file_exists($SELF_USER_FOLDER_NAME)) { //no username
+    $redirect_url="https://".$_SERVER['HTTP_HOST'];
+    header('Location: '.$redirect_url); //go back to home
+  }
 
   //Recharge Session
   $user_details=htmlspecialchars(strval(file_get_contents($SELF_USER_SESSION)));
@@ -12,39 +16,44 @@
   $fp=fopen($SELF_USER_SESSION,"w");
   fwrite($fp,$user_x.",".$user_y.",".$time_expire.",".$user_name);
   fclose($fp);
+?>
 
-  //Save Folder To Zip https://www.geeksforgeeks.org/how-to-zip-a-directory-in-php/
-  //https://www.php.net/manual/en/ziparchive.addemptydir.php
 
-  function ZipFolder($pathdir,$current_folder,$zip) {
-    $_pathdir=$pathdir."/".$current_folder;
-    $_pathdir=preg_replace('/\/+/i','/',$_pathdir);
-    $current_folder=preg_replace('/\/+/i','/',$current_folder);
-    $dir=opendir($_pathdir);
-    while ($_file = readdir($dir)) {
-      if (is_file($_pathdir."/".$_file)) {
-        $saved_file_name=preg_replace("/\//i",">",$current_folder).">".$_file;
-        $zip -> addFile($_pathdir."/".$_file, $current_folder."/".$saved_file_name);
-      } else if (is_dir($_pathdir."/".$_file)) {
-        if ($_file!="." && $_file!="..") {
-          $new_folder=$current_folder."/".$_file;
-          $zip -> addEmptyDir($new_folder);
-          ZipFolder($pathdir,$new_folder,$zip);
-        }
-      }
-    }
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Saving Disc Page</title>
+  <style>
+  body {
+    text-align: center;
   }
-
-  $pathdir = $SELF_USER_FOLDER_NAME."/";
-  $zipcreated = $GLOBAL_FOLDER."/WEB_SITE_DISC_".$user_name.".zip";
-  $zip = new ZipArchive;
-  if($zip -> open($zipcreated, ZipArchive::CREATE ) === TRUE) {
-    ZipFolder($pathdir,"",$zip);
-    $zip ->close();
-    $redirect_url="/global/"."WEB_SITE_DISC_".$user_name.".zip";
-    header('Location: '.$redirect_url);
+  </style>
+</head>
+<body>
+<?php 
+  $file_download_href=$user_name."/WEB_SITE_DISC_".$user_name.".zip";     
+  if (!file_exists($SAVED_DISCS_DIR."/".$file_download_href)) {
+    echo "<h1 id='exists'> Disc is being Copied... </h1><p>(refresh if loading below didn't load)</p>";
+    $copying_size=GetConvertedFilesize(GetDirectorySize($USER_SAVED_DISCS_DIR));
+    $source_size=GetConvertedFilesize(GetDirectorySize($SELF_USER_FOLDER_NAME));
+    echo "{$copying_size} / {$source_size}";
   } else {
-    $redirect_url="/php/save_disc.php";
-    header('Location: '.$redirect_url); //go back to home
+    echo "<h1 id> Disc has been Copied Successfully </h1>";
+    echo "<a href='/global/{SavedDiscs}/".$file_download_href."'> Download </a>";
   }
 ?>
+  <br><br>
+  <p>You can leave and return to this page later.</p>
+  <script>
+    LiveReload=function() {
+      location.reload();
+    }
+
+    if (document.getElementById("exists")!==null) {
+      setInterval(LiveReload,5000);
+    }
+  </script>
+</body>
+</html>
+
+

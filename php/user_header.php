@@ -69,6 +69,7 @@
         /**/$REG_USERS_DIR=$GLOBAL_FOLDER."/{RegisteredUsers}";
         /**/$REG_EMAILS_DIR=$GLOBAL_FOLDER."/{RegisteredEmails}";
         /**/$REG_Q_DIR=$GLOBAL_FOLDER."/{RegQ}";
+	/**/$SAVED_DISCS_DIR=$GLOBAL_FOLDER."/{SavedDiscs}";
         /**/$SESSIONS_DIR=$GLOBAL_FOLDER."/{Sessions}";
               /**/$TOKEN_DIR=$SESSIONS_DIR."/token.txt";
               /**/$JUSERS_DIR=$SESSIONS_DIR."/joined_users.txt";
@@ -165,6 +166,7 @@
     $RAND_TIP=rand(0,sizeof($PROTIPS)-1);
     $SELF_USER_NAME=GetUsernameFromIpAddress($USER_IP_ADDRESS);
     $SELF_USER_FOLDER_NAME=$GLOBAL_FOLDER."/".$SELF_USER_NAME;
+    $USER_SAVED_DISCS_DIR=$SAVED_DISCS_DIR."/".$SELF_USER_NAME;  
 //
 //
 //
@@ -198,7 +200,7 @@
     mkdir($REG_Q_DIR,0777,true);
     mkdir($REG_EMAILS_DIR,0777,true);
     mkdir($REG_USERS_DIR,0777,true);
-
+    mkdir($SAVED_DISCS_DIR,0777,true);
 //
 //
 //
@@ -233,12 +235,14 @@
       global $REG_USERS_DIR;
       global $REG_EMAILS_DIR;
       global $REG_Q_DIR;
+      global $SAVED_DISCS_DIR;
       global $SESSIONS_DIR;
       global $DVD_DIR;
       global $GLOBAL_FOLDER;
       if ($folder!=$REG_USERS_DIR &&
 	  $folder!=$REG_EMAILS_DIR &&
 	  $folder!=$REG_Q_DIR &&
+	  $folder!=$SAVED_DISCS_DIR &&
 	  $folder!=$SESSIONS_DIR
 	) {
         $a = scandir($folder);
@@ -342,12 +346,36 @@
 	      
               for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing
               echo "|__→</span>";
-	      echo "[<a href='".$div_id."'>".$folder_name."</a>]<br>";
+	      echo "[<a href='".$div_id."'>".$folder_name."</a>]{$S}{$S}";
 
-	      echo "<span style='font-size:16px;'>";
-              for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing
-              echo "|</span><br>";
+	      //echo "[<a href='#default_server_header'>↑X</a>]{$S}{$S}";
+	      for ($j=0;$j<$n;$j++) { //for every previous folder
+		$tmp_div_id="/global";
+		echo "[<a href='#";
+		for ($k=0;$k<$j+1;$k++) {
+		  $tmp_subfolder_name=$folder_name_arr[$k];
+		  $tmp_subfolder_name=str_replace(" ","%20",$tmp_subfolder_name);
+	      	  $tmp_subfolder_name=str_replace("'","%27",$tmp_subfolder_name);
+		  $tmp_div_id.="/".$tmp_subfolder_name;
+		}
+		echo $tmp_div_id."_button'>";
+		if ($j>0) {
+		  if ($j<$n-1) {
+                    echo "←";
+		  } else {
+		    echo "•";
+		  }
+		} else {
+                  echo "start";
+		}
+		echo "</a>]".$S;
+	      }
+	      echo "<br>";
 
+	      echo "<span style='font-size:16px;'><a href='#".$div_id."_footer_anchor'>";
+              for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing		
+	      echo "↓</a></span>";
+	      echo "<br>";
 	      echo "</div>"; //end of final branch
 
 	      echo "</div>";//end of folder div
@@ -410,7 +438,7 @@
 	            if ($is_image) {
 		      echo "<table class='image_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";	  
-		      echo "<th colspan='2' class='table_image'><img class='".$div_id."' id='".$href_filename."' style='width:256px;height:auto;'></img></th>"; //show image
+		      echo "<th colspan='2' class='table_image'><img class='".$div_id."' id='".$href_filename."' style='width:auto;height:256px;'></img></th>"; //show image
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_image_icon'>";
 		      if (!($file_extension=="gif" || $file_extension=="apng")) {
@@ -419,7 +447,7 @@
 	                echo "<img src='/images/".$file_extension.".gif' style='width:32px;height:auto;'></img>"; //moving image bmp
 		      }
 		      echo "</th>";
-		      echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
+		      echo "<td><div class='a_file_name'><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></div></td>";
 		      echo "</tr>";
 		      echo "<tr class='image_metadata'><td>";
 		      if (filemtime($a_f)!=NULL) { 		//print date creation
@@ -435,12 +463,13 @@
 		    } else if ($is_video) {
 		      echo "<table class='video_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";
-		      echo "<th colspan='2' class='table_video'><video width='256px' height='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."'></video></th>";
+		      //echo "<th colspan='2' class='table_video'><video width='256px' height='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."'></video></th>";
+		      echo "<th colspan='2' class='table_video'><video height='256px' width='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."'></video></th>";
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_video_icon'>";
 	                echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //video bmp			
 		      echo "</th>";
-		      echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
+		      echo "<td><div class='a_file_name'><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></div></td>";
 		      echo "</tr>";
 		      echo "<tr class='video_metadata'><td>";
 		      if (filemtime($a_f)!=NULL) { 		//print date creation
@@ -484,7 +513,7 @@
 		      echo "<table class='file_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";
 		        echo "<th rowspan='2' class='table_file_icon'><img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img></th>"; //normal file bmp
-		        echo "<td><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></td>";
+		        echo "<td><div class='a_file_name'><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></div></td>";
 		      echo "</tr>";
 		      echo "<tr class='file_metadata'><td>";
 		      if (filemtime($a_f)!=NULL) { 		//print date creation
@@ -513,6 +542,30 @@
           } //end for loop, before loop is a div
 	  if ($type==0) {
 	    echo "</div>";
+	    if ($folder!=$GLOBAL_FOLDER && $folder!=$DVD_DIR && $folder!=$DVD_DIR."/AVRIL_LAVIGNE") {
+              echo "<span id='".$div_id."_footer' style='diplay:none;'>";
+	        //echo "<table id='".$div_id."_footer' style='text_align:center;border-style:solid;border-width:thick;width:100%;'>"; //non-working
+	        //echo "<table id='".$div_id."_footer_table' style='display:none;'>";
+		//echo "<tr>";
+		//echo "<td style='width:33%;border-width:thin;border-style:solid'><a href='#".$div_id."'>[↑] Back to Top</a></td>";
+	        //echo "<td style='width:33%;border-width:thin;border-style:solid'><button class='folder_button' onclick='location.href=\"#".$div_id."_last_branch\"'>Back To Top</button></td>";
+	        //echo "<td style='width:33%;border-width:thin;border-style:solid'><button class='folder_button' onclick=ToggleTreeView('".$div_id."')>Close Folder</button></td>";
+	        //echo "<td style='border-width:thin;border-style:solid'>";
+		//echo "<div id='".$div_id."_footer_anchor' style='margin-top:-768px;'> </div>";
+		//echo "</td>";
+		//echo "</tr>";
+	        //echo "</table>";
+	      echo "<span id='".$div_id."_footer_table' style='display:none;'>"; //working
+		echo "<table style='border-style:solid;border-width:thick;width:100%'><tr>";
+		  echo "<td style='width:33%;border-width:thin;border-style:solid'><button style='width:100%;'class='folder_button' onclick='location.href=\"#".$div_id."_last_branch\"'>Back To Top</button></td>";
+		  echo "<td style='width:33%;border-width:thin;border-style:solid'><button style='width:100%;' onclick=ToggleTreeView('".$div_id."')>Close Folder</button></td>";
+		  echo "<td style='width:33%;border-width:thin;border-style:solid'><button style='width:100%;'class='folder_button'>{$S}</button></td>";
+		echo "</table></tr>";
+	      echo "</span>";
+	      echo "<div id='".$div_id."_footer_anchor' style='display:none;'> </div>";
+	      echo "<table id='".$div_id."_footer_break' style='display:none'><tr><td>{$S}</td></tr><tr><td>{$S}</td></tr></table>";
+	      echo "</span>";
+	    }
 	  } //close div of folder
         }//end main, if is dir
       }//end if non-valid files
@@ -632,7 +685,9 @@
        $file_content_arr=explode(",",$file_content);
        $session_user_expiry_time=$file_content_arr[2];      
        if (time()>$session_user_expiry_time) {//Delete expired session user
-         unlink($GLOBAL_FOLDER."/WEB_SITE_DISC_".GetUsernameFromIpAddress($session_user_ip_address).".zip");
+	 $tmp_username=GetUsernameFromIpAddress($session_user_ip_address);
+	 PrintDir($SAVED_DISCS_DIR."/".$tmp_username,-1,0); //Delete folder from {SavedDiscs}
+         //unlink($SAVED_DISCS_DIR."/WEB_SITE_DISC_".$tmp_username.".zip");
          //PrintDir($GLOBAL_FOLDER."/".GetUsernameFromIpAddress($session_user_ip_address),-1,0);//autoeject - legacy
          unlink($SESSIONS_DIR."/".$session_file_name);
        } else {
@@ -669,6 +724,12 @@
       border:2px solid;
       /*overflow-y: auto;
       max-height: 480px;*/
+    }
+
+    .a_file_name{
+      overflow: auto;
+      max-width: 445px;
+      max-height: 24px;
     }
   </style>";
     echo "<link rel='stylesheet' href='/global/".$SELF_USER_NAME."/style.css'>";

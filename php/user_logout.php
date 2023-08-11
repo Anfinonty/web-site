@@ -11,12 +11,12 @@
   <?php 
 //    global $USER_SESSION_DIR;
 
-    if (file_exists($SELF_USER_SESSION)) {
-      unlink($SELF_USER_SESSION);
-    }    
+    //if (file_exists($SELF_USER_SESSION)) {
+      //unlink($SELF_USER_SESSION);
+    //}    
     //redirect to home
-    $redirect_url="http://".$_SERVER['HTTP_HOST'];;
-    header('Location: '.$redirect_url); //go back to home
+    //$redirect_url="http://".$_SERVER['HTTP_HOST'];;
+    //header('Location: '.$redirect_url); //go back to home
   ?>
 </body>
 </html>
