@@ -10,6 +10,8 @@
     var e7=document.getElementById(_e.concat("_footer_table"));
     var e8=document.getElementById(_e.concat("_footer_break"));
     var e9=document.getElementById(_e.concat("_footer_anchor"));
+    var e10=document.getElementById(_e.concat("_header"));    
+    var e11=document.getElementById(_e.concat("_header_table"));    
 
     var a=new Audio("/audio/folder_open_sound3.mp3");
     var a2=new Audio("/audio/folder_close_sound.mp3");
@@ -20,6 +22,7 @@
       e.style.display="block"; //folder open, causes the break
       e.style.borderWidth="thick"; //folder border size
       e.style.borderStyle="solid"; //folder border type
+      //e.style.textAlign="center"; //centering
 
       e3.style.display="inline-table"; //button break
       e3.style.borderWidth="thick"; //button border size
@@ -28,6 +31,7 @@
       if (_e!=_dvd) {
         e2.style.display="inline-table"; //branch in button open
         e5.style.display="inline-table"; //final branch open
+        e5.style.textAlign="left";
 
         try { //if index.html exists
 	  e4.style.display="block"; //open website
@@ -40,16 +44,21 @@
 
 	//footer
         e6.style.display="block"; //display footer
-        e8.style.display="block"; //footer break
-
-	//style='text_align:center;border-style:solid;border-width:thick;width:100%;'>
 	e7.style.display="block"; //footer table
 	e7.style.textAlign="center";	
 	e7.style.borderStyle="solid";
 	e7.style.borderWidth="thick";
+        e8.style.display="block"; //footer break
+        e8.style.width="100%"; //footer break
 
-	e9.style.display="inline-table";
-	e9.style.marginTop="-50%";
+	e9.style.display="inline-table"; //footer ancho
+	e9.style.marginTop="-51%";
+
+        e10.style.display="block"; //display header
+	e11.style.display="block"; //header table
+	e11.style.textAlign="center";
+	e11.style.borderStyle="solid";
+	e11.style.borderWidth="thick";
       }
       if (!e.classList.contains("folder_opened")) { //occurs once only
         const folder_files=document.getElementsByClassName(_e);
@@ -80,5 +89,7 @@
       e7.style.display="none"; // folder footer close
       e8.style.display="none"; // folder footer close
       e9.style.display="none"; // folder footer close
+      e10.style.display="none"; //folder header close
+      e11.style.display="none"; //folder header close
     }
   }
