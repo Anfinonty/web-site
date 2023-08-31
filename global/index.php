@@ -21,5 +21,10 @@
     PrintDir($DVD_DIR,0,0);
   ?>
   </div>
+  <?php
+    for ($i=0;$i<36;$i++) {
+      echo "<br>";
+    }
+  ?>
 </body>
 </html>
