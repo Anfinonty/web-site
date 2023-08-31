@@ -239,6 +239,8 @@
       global $SESSIONS_DIR;
       global $DVD_DIR;
       global $GLOBAL_FOLDER;
+      $full_folder_directories="";
+      $prev_div_id="";
       if ($folder!=$REG_USERS_DIR &&
 	  $folder!=$REG_EMAILS_DIR &&
 	  $folder!=$REG_Q_DIR &&
@@ -310,16 +312,16 @@
 		  }
 		  if (file_exists($folder."/folder_icon.".$folder_icon_ext)) {
 		    if (filesize($folder."/folder_icon.".$folder_icon_ext)<1000000) {
-                      echo "<img src='".$div_id."/folder_icon.".$folder_icon_ext."' style='height:64px;width:auto;'></img></th>";
+                      echo "<img src='".$div_id."/folder_icon.".$folder_icon_ext."' class='special_folder_icon'></img></th>";
 		      break;
 		    }
 		  }
 	        } else { //default icon
-                  echo "<img src='/images/folder.bmp' style='width:32px;height:auto;'></img></th>";
+                  echo "<img src='/images/folder.bmp' class='default_folder_icon'></img></th>";
 		}
 	      }
 
-              echo "<td class='folder_name' style='font-size:20px;'>".$folder_name." <span style='font-size:16px;'>[<a href='".$div_id."'>visit</a>]</span></td>"; //print foldername
+              echo "<td class='folder_name'>".$folder_name." <span class='folder_sub_name'>[<a href='".$div_id."'>visit</a>]</span></td>"; //print foldername
 	        echo "</tr>";
 	        echo "<tr class='folder_metadata'><td>";
 	          echo " [".date("F/d/Y H:i:s",filectime($folder))."]";
@@ -339,7 +341,7 @@
 
 	      //print last branch
 	      echo "<div class='showfiletree_branch' style='display:none;' id='".$div_id."_last_branch'>"; //start of final branch
-	      echo "<span style='font-size:16px;'>";	      
+	      echo "<span class='folder_sub_name'>";	      
 
               for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing
               echo "|<br>";
@@ -349,32 +351,11 @@
 	      echo "[<a href='".$div_id."'>".$folder_name."</a>]{$S}{$S}";
 
 	      //echo "[<a href='#default_server_header'>↑X</a>]{$S}{$S}";
-	      for ($j=0;$j<$n;$j++) { //for every previous folder
-		$tmp_div_id="/global";
-		echo "[<a href='#";
-		for ($k=0;$k<$j+1;$k++) {
-		  $tmp_subfolder_name=$folder_name_arr[$k];
-		  $tmp_subfolder_name=str_replace(" ","%20",$tmp_subfolder_name);
-	      	  $tmp_subfolder_name=str_replace("'","%27",$tmp_subfolder_name);
-		  $tmp_div_id.="/".$tmp_subfolder_name;
-		}
-		echo $tmp_div_id."_button'>";
-		if ($j>0) {
-		  if ($j<$n-1) {
-                    echo "←";
-		  } else {
-		    echo "•";
-		  }
-		} else {
-                  echo "start";
-		}
-		echo "</a>]".$S;
-	      }
+
 	      echo "<br>";
 
-	      echo "<span style='font-size:16px;'><a href='#".$div_id."_footer_anchor'>";
               for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing		
-	      echo "↓</a></span>";
+	      echo "|</span>";
 	      echo "<br>";
 	      echo "</div>"; //end of final branch
 
@@ -383,11 +364,47 @@
 	      if ($n==-1) { //exception
 		$n=1;
 	      }
-	      echo "<div style='display:none;' id='".$div_id."'>"; //begin div
+
+	      //make full folder directories
+	      for ($j=0;$j<$n;$j++) { //for every previous folder
+		$tmp_div_id="/global";
+		$full_folder_directories .= "<a href='#";
+		for ($k=0;$k<$j+1;$k++) {
+		  $tmp_subfolder_name=$folder_name_arr[$k];
+		  $tmp_subfolder_name=str_replace(" ","%20",$tmp_subfolder_name);
+	      	  $tmp_subfolder_name=str_replace("'","%27",$tmp_subfolder_name);
+		  $tmp_div_id.="/".$tmp_subfolder_name;
+		}
+		if ($j==$n-2) {$prev_div_id=$tmp_div_id;}
+		$full_folder_directories .= $tmp_div_id."_button'>";
+                $full_folder_directories .= $folder_name_arr[$j];
+		$full_folder_directories .= "</a>";
+		if ($j>0) {
+		  $full_folder_directories.="\\";
+                } else {
+		  $full_folder_directories.=":\\";
+		}
+	      }		    
+
+
+	      echo "<div style='display:none;' id='".$div_id."'>"; //begin folder
+	      echo "<div id='".$div_id."_header' style='display:none'>";//header
+	      echo "<span id='".$div_id."_header_table' style='display:none'>";
+		echo "<table class='folder_header_table'>";
+		  echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='location.href=\"#".$div_id."_footer_anchor\"'>Dive Down</button></td>";
+		  echo "<td class='folder_header_part1'><button style='width:100%;' onclick=ToggleTreeView('".$div_id."')>Close Folder</button></td>";
+		  echo "<td class='folder_header_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
+		  echo "<td class='folder_header_part3'>".$folder_name."</td>";
+		  echo "<td class='folder_header_part4'>";
+		    echo "<button style='width:100%' onclick=\"ToggleTreeView('".$div_id."');location.href='#".$prev_div_id."_header_table'\">←</button>";
+		  echo "</td>";
+		echo "</table>";
+	      echo "</span>";
+	      echo "</div>"; //end of header
 	    } else { //files on surface are open
 	      echo "<script src='/script/toggletreeview.js'></script>";//call script on surface
-	      echo "<div id='".$div_id."'>";		
-	    }
+	      echo "<div id='".$div_id."'>"; //begin div, opened div	
+	    } //end of if surface or non-surface
 	  }// end of if type==0 beginning
 
 	  //for each file & folder in folder
@@ -408,6 +425,7 @@
 	          $is_audio=false;
 	          $is_video=false;
 	          if (!is_dir($a_f) && $a_f!==$folder."/index.php" && $a_f!==$folder."/lechat.txt") { //its a file
+
 		  //determiine file type
 		    if ($file_extension=="png" ||
 		        $file_extension=="jpg" ||
@@ -438,16 +456,16 @@
 	            if ($is_image) {
 		      echo "<table class='image_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";	  
-		      echo "<th colspan='2' class='table_image'><img class='".$div_id."' id='".$href_filename."' style='width:auto;height:256px;'></img></th>"; //show image
+		      echo "<th colspan='2' class='table_image'><img class='".$div_id." image_in_folder' id='".$href_filename."'></img></th>"; //show image
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_image_icon'>";
 		      if (!($file_extension=="gif" || $file_extension=="apng")) {
-	                echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //still image bmp			
+	                echo "<img src='/images/".$file_extension.".bmp' class='file_icon'></img>"; //still image bmp			
 		      } else {
-	                echo "<img src='/images/".$file_extension.".gif' style='width:32px;height:auto;'></img>"; //moving image bmp
+	                echo "<img src='/images/".$file_extension.".gif' class='file_icon'></img>"; //moving image bmp
 		      }
 		      echo "</th>";
-		      echo "<td><div class='a_file_name'><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></div></td>";
+		      echo "<td class='a_file_name_cell'><div class='a_file_name'><a class='filename' href='".$href_filename."'>".$a[$i]."</a></div></td>";
 		      echo "</tr>";
 		      echo "<tr class='image_metadata'><td>";
 		      if (filemtime($a_f)!=NULL) { 		//print date creation
@@ -463,13 +481,12 @@
 		    } else if ($is_video) {
 		      echo "<table class='video_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";
-		      //echo "<th colspan='2' class='table_video'><video width='256px' height='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."'></video></th>";
 		      echo "<th colspan='2' class='table_video'><video height='256px' width='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."'></video></th>";
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_video_icon'>";
-	                echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //video bmp			
+	                echo "<img src='/images/".$file_extension.".bmp' class='file_icon'></img>"; //video bmp			
 		      echo "</th>";
-		      echo "<td><div class='a_file_name'><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></div></td>";
+		      echo "<td class='a_file_name_cell'><div class='a_file_name'><a class='file_name' href='".$href_filename."'>".$a[$i]."</a></div></td>";
 		      echo "</tr>";
 		      echo "<tr class='video_metadata'><td>";
 		      if (filemtime($a_f)!=NULL) { 		//print date creation
@@ -483,14 +500,14 @@
 
 		    //--- music files ---
 		    } else if ($is_audio) { //display music
-		      echo "<div style='border: 2px solid;width:100%' class='music_row'>";
+		      echo "<div class='music_row'>";
 		      echo "<table class='music_icon_main'>";
 		      echo "<tr>";
 		        echo "<td rowspan='2' class='table_music_icon'>";
-	                  echo "<img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img>"; //music bmp
+	                  echo "<img src='/images/".$file_extension.".bmp' class='file_icon'></img>"; //music bmp
 		        echo "</td>";
 		        echo "<td>";
-		          echo "<a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a>"; //music href
+		          echo "<a class='file_name' href='".$href_filename."'>".$a[$i]."</a>"; //music href
 		      echo "</td></tr>";
 
 		      echo "<tr class='music_metadata'><td>";
@@ -512,8 +529,11 @@
 		    } else {
 		      echo "<table class='file_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";
-		        echo "<th rowspan='2' class='table_file_icon'><img src='/images/".$file_extension.".bmp' style='width:32px;height:auto;'></img></th>"; //normal file bmp
-		        echo "<td><div class='a_file_name'><a style='font-size:20px;' href='".$href_filename."'>".$a[$i]."</a></div></td>";
+		      echo "<th colspan='2' class='regular_files_null'>{$S}</th>";
+		      echo "</tr>";
+		      echo "<tr>";
+		        echo "<th rowspan='2' class='table_file_icon'><img src='/images/".$file_extension.".bmp' class='file_icon'></img></th>"; //normal file bmp
+		        echo "<td class='a_file_name_cell'><div class='a_file_name'><a class='file_name' href='".$href_filename."'>".$a[$i]."</a></div></td>";
 		      echo "</tr>";
 		      echo "<tr class='file_metadata'><td>";
 		      if (filemtime($a_f)!=NULL) { 		//print date creation
@@ -544,26 +564,18 @@
 	    echo "</div>";
 	    if ($folder!=$GLOBAL_FOLDER && $folder!=$DVD_DIR && $folder!=$DVD_DIR."/AVRIL_LAVIGNE") {
               echo "<span id='".$div_id."_footer' style='diplay:none;'>";
-	        //echo "<table id='".$div_id."_footer' style='text_align:center;border-style:solid;border-width:thick;width:100%;'>"; //non-working
-	        //echo "<table id='".$div_id."_footer_table' style='display:none;'>";
-		//echo "<tr>";
-		//echo "<td style='width:33%;border-width:thin;border-style:solid'><a href='#".$div_id."'>[↑] Back to Top</a></td>";
-	        //echo "<td style='width:33%;border-width:thin;border-style:solid'><button class='folder_button' onclick='location.href=\"#".$div_id."_last_branch\"'>Back To Top</button></td>";
-	        //echo "<td style='width:33%;border-width:thin;border-style:solid'><button class='folder_button' onclick=ToggleTreeView('".$div_id."')>Close Folder</button></td>";
-	        //echo "<td style='border-width:thin;border-style:solid'>";
-		//echo "<div id='".$div_id."_footer_anchor' style='margin-top:-768px;'> </div>";
-		//echo "</td>";
-		//echo "</tr>";
-	        //echo "</table>";
 	      echo "<span id='".$div_id."_footer_table' style='display:none;'>"; //working
-		echo "<table style='border-style:solid;border-width:thick;width:100%'><tr>";
-		  echo "<td style='width:33%;border-width:thin;border-style:solid'><button style='width:100%;'class='folder_button' onclick='location.href=\"#".$div_id."_last_branch\"'>Back To Top</button></td>";
-		  echo "<td style='width:33%;border-width:thin;border-style:solid'><button style='width:100%;' onclick=ToggleTreeView('".$div_id."')>Close Folder</button></td>";
-		  echo "<td style='width:33%;border-width:thin;border-style:solid'><button style='width:100%;'class='folder_button'>{$S}</button></td>";
-		echo "</table></tr>";
+		echo "<table class='folder_footer_table'><tr>";
+		  echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='location.href=\"#".$div_id."_header\"'>Back To Top</button></td>";
+		  echo "<td class='folder_footer_part1'><button style='width:100%;' onclick=ToggleTreeView('".$div_id."')>Close Folder</button></td>";
+		  echo "<td class='folder_footer_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
+		  echo "<td class='folder_footer_part3'>";
+		    echo "<button style='width:100%' onclick=\"ToggleTreeView('".$div_id."');location.href='#".$prev_div_id."_header_table'\">←</button>";
+		  echo "</td>";
+		echo "</tr></table>";
 	      echo "</span>";
-	      echo "<div id='".$div_id."_footer_anchor' style='display:none;'> </div>";
-	      echo "<table id='".$div_id."_footer_break' style='display:none'><tr><td>{$S}</td></tr><tr><td>{$S}</td></tr></table>";
+	      echo "<div id='".$div_id."_footer_anchor' style='display:none;'>{$S}</div>";
+	      echo "<div id='".$div_id."_footer_break' style='display:none'><div class='folder_footer_break'>{$S}</div><br><br><br></div>";
 	      echo "</span>";
 	    }
 	  } //close div of folder
@@ -722,15 +734,103 @@
   <style>
     #showfiletree {
       border:2px solid;
-      /*overflow-y: auto;
-      max-height: 480px;*/
     }
 
     .a_file_name{
-      overflow: auto;
-      max-width: 445px;
-      max-height: 24px;
+      /*max-width: 445px;*/
+      max-width: 436px;
+      white-space:nowrap;
+      overflow-x:auto;
     }
+
+
+
+    .special_folder_icon {
+      height:64px;width:auto;
+    }
+
+    .default_folder_icon {
+      width:32px;height:auto;
+    }
+
+    .folder_name {
+      font-size:20px;
+    }
+
+
+    .folder_sub_name {
+      font-size:16px;
+    }
+
+    .folder_header_table {
+      border-style:solid;border-width:thick;width:100%;
+    }
+
+    .folder_header_part1 {
+      width:16%;border-width:thin;border-style:solid;
+    }
+
+    .folder_header_part2 {
+      width:33%;border-width:thin;border-style:solid;
+    }
+
+    .folder_header_part3 {
+      width:30%;border-width:thin;border-style:solid;text-align:center;
+    }
+
+    .folder_header_part4 {
+      width:3%;border-width:thin;border-style:solid;
+    }
+
+    .folder_full_dir {
+      white-space:nowrap;overflow-x:auto;width:100%;
+    }
+
+
+    .image_in_folder {
+      width:auto;height:256px;
+    }
+
+    .file_icon {
+      width:32px;height:auto;
+    }
+
+    .file_name {
+      font-size:20px;
+    }
+
+    .music_row {
+      border: 2px solid;
+      width:100%;
+    }
+
+    .regular_files_null {
+      height:256px;
+    }
+
+
+
+    .folder_footer_table {
+      border-style:solid;border-width:thick;width:100%;
+    }
+
+    .folder_footer_part1 {
+      width:33%;border-width:thin;border-style:solid;
+    }
+
+
+    .folder_footer_part2 {
+      width:30%;border-width:thin;border-style:solid;
+    }
+
+    .folder_footer_part3 {
+      width:3%;border-width:thin;border-style:solid;
+    }
+
+    .folder_footer_break {
+      border-width:thick;border-style:solid;
+    }
+
   </style>";
     echo "<link rel='stylesheet' href='/global/".$SELF_USER_NAME."/style.css'>";
 //

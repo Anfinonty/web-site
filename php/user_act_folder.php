@@ -205,6 +205,11 @@
       header('Location: '.$redirect_url); //go back to home
     }
   ?>
+  <?php
+    for ($i=0;$i<36;$i++) {
+      echo "<br>";
+    }
+  ?>
 </body>
 </html>
 
