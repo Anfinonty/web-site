@@ -4,7 +4,9 @@
 
 <!-- Head -->
 <head>
+  <!--<title>G'day Again M8! Welcome To My Web-site :D</title>-->
   <!--<title>G'day M8! Welcome To My Web-site :D</title>-->
+  <!--<title>G'day Again M8! :D</title>-->
   <title>G'day M8! :D</title>
   <script src="script/myScript.js"></script>
   <style>
@@ -24,9 +26,6 @@
 
 <!-- Body -->
 <body>
-
-
-
   <!-- Touchscreen Buttons For Movement of Live Peerrs Avatar -->
   <div id="axis_click_buttons" hidden="">
   <form method="post" target="nfresh" style="display:inline;">
@@ -45,10 +44,14 @@
 
   <!-- Webpage @ Greeting -->
   <div id="default_chatroom_greet">
+  <!--<h1 id="header">G'day Again M8!</h1>-->
   <h1 id="header">G'day M8!</h1>
+
     <?php
 //      echo "Hello World! Welcome to ".$SERVER_IP_ADDRESS."! <br>";
 // Hello Changes
+
+//Hello World! Welcome to the http://gdaym8.site:591 web-site! :D<br> 
     ?>
     Hello World! Welcome to the http://gdaym8.site web-site! :D<br> 
     <br>Say Something or Hear from Other Peers! <br>
@@ -127,7 +130,7 @@
   <div style='display:inline;margin:0;' id='timeUTC'></div>
   <div id='chathere' height:400px;>
     <?php
-      echo htmlspecialchars(strval(file_get_contents($_SERVER['DOCUMENT_ROOT']."/".$CHAT_DIR)));
+      //echo htmlspecialchars(strval(file_get_contents($_SERVER['DOCUMENT_ROOT']."/".$CHAT_DIR)));
     ?>
   </div>
   <div id="footer"><a href="#default_server_header">Back to Top</a></div>
