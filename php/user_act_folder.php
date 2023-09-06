@@ -86,7 +86,6 @@
     <input type="submit" name="delete2" value="Delete File">
   </form>
 
-
   <br>
   <div id="showfiletree">
     <?php 
@@ -98,9 +97,14 @@
         echo $PROTIPS[2]."<br>";
         echo $PROTIPS[3]."<br>";
         echo $PROTIPS[4]."<br><br>";
-        PrintDir($SELF_USER_FOLDER_NAME,0,-1);
+        //PrintDir($SELF_USER_FOLDER_NAME,0,0);
+	//echo "Hello";
     ?>
+  <!--<iframe width="100%" height="100%" src="https://gdaym8.site:592/php/view_folder.php?target_folder=/global/<?php echo $SELF_USER_NAME;?>"></iframe>-->
+  <iframe width="100%" height="100%" src="https://gdaym8.site/php/view_folder.php?target_folder=/global/<?php echo $SELF_USER_NAME;?>"></iframe>
   </div>
+
+
   <?php    
     //FOLDER Create
     if (isset($_POST['submit'])){
@@ -126,7 +130,8 @@
         } else {
           echo "<br> Subfolder Creation Unsuccessful :( <br>";
         }
-      } else {        echo "<br> Folder Not Found, Check your Spelling :/<br>";    
+      } else {        
+	echo "<br> Folder Not Found, Check your Spelling :/<br>";    
       }
       $redirect_url="https://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
       header('Location: '.$redirect_url); //go back to home

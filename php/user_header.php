@@ -226,6 +226,7 @@
       return $nf_size;
     }
 
+
     function PrintDir($folder,$type,$n) {
       global $S;
       global $USER_TOTAL_FOLDER_NUM;
@@ -239,174 +240,31 @@
       global $SESSIONS_DIR;
       global $DVD_DIR;
       global $GLOBAL_FOLDER;
+
+      $hidden_folders_arr=array($REG_USERS_DIR, $REG_EMAILS_DIR, $REG_Q_DIR, $SAVED_DISCS_DIR, $SESSIONS_DIR);
+      $dvd_folders_arr=array($DVD_DIR."/COOL_SONGS_COLLECTION/Brand New",
+			 $DVD_DIR."/COOL_SONGS_COLLECTION/Evanescence",
+			 $DVD_DIR."/COOL_SONGS_COLLECTION/Linkin Park",
+			 $DVD_DIR."/COOL_SONGS_COLLECTION/Saosin");
       $full_folder_directories="";
       $prev_div_id="";
-      if ($folder!=$REG_USERS_DIR &&
-	  $folder!=$REG_EMAILS_DIR &&
-	  $folder!=$REG_Q_DIR &&
-	  $folder!=$SAVED_DISCS_DIR &&
-	  $folder!=$SESSIONS_DIR
-	) {
+
+      if (!in_array($folder,$hidden_folders_arr)) {
         $a = scandir($folder);
         $dir_size=sizeof($a);
         if (is_dir($folder)) {
-	  if ($type==0) {	  
-	    //foldername
-	    if ($n>0 || $n==-1) {
-	      if ($n==-1) { //exception
-	        echo "<script src='/script/toggletreeview.js'></script>";//call script on surface
-	      }	
+	  if ($type==0) {
+	    echo "<script src='/script/toggletreeview.js'></script>";
+            if (file_exists($folder."/index.html")) {	      //only if index exists
+	      $folder_username=str_replace("C:/Apache2.2/htdocs","",$folder);
+              echo "<div id='".$folder_username."_folder_tab'>";
 
-	      //for branch display
-	      $tmp_folder_name=str_replace("C:/Apache2.2/htdocs/global/","",$folder);
-	      $folder_name_arr=explode('/',$tmp_folder_name);
-	      $folder_name=end($folder_name_arr);
+	      //echo "<iframe width='100%' height='100%' class='".$folder_username."' src='https://gdaym8.site:592/".$folder_username."/'></iframe>";
+	      echo "<iframe width='100%' height='100%' class='".$folder_username."' src='https://gdaym8.site/".$folder_username."/'></iframe>";
 
-
-	      //for href and div_id
-	      $div_id=str_replace("C:/Apache2.2/htdocs","",$folder);
-	      $div_id=str_replace(" ","%20",$div_id);
-	      $div_id=str_replace("'","%27",$div_id);
-
-	      echo "<div style='display:inline-table;' id='".$div_id."_button'>";
-	      echo "<button class='folder_button' onclick=ToggleTreeView('".$div_id."')>";
-
-	      //Draw folder button
-              echo "<table class='folder_button'>";
-	      echo "<tr>";
-	      echo "<th rowspan='2' class='table_folder_icon'>";
-
-	      //Draw Folder Icon branch
-	      echo "<table style='display:none;' class='opened_folder_branch' id='".$div_id."_branch'>";
-	      for ($j=0;$j<$n-1;$j++) { //for every previous folder
-		echo "<tr><td>";
-                for ($k=0;$k<$j;$k++) {echo "____";} //branch printing
-                echo "|__→";
-		echo "<u>".$folder_name_arr[$j]."</u></td></tr>";
-	      }
-	      echo "</table>";
-
-	      //Draw folder icon image
-	      for ($i=0;$i<7;$i++) {
-		if ($i<6) {
-		  $folder_icon_ext="";
-		  switch ($i) {
-		    case 0;
-		      $folder_icon_ext="gif";
-		      break;
-		    case 1;
-		      $folder_icon_ext="apng";
-		      break;
-		    case 2;
-		      $folder_icon_ext="png";
-		      break;
-		    case 3;
-		      $folder_icon_ext="jpg";
-		      break;
-		    case 4;
-		      $folder_icon_ext="jpeg";
-		      break;
-		    case 5;
-		      $folder_icon_ext="bmp";
-		      break;
-		  }
-		  if (file_exists($folder."/folder_icon.".$folder_icon_ext)) {
-		    if (filesize($folder."/folder_icon.".$folder_icon_ext)<1000000) {
-                      echo "<img src='".$div_id."/folder_icon.".$folder_icon_ext."' class='special_folder_icon'></img></th>";
-		      break;
-		    }
-		  }
-	        } else { //default icon
-                  echo "<img src='/images/folder.bmp' class='default_folder_icon'></img></th>";
-		}
-	      }
-
-              echo "<td class='folder_name'>".$folder_name." <span class='folder_sub_name'>[<a href='".$div_id."'>visit</a>]</span></td>"; //print foldername
-	        echo "</tr>";
-	        echo "<tr class='folder_metadata'><td>";
-	          echo " [".date("F/d/Y H:i:s",filectime($folder))."]";
-                echo " (".GetConvertedFilesize(GetDirectorySize($folder)).")";
-              echo "</td></tr>";
-	      echo "</table>";
-	      echo "</button>";
-	      //end of button
-
-	      if (file_exists($folder."/index.html")) {	      //only if index exists
-              	echo "<div style='display:none;' id='".$div_id."_folder_tab'>";
-	        echo "<iframe width='100%' height='100%' class='".$div_id."' id='https://gdaym8.site/".$div_id."/'></iframe>";
-		echo "</div>";
-	      } else {
-		echo "<br>";
-	      }
-
-	      //print last branch
-	      echo "<div class='showfiletree_branch' style='display:none;' id='".$div_id."_last_branch'>"; //start of final branch
-	      echo "<span class='folder_sub_name'>";	      
-
-              for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing
-              echo "|<br>";
-	      
-              for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing
-              echo "|__→</span>";
-	      echo "[<a href='".$div_id."'>".$folder_name."</a>]{$S}{$S}";
-
-	      //echo "[<a href='#default_server_header'>↑X</a>]{$S}{$S}";
-
-	      echo "<br>";
-
-              for ($j=0;$j<$n-1;$j++) {echo "____";} //branch printing		
-	      echo "|</span>";
-	      echo "<br>";
-	      echo "</div>"; //end of final branch
-
-	      echo "</div>";//end of folder div
-
-	      if ($n==-1) { //exception
-		$n=1;
-	      }
-
-	      //make full folder directories
-	      for ($j=0;$j<$n;$j++) { //for every previous folder
-		$tmp_div_id="/global";
-		$full_folder_directories .= "<a href='#";
-		for ($k=0;$k<$j+1;$k++) {
-		  $tmp_subfolder_name=$folder_name_arr[$k];
-		  $tmp_subfolder_name=str_replace(" ","%20",$tmp_subfolder_name);
-	      	  $tmp_subfolder_name=str_replace("'","%27",$tmp_subfolder_name);
-		  $tmp_div_id.="/".$tmp_subfolder_name;
-		}
-		if ($j==$n-2) {$prev_div_id=$tmp_div_id;}
-		$full_folder_directories .= $tmp_div_id."_button'>";
-                $full_folder_directories .= $folder_name_arr[$j];
-		$full_folder_directories .= "</a>";
-		if ($j>0) {
-		  $full_folder_directories.="\\";
-                } else {
-		  $full_folder_directories.=":\\";
-		}
-	      }		    
-
-
-	      echo "<div style='display:none;' id='".$div_id."'>"; //begin folder
-	      echo "<div id='".$div_id."_header' style='display:none'>";//header
-	      echo "<span id='".$div_id."_header_table' style='display:none'>";
-		echo "<table class='folder_header_table'>";
-		  echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='location.href=\"#".$div_id."_footer_anchor\"'>Dive Down</button></td>";
-		  echo "<td class='folder_header_part1'><button style='width:100%;' onclick=ToggleTreeView('".$div_id."')>Close Folder</button></td>";
-		  echo "<td class='folder_header_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
-		  echo "<td class='folder_header_part3'>".$folder_name."</td>";
-		  echo "<td class='folder_header_part4'>";
-		    echo "<button style='width:100%' onclick=\"ToggleTreeView('".$div_id."');location.href='#".$prev_div_id."_header_table'\">←</button>";
-		  echo "</td>";
-		echo "</table>";
-	      echo "</span>";
-	      echo "</div>"; //end of header
-	    } else { //files on surface are open
-	      echo "<script src='/script/toggletreeview.js'></script>";//call script on surface
-	      echo "<div id='".$div_id."'>"; //begin div, opened div	
-	    } //end of if surface or non-surface
-	  }// end of if type==0 beginning
-
+	      echo "</div><br>";
+      	    }
+	  }
 	  //for each file & folder in folder
           for ($i=0;$i<$dir_size;$i++) {
 	    if ($a[$i]!=="." && $a[$i]!=="..") {
@@ -416,6 +274,11 @@
                   unlink($a_f);
                   break;
                 case 0: // Printing files
+	          //for href and div_id
+	          $div_id=str_replace("C:/Apache2.2/htdocs","",$a_f);
+	          $div_id=str_replace(" ","%20",$div_id);
+	          $div_id=str_replace("'","%27",$div_id);
+	
 	          //manual encoding
 	          $href_filename=str_replace("C:/Apache2.2/htdocs","",$a_f);
 	          $href_filename=str_replace(" ","%20",$href_filename);
@@ -424,7 +287,19 @@
 	          $is_image=false;
 	          $is_audio=false;
 	          $is_video=false;
-	          if (!is_dir($a_f) && $a_f!==$folder."/index.php" && $a_f!==$folder."/lechat.txt") { //its a file
+
+		  //is a folder in dvd folder
+		  $is_folder_in_dvd_folder=false;
+		  if (in_array($a_f,$dvd_folders_arr)) {
+		    $is_folder_in_dvd_folder=true;
+		  }
+		
+	          if (!$is_folder_in_dvd_folder &&
+			(!is_dir($a_f) && 
+			 $a_f!==$folder."/index.php" && 
+			 $a_f!==$folder."/old_index.php" && 
+			 $a_f!==$folder."/lechat.txt")
+		     ) { //its a file
 
 		  //determiine file type
 		    if ($file_extension=="png" ||
@@ -456,7 +331,7 @@
 	            if ($is_image) {
 		      echo "<table class='image_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";	  
-		      echo "<th colspan='2' class='table_image'><img class='".$div_id." image_in_folder' id='".$href_filename."'></img></th>"; //show image
+		      echo "<th colspan='2' class='table_image'><img class='".$div_id." image_in_folder' id='".$href_filename."' src='".$href_filename."'></img></th>"; //show image
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_image_icon'>";
 		      if (!($file_extension=="gif" || $file_extension=="apng")) {
@@ -481,7 +356,7 @@
 		    } else if ($is_video) {
 		      echo "<table class='video_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";
-		      echo "<th colspan='2' class='table_video'><video height='256px' width='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."'></video></th>";
+		      echo "<th colspan='2' class='table_video'><video height='256px' width='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."' src='".$href_filename."'></video></th>";
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_video_icon'>";
 	                echo "<img src='/images/".$file_extension.".bmp' class='file_icon'></img>"; //video bmp			
@@ -521,7 +396,7 @@
 
 		      echo "<tr><td></td>";
 		      echo "<td class='music_player' colspan='2'>";                    
-     		      echo "<audio controls class='".$div_id."_audio'><source type='audio/".$file_extension."' class='".$div_id."' id='".$href_filename."'></audio>";//music player
+     		      echo "<audio controls class='".$div_id."_audio'><source type='audio/".$file_extension."' class='".$div_id."' id='".$href_filename."' src='".$href_filename."'></audio>";//music player
 		      echo "</td></tr>";
 		      echo "</table></div>";
 
@@ -545,7 +420,174 @@
 		      echo "</td></tr>";
 		      echo "</table>";
 		    }
-	          } //end of if files
+	          } else if (
+		      $is_folder_in_dvd_folder ||
+		      (is_dir($a_f) && !in_array($a_f,$hidden_folders_arr))
+		      )
+		  { //end of if files else, if its a folder
+	          ////Folder		
+	          //for branch display
+	            $tmp_folder_name=str_replace("\\","/",$a_f);
+                    $tmp_folder_name_len=strlen($tmp_folder_name);
+
+	            $tmp_folder_name=str_replace("C:/Apache2.2/htdocs/global/","",$tmp_folder_name);
+	            $is_dvd_folder=false;
+	            if (strlen($tmp_folder_name)==$tmp_folder_name_len) {
+	              $tmp_folder_name=str_replace("C:/Apache2.2/htdocs/dvd/","",$tmp_folder_name);
+		      $is_dvd_folder=true;
+	            }
+	            $folder_name_arr=explode('/',$tmp_folder_name);
+	            $folder_name=end($folder_name_arr);
+
+
+	            echo "<div style='display:inline-table;' id='".$div_id."_button'>";
+		    if (!$is_dvd_folder) {
+	              echo "<button class='folder_button' onclick='ToggleTreeView(\"" .$div_id. "\");location.href=\"#". $i ."_button\";'>";
+		    } else {
+	              echo "<button class='folder_button' onclick='ToggleTreeView(\"" .$div_id. "\");location.href=\"#". $i ."_dvd_button\";'>";
+		    }
+
+	            //Draw folder button
+                    echo "<table class='folder_button'>";
+	            echo "<tr>";
+	            echo "<th rowspan='2' class='table_folder_icon'>";
+
+		//make full folder directories
+	            $full_folder_directories="";
+	            for ($j=0;$j<count($folder_name_arr);$j++) { //for every previous folder
+		      if (!$is_dvd_folder) {
+		        $tmp_div_id="/global";
+		      } else {
+		        $tmp_div_id="/dvd";
+		      }
+		      //$full_folder_directories .= "<a href='https://gdaym8.site:592/php/view_folder.php?target_folder=";
+
+		      //$full_folder_directories .= "<a href='https://gdaym8.site:592/";
+		      $full_folder_directories .= "<a href='https://gdaym8.site/";
+
+		      for ($k=0;$k<$j+1;$k++) {
+		        $tmp_subfolder_name=$folder_name_arr[$k];
+		        $tmp_subfolder_name=str_replace(" ","%20",$tmp_subfolder_name);
+	      	        $tmp_subfolder_name=str_replace("'","%27",$tmp_subfolder_name);
+		        $tmp_div_id.="/".$tmp_subfolder_name;
+		      }
+		      if ($j==$n-2) {$prev_div_id=$tmp_div_id;}
+			//$full_folder_directories .= $tmp_div_id."_button'>";
+		      $full_folder_directories .= $tmp_div_id."'>";
+                      $full_folder_directories .= $folder_name_arr[$j];
+		      $full_folder_directories .= "</a>";
+		      if ($j>0) {
+		        $full_folder_directories.="\\";
+                      } else {
+		        $full_folder_directories.=":\\";
+		      }
+	            }
+
+
+	      	//Draw Folder Icon branch
+	            echo "<table style='display:none;' class='opened_folder_branch' id='".$div_id."_branch'>";
+	            echo "</table>";	
+
+	      	//Draw folder icon image
+	            for ($z=0;$z<7;$z++) {
+		      if ($z<6) {
+		        $folder_icon_ext="";
+		        switch ($z) {
+		          case 0;
+		            $folder_icon_ext="gif";
+		            break;
+		          case 1;
+		            $folder_icon_ext="apng";
+		            break;
+		          case 2;
+		            $folder_icon_ext="png";
+		            break;
+		          case 3;
+		            $folder_icon_ext="jpg";
+		            break;
+		          case 4;
+		            $folder_icon_ext="jpeg";
+		            break;
+		          case 5;
+		            $folder_icon_ext="bmp";
+		            break;
+		        }
+		        if (file_exists($a_f."/folder_icon.".$folder_icon_ext)) {
+		          if (filesize($a_f."/folder_icon.".$folder_icon_ext)<1000000) { //allow if below 100mb 
+                            echo "<img src='".$div_id."/folder_icon.".$folder_icon_ext."' class='special_folder_icon'></img></th>";
+		            break;
+		          }
+		        }
+	              } else { //default icon
+                        echo "<img src='/images/folder.bmp' class='default_folder_icon'></img></th>";
+		      }
+	            }
+
+                    echo "<td class='folder_name'>".$folder_name." <span class='folder_sub_name'>[<a href='".$div_id."'>visit</a>]</span></td>"; //print foldername
+	              echo "</tr>";
+	              echo "<tr class='folder_metadata'><td>";
+	                echo " [".date("F/d/Y H:i:s",filectime($a_f))."]";
+                      echo " (".GetConvertedFilesize(GetDirectorySize($a_f)).")";
+                    echo "</td></tr>";
+	            echo "</table>";
+	            echo "</button>";
+	            echo "</div>";
+//end of button
+////
+////header
+		    echo "<div style='display:none;' id='".$div_id."'>"; //begin folder
+	            echo "<div id='".$div_id."_header' style='display:none'>";//header
+	            echo "<span id='".$div_id."_header_table' class='folder_header_span' style='display:none'>";
+		      echo "<table class='folder_header_table'>";
+		  //echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe('".$div_id."',1);location.href=\"#".$div_id."_footer_anchor\"'>Dive Down</button></td>";
+		  //echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",1);location.href=\"#".$div_id."_footer_anchor\"'>Dive Down</button></td>";
+		    echo "<td class='folder_header_part4'>";
+		    if (!$is_dvd_folder) {
+		      echo "<button id=\"".$i."_button\" style=\"width:100%\" onclick=\"location.href='#" .$i. "_button'\">#</button>";
+		    } else {
+		      echo "<button id=\"".$i."_dvd_button\" style=\"width:100%\" onclick=\"location.href='#" .$i. "_dvd_button'\">#</button>";
+		    }
+		    echo "</td>";
+		    echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",1)'>↓</button></td>";
+		    echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0)'>↖</button></td>";
+		    echo "<td class='folder_header_part1'><button style='width:100%;' onclick='ToggleTreeView(\"".$div_id."\");'>=</button></td>";
+		    echo "<td class='folder_header_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
+		    echo "<td class='folder_header_part3'>".$folder_name."</td>";
+		    echo "</table>";
+	            echo "</span>";
+	            echo "</div>"; //end of header
+////
+////iframe
+	            echo "<div>";
+	            //echo "<iframe width='99%' height='85%' class='".$div_id."' id='https://gdaym8.site:592/php/view_folder.php?target_folder=".$div_id."'></iframe>";
+	            echo "<iframe width='99%' height='85%' class='".$div_id."' id='https://gdaym8.site/php/view_folder.php?target_folder=".$div_id."'></iframe>";
+	            echo "</div>";
+////
+////footer
+                    echo "<span id='".$div_id."_footer' style='diplay:none;'>";
+	            echo "<span id='".$div_id."_footer_table' class='folder_footer_span' style='display:none;'>"; //working
+		    echo "<table class='folder_footer_table'><tr>";
+		    //echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0);location.href=\"#".$div_id."_header\"'>↑</button></td>";
+		    echo "<td class='folder_footer_part3'>";
+		    if (!$is_dvd_folder) {
+		      echo "<button style='width:100%' onclick=\"location.href='#".$i."_button'\">•</button>";
+		    } else {
+		      echo "<button style='width:100%' onclick=\"location.href='#".$i."_dvd_button'\">•</button>";
+		    }
+		    echo "</td>";
+		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",1)'>↓</button></td>";
+		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0)'>↑</button></td>";
+		    echo "<td class='folder_footer_part2'><button style='width:100%;' onclick=ToggleTreeView('".$div_id."')>=</button></td>";
+		    echo "<td class='folder_footer_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
+		    echo "</tr></table>";
+	            echo "</span>";
+	            echo "<div id='".$div_id."_footer_anchor' style='display:none;'>{$S}</div>";
+	            //echo "<div id='".$div_id."_footer_break' style='display:none'><div class='folder_footer_break'>{$S}</div><br><br><br></div>";
+	            echo "</span>";
+	            echo "</div>";
+////
+////end of case 0 print folder
+		  }
                   break;
                 case 1: //Count Folders
                   if (is_dir($a_f)) {$USER_TOTAL_FOLDER_NUM++;}
@@ -558,27 +600,10 @@
                   break;
               } //end switch actions
 	    } //end of . or ..
-            PrintDir($a_f,$type,$n+1);
-          } //end for loop, before loop is a div
-	  if ($type==0) {
-	    echo "</div>";
-	    if ($folder!=$GLOBAL_FOLDER && $folder!=$DVD_DIR && $folder!=$DVD_DIR."/AVRIL_LAVIGNE") {
-              echo "<span id='".$div_id."_footer' style='diplay:none;'>";
-	      echo "<span id='".$div_id."_footer_table' style='display:none;'>"; //working
-		echo "<table class='folder_footer_table'><tr>";
-		  echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='location.href=\"#".$div_id."_header\"'>Back To Top</button></td>";
-		  echo "<td class='folder_footer_part1'><button style='width:100%;' onclick=ToggleTreeView('".$div_id."')>Close Folder</button></td>";
-		  echo "<td class='folder_footer_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
-		  echo "<td class='folder_footer_part3'>";
-		    echo "<button style='width:100%' onclick=\"ToggleTreeView('".$div_id."');location.href='#".$prev_div_id."_header_table'\">←</button>";
-		  echo "</td>";
-		echo "</tr></table>";
-	      echo "</span>";
-	      echo "<div id='".$div_id."_footer_anchor' style='display:none;'>{$S}</div>";
-	      echo "<div id='".$div_id."_footer_break' style='display:none'><div class='folder_footer_break'>{$S}</div><br><br><br></div>";
-	      echo "</span>";
+	    if ($type!=0) { //type 0 on surface only, others are recursive
+              PrintDir($a_f,$type,$n+1);
 	    }
-	  } //close div of folder
+          } //end for loop, before loop is a div	  
         }//end main, if is dir
       }//end if non-valid files
       if ($type==-1) {rmdir($folder);} //recursive remove folder
@@ -732,8 +757,21 @@
     //Includes user's style'
     echo "
   <style>
+
     #showfiletree {
       border:2px solid;
+      overflow-y:auto;
+    }
+
+
+    .folder_opened, .folder_header_span, .folder_footer_span, .music_row {
+      white-space:nowrap;
+      overflow-x:auto;
+    }
+
+    .folder_full_dir {
+      white-space:nowrap;
+      overflow-x:auto;
     }
 
     .a_file_name{
@@ -743,7 +781,8 @@
       overflow-x:auto;
     }
 
-
+    .folder_full_dir {
+    }
 
     .special_folder_icon {
       height:64px;width:auto;
@@ -767,23 +806,20 @@
     }
 
     .folder_header_part1 {
-      width:16%;border-width:thin;border-style:solid;
+      width:8%;border-width:thin;border-style:solid;
     }
 
     .folder_header_part2 {
-      width:33%;border-width:thin;border-style:solid;
+      width:33%;border-width:thin;border-style:solid;overflow-wrap:break-word;
     }
 
     .folder_header_part3 {
-      width:30%;border-width:thin;border-style:solid;text-align:center;
+      width:30%;
+      border-width:thin;border-style:solid;text-align:center;
     }
 
     .folder_header_part4 {
       width:3%;border-width:thin;border-style:solid;
-    }
-
-    .folder_full_dir {
-      white-space:nowrap;overflow-x:auto;width:100%;
     }
 
 
@@ -808,16 +844,13 @@
       height:256px;
     }
 
-
-
     .folder_footer_table {
       border-style:solid;border-width:thick;width:100%;
     }
 
     .folder_footer_part1 {
-      width:33%;border-width:thin;border-style:solid;
+      width:8%;border-width:thin;border-style:solid;
     }
-
 
     .folder_footer_part2 {
       width:30%;border-width:thin;border-style:solid;
@@ -865,7 +898,7 @@
     $user_details_arr=explode(",",$user_details);
     $user_time_expiry=$user_details_arr[2];
 
-    echo "<a href='/php/recharge.php' id='session_limit'></a>";
+    //echo "<a href='/php/recharge.php' id='session_limit'></a> (II) ";
     echo "<span id='user_session_expiry' hidden>{$user_time_expiry}</span>";
 
     echo "{$S}<span id='self_ip'>{$S}u:$USER_IP_ADDRESS{$S}</span>{$S}";
