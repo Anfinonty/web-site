@@ -1,4 +1,7 @@
-﻿if ( window.history.replaceState ) { //prevent refresh n submit
+﻿
+
+
+if ( window.history.replaceState ) { //prevent refresh n submit
     window.history.replaceState( null, null, window.location.href );
 }
 //
@@ -35,6 +38,18 @@ let LiveChatInterval;
 //call ON LOAD
 window.addEventListener("load", function()
 {
+
+
+  /*function DisableAlerts() {
+    frames=document.getElementsByTagName("iframe");
+    for (i=0;i<frames.length;i++) {
+      frames[i].contentWindow.alert = function(){};
+      frames[i].classList.add("an_iframe");
+    }
+  }*/
+
+  function alert() {}
+
 //GLOBALS
   var is_focus_txthere=0;
   let list_of_user_ip_address=[];
@@ -658,6 +673,10 @@ window.addEventListener("load", function()
         const regex_chathere=/[Cc][Hh][Aa][Tt][Hh][Ee][Rr][Ee]/ig;
         _t = _t.replace(regex_chathere,"ch@there");
 
+        const regex_iframe=/\<[iI][fF][rR][aA][mM][Ee]/ig;
+        _t = _t.replace(regex_iframe,"<iframe sandbox='allow-scripts' ");
+
+
         const regex_id=/[Ii][Dd]\=\"/ig; //prevents no style showing
         _t = _t.replace(regex_id,"1d=''");
         _t = _t.replace(/\/\>/ig,"XD"); //Wrong End Sharp Bracket
@@ -886,6 +905,8 @@ window.addEventListener("load", function()
     document.getElementById('form1').reset()
   }
 
+
+
 //=================
 //
 //
@@ -899,3 +920,10 @@ window.addEventListener("load", function()
 });
 
 
+//Attempt to disable alerts()
+//(function(proxied) {
+//  window.alert=function() {
+    //do something here
+//    return proxied.apply(this, arguements);
+//  };
+//})(window.alert);
