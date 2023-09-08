@@ -899,6 +899,7 @@
     $user_time_expiry=$user_details_arr[2];
 
     //echo "<a href='/php/recharge.php' id='session_limit'></a> (II) ";
+    echo "<a href='/php/recharge.php' id='session_limit'></a> ";
     echo "<span id='user_session_expiry' hidden>{$user_time_expiry}</span>";
 
     echo "{$S}<span id='self_ip'>{$S}u:$USER_IP_ADDRESS{$S}</span>{$S}";

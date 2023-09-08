@@ -28,7 +28,7 @@
   ?>
 
   <div id='showfiletree'>
-    <iframe width="100%" height="100%" src="https://gdaym8.site:592/php/view_folder.php?target_folder=/dvd/">
+    <iframe width="100%" height="100%" src="https://gdaym8.site:592/php/view_folder.php?target_folder=/dvd">
   </div>
 </body>
 </html>
