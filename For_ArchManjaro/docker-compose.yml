@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+ apache:
+  build:
+   context: .
+   dockerfile: docker/apache/Dockerfile
+  volumes:
+   - ./gdaym8:/var/www/html
+   #- ./docker/fstab:/etc/fstab
+   - /run/media:/run/media
+   #- ./letsencrypt:/etc/apache2/ssl_keys
+
+  #devices:
+   #- /dev/sr0:/dev/sr0
+  ports:
+   - "80:80"
+   - "443:443"
+  environment:
+   - SQLITE_DATABASE_PATH=/var/www/db/mydatabase.sqlite
+  networks:
+   - backend
+  restart: always
+
+networks:
+ backend:
+   driver: bridge
+
