@@ -6,20 +6,25 @@ services:
    context: .
    dockerfile: docker/apache/Dockerfile
   volumes:
+  #website html-php
    - ./gdaym8:/var/www/html
-   #- ./docker/fstab:/etc/fstab
-   - /run/media:/run/media
-   #- ./letsencrypt:/etc/apache2/ssl_keys
 
-  #devices:
-   #- /dev/sr0:/dev/sr0
+  #DVD
+   - /run/media:/run/media
+
+  #SQLite DB
+   - ./mydatabase.sqlite:/var/www/db/mydatabase.sqlite
+
   ports:
    - "80:80"
    - "443:443"
+
   environment:
    - SQLITE_DATABASE_PATH=/var/www/db/mydatabase.sqlite
+
   networks:
    - backend
+
   restart: always
 
 networks:

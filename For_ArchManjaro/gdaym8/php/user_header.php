@@ -2,8 +2,9 @@
 //
 //
 //
+//11/08/2023: outdated
 //Hashing
-    function MyHash($input) {
+/*    function MyHash($input) {
       $input_size=strlen($input);
       $split_at=$input_size/2;
       $part1="";
@@ -29,7 +30,7 @@
         $part2=$part2.$input[$i];
       }
       return md5(md5($part1).md5($part2));
-    }
+    }*/
 //
 //
 //
@@ -50,7 +51,7 @@
 //
   session_start();
   if (!$_SESSION["username"]) { // no username
-    $_SESSION["username"]= "Mate_".GenRandString(6);    
+    $_SESSION["username"]= "M8*".GenRandString(6);
   }
 //
 //
@@ -61,7 +62,7 @@
 
 
 //generate user_id
-    $USER_IP_ADDRESS = MyHash2($_SERVER['REMOTE_ADDR']);
+    //$USER_IP_ADDRESS = MyHash2($_SERVER['REMOTE_ADDR']);
 
 
     //$CHAT_DIR="global/lechat.txt";
@@ -74,14 +75,14 @@
     $DVD_DIR=$_SERVER['DOCUMENT_ROOT']."/dvd";
     $GLOBAL_FOLDER=$_SERVER['DOCUMENT_ROOT']."/global";
         /**/$GLOBAL_CHAT_DIR=$GLOBAL_FOLDER."/{GlobalChat}";
-        /**/$REG_USERS_DIR=$GLOBAL_FOLDER."/{RegisteredUsers}";
-        /**/$REG_EMAILS_DIR=$GLOBAL_FOLDER."/{RegisteredEmails}";
-        /**/$REG_Q_DIR=$GLOBAL_FOLDER."/{RegQ}";
+        //$REG_USERS_DIR=$GLOBAL_FOLDER."/{RegisteredUsers}";
+        //$REG_EMAILS_DIR=$GLOBAL_FOLDER."/{RegisteredEmails}";
+        //$REG_Q_DIR=$GLOBAL_FOLDER."/{RegQ}";
 	/**/$SAVED_DISCS_DIR=$GLOBAL_FOLDER."/{SavedDiscs}";
-        /**/$SESSIONS_DIR=$GLOBAL_FOLDER."/{Sessions}";
-              /**/$TOKEN_DIR=$SESSIONS_DIR."/token.txt";
-              /**/$JUSERS_DIR=$SESSIONS_DIR."/joined_users.txt";
-              /**/$SELF_USER_SESSION=$SESSIONS_DIR."/".$USER_IP_ADDRESS.".txt";
+        //$SESSIONS_DIR=$GLOBAL_FOLDER."/{Sessions}";
+              //$TOKEN_DIR=$SESSIONS_DIR."/token.txt";
+              //$JUSERS_DIR=$SESSIONS_DIR."/joined_users.txt";
+              //$SELF_USER_SESSION=$SESSIONS_DIR."/".$USER_IP_ADDRESS.".txt";
 
 
   //Protips
@@ -93,6 +94,8 @@
 
 //"This web-site's Minecraft Server goes by the same URL or IP Address.",
 //"This web-site's Minecraft Server Address is: $SERVER_IP_ADDRESS",
+"Minecraft Server 1.8.9: gdaym8.site",
+"Minecraft Server c0.30: gdaym8.site:25564",
 "This web-site's Live Updates is faster on Private Browsing modes.",
 "HTML Works in the Chat.",
 "#i# [image/gif link] #_i# is a shortcut for embedding gifs or images.",
@@ -104,6 +107,7 @@
 "spider.bmp drawn by hoobsug.",
 "Website pen-tested by clovis.",
 "HTTPS assist by Professor8404 and y4my4m.",
+"Website Phone Number: +61 8 6186 9573",
 
 //Misc
 //"OCT 8 2023 PENDULUM PERFORMS AT RAC ARENA - WA",
@@ -152,8 +156,8 @@
 
 //
 //
-//
-    function GetUsernameFromIpAddress($_ip_address) {
+//11/08/2023: outdated
+    /*function GetUsernameFromIpAddress($_ip_address) {
       global $SESSIONS_DIR;
       $_user_session_filename=$SESSIONS_DIR."/".$_ip_address.".txt";
       if (file_exists($_user_session_filename)) {
@@ -167,7 +171,9 @@
       }
       //0= x, 1= y, 2=session expiry, 3=username
       return $_ip_address;
-    }
+    }*/
+
+
 //Dynamic GLOBALS
     $USER_TOTAL_FOLDER_NUM=0;
     $USER_FOLDERS_ARR=array();
@@ -177,7 +183,7 @@
     $SESSION_USERNAME = $_SESSION["username"];
     $SELF_USER_NAME=$SESSION_USERNAME;
     $SELF_USER_FOLDER_NAME=$GLOBAL_FOLDER."/".$SELF_USER_NAME;
-    $USER_SAVED_DISCS_DIR=$SAVED_DISCS_DIR."/".$SELF_USER_NAME;  
+    $USER_SAVED_DISCS_DIR=$SAVED_DISCS_DIR."/".$SELF_USER_NAME; 
 //
 //
 //
@@ -207,12 +213,12 @@
 //
 //
 //Debug: Create Folders
-    mkdir($GLOBAL_CHAT_DIR,0777,true);
-    mkdir($SESSIONS_DIR,0777,true);
-    mkdir($REG_Q_DIR,0777,true);
-    mkdir($REG_EMAILS_DIR,0777,true);
-    mkdir($REG_USERS_DIR,0777,true);
-    mkdir($SAVED_DISCS_DIR,0777,true);
+    //mkdir($GLOBAL_CHAT_DIR,0777,true);
+    //mkdir($SESSIONS_DIR,0777,true);
+    //mkdir($REG_Q_DIR,0777,true);
+    //mkdir($REG_EMAILS_DIR,0777,true);
+    //mkdir($REG_USERS_DIR,0777,true);
+    mkdir($SAVED_DISCS_DIR,0755,true);
 //
 //
 //
@@ -249,11 +255,11 @@
       global $REG_EMAILS_DIR;
       global $REG_Q_DIR;
       global $SAVED_DISCS_DIR;
-      global $SESSIONS_DIR;
+      //global $SESSIONS_DIR;
       global $DVD_DIR;
       global $GLOBAL_FOLDER;
 
-      $hidden_folders_arr=array($REG_USERS_DIR, $REG_EMAILS_DIR, $REG_Q_DIR, $SAVED_DISCS_DIR, $SESSIONS_DIR);
+      $hidden_folders_arr=array($REG_USERS_DIR, $REG_EMAILS_DIR, $REG_Q_DIR, $SAVED_DISCS_DIR);
       $dvd_folders_arr=array($DVD_DIR."/COOL_SONGS_COLLECTION/Brand New",
 			 $DVD_DIR."/COOL_SONGS_COLLECTION/Evanescence",
 			 $DVD_DIR."/COOL_SONGS_COLLECTION/Linkin Park",
@@ -569,7 +575,7 @@
 		    echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0)'>↖</button></td>";
 		    echo "<td class='folder_header_part1'><button style='width:100%;' onclick='ToggleTreeView(\"".$div_id."\");'>=</button></td>";
 		    echo "<td class='folder_header_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
-		    echo "<td class='folder_header_part3'>".$folder_name."</td>";
+		    echo "<td class='folder_header_part3'><div class='folder_full_dir'>".$folder_name."</div></td>";
 		    echo "</table>";
 	            echo "</span>";
 	            echo "</div>"; //end of header
@@ -695,9 +701,10 @@
 //
 //
 //
+//11/08/2023 EXTREMELY outdated
 //SESSION
     //Token for shared files
-    function TokenAvailable() {
+    /*function TokenAvailable() {
       global $TOKEN_DIR;
       if (file_exists($TOKEN_DIR)) {return true;}
       return false;
@@ -723,13 +730,13 @@
         fclose($fp);
         PutBackToken();
       }
-    }
+    }*/
 
 //Action for ALL USERS on join
 //
 //
   //Delete Expired users
-   $session_files=scandir($SESSIONS_DIR);
+   /*$session_files=scandir($SESSIONS_DIR);
    $juser_txt="";
    for ($i=0;$i<sizeof($session_files);$i++) {
      $session_file_name=$session_files[$i];
@@ -749,11 +756,11 @@
        }
      }
    }
-   WriteUpdatedSharedTxt($JUSERS_DIR,$juser_txt);
+   WriteUpdatedSharedTxt($JUSERS_DIR,$juser_txt);*/
 //
 //
    //Brand new user based on ip,append to list
-   if (!in_array($USER_IP_ADDRESS.".txt",$session_files)) { 
+   /*if (!in_array($USER_IP_ADDRESS.".txt",$session_files)) { 
      if (TokenAvailable()) {//append
         TakeToken();
         $fp=fopen($JUSERS_DIR,"a");
@@ -765,7 +772,7 @@
       $fp=fopen($SELF_USER_SESSION,"w");
       fwrite($fp,"0,0,".$short_time_expire.",".$USER_IP_ADDRESS);
       fclose($fp);
-   }
+   }*/
 //
 //
 //
@@ -827,12 +834,16 @@
     }
 
     .folder_header_part2 {
-      width:33%;border-width:thin;border-style:solid;overflow-wrap:break-word;
+      width:33%;
+      border-width:thin;
+      border-style:solid;
+      overflow-wrap:break-word;
     }
 
     .folder_header_part3 {
       width:30%;
       border-width:thin;border-style:solid;text-align:center;
+      overflow-wrap:breakw-word;
     }
 
     .folder_header_part4 {
@@ -898,33 +909,35 @@
       global $PROTIPS;
       global $RAND_TIP;
       global $SELF_USER_NAME;
-      global $SELF_USER_SESSION;
+     // global $SELF_USER_SESSION;
+      global $SELF_USER_FOLDER_NAME;
 
       echo "<div id='default_server_header'>";
       echo "<a class='default_server_header_txt' href='/'>{$S}@{$S}</a>{$S}";
       echo "<a class='default_server_header_txt' href='/global'>{$S}View Site Content{$S}</a>{$S}";
-      if (file_exists($SELF_USER_FOLDER_NAME)) {//User is logged in
+      if (file_exists($SELF_USER_FOLDER_NAME)) { //User is logged in
         echo "<a class='default_server_header_txt' href='/php/user_act_folder.php'>{$S}Disc Management{$S}</a>{$S}";
         echo "<a class='default_server_header_txt' href='/global/".$SELF_USER_NAME."'>{$S}".$SELF_USER_NAME."{$S}</a>{$S}";
         if (GetDirectorySize($SELF_USER_FOLDER_NAME)>0) {
           echo "<a class='default_server_header_txt' href='/php/save_disc.php'>{$S}Save Disc{$S}</a>{$S}";
         }
         echo "<a class='default_server_header_txt' href='/php/are_you_sure.php'>{$S}Log Out{$S}</a>{$S}";
+
       } else { //not logged in:
-        echo "{$S}<span id='self_ip'>{$S}u:$SELF_USER_NAME{$S}</span>{$S}";
+        echo "<a class='default_server_header_txt' href='/php/login_register_form.php'>{$S}Join!{$S}</a>{$S}";
+        echo "<span id='self_ip'>{$S}u:$SELF_USER_NAME{$S}</span>{$S}";
+
         //echo "<a class='default_server_header_txt' href='/php/insert_disc.php'>{$S}Insert Disc{$S}</a>{$S}"; //legacy
-        echo "<a class='default_server_header_txt' href='/php/user_login.php'>{$S}Login{$S}</a>{$S}";
-        echo "<a class='default_server_header_txt' href='/php/user_registration.php'>{$S}Get Code{$S}</a>{$S}";
-        echo "<a class='default_server_header_txt' href='/php/user_registration2.php'>{$S}Register{$S}</a>{$S}";
+        //echo "<a class='default_server_header_txt' href='/php/user_login.php'>{$S}Login{$S}</a>{$S}";
+        //echo "<a class='default_server_header_txt' href='/php/user_registration.php'>{$S}Get Code{$S}</a>{$S}";
+        //echo "<a class='default_server_header_txt' href='/php/user_registration2.php'>{$S}Register{$S}</a>{$S}";
       }
-      $user_details=htmlspecialchars(strval(file_get_contents($SELF_USER_SESSION)));
-      $user_details_arr=explode(",",$user_details);
-      $user_time_expiry=$user_details_arr[2];
+      //$user_details=htmlspecialchars(strval(file_get_contents($SELF_USER_SESSION)));
+      //$user_details_arr=explode(",",$user_details);
+      //$user_time_expiry=$user_details_arr[2];
 
-      echo "<a href='/php/recharge.php' id='session_limit'></a>";
-      echo "<span id='user_session_expiry' hidden>{$user_time_expiry}</span>";
-
-
+      //echo "<a href='/php/recharge.php' id='session_limit'></a>"; //legacy
+      //echo "<span id='user_session_expiry' hidden>{$user_time_expiry}</span>"; //legacy
       //echo "{$S}<span id='self_ip'>{$S}u:$USER_IP_ADDRESS{$S}</span>{$S}";
 
       //echo "{$S}<span id='timeUTC' style='display:inline'></span>{$S}";

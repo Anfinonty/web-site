@@ -1,7 +1,8 @@
+
 FROM debian:buster-slim
 
 #Update and Install Necessary Packages
-RUN apt-get update -y && apt-get install -y apache2 locales-all vim php libapache2-mod-php
+RUN apt-get update -y && apt-get install -y apache2 locales-all vim php libapache2-mod-php php-sqlite3
 
 
 #Set Locale and Timezone
@@ -12,11 +13,9 @@ RUN echo "${TZ}" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
 #Apache settings
 ###COPY docker/fstab /etc/fstab
 COPY docker/apache/sites-available /etc/apache2/sites-available
+COPY docker/apache/php.ini /etc/php/7.3/apache2/php.ini
 COPY server.* /etc/apache2/ssl_keys/
-#COPY mkcert/rootCA* /etc/apache2/ssl_keys
 COPY letsencrypt/*.pem /etc/apache2/ssl_keys
-#COPY letsencrypt/privkey1.pem /etc/apache2/ssl_keys/privkey.pem
-#COPY letsencrypt/chain1.pem /etc/apache2/ssl_keys/chain.pem
 
 
 
@@ -28,5 +27,13 @@ RUN a2dissite 000-default
 
 EXPOSE 80
 EXPOSE 443
+
+#Create folder for SQLite DB
+RUN mkdir /var/www/db
+COPY ./mydatabase.sqlite /var/www/db/mydatabase.sqlite
+#Folder and Database file must be writeable to work
+RUN chmod 777 /var/www/db
+RUN chmod 777 /var/www/db/mydatabase.sqlite
+
 
 CMD ["apachectl", "-D", "FOREGROUND"]
