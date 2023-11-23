@@ -32,3 +32,5 @@ sqlite3
 
 #Other notes:
 #On Dockerfile and docker-compose.yml, expose port 8085 like you did for 80 and 443
+
+#Make sure you have made the private key and cert with LetsEncrypt and copy them from etc/letsencrypt/archive/website.com/ to the docker
