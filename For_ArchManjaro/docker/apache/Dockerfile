@@ -2,8 +2,14 @@
 FROM debian:buster-slim
 
 #Update and Install Necessary Packages
-RUN apt-get update -y && apt-get install -y apache2 locales-all vim php libapache2-mod-php php-sqlite3 vlc openssh-server
+RUN apt-get update -y && apt-get install -y apache2 locales-all vim php libapache2-mod-php php-sqlite3 vlc openssh-server python3-dev python3-pip
+#RUN apt-get install -y libnetfilter-queue-dev
+RUN apt-get install -y libffi-dev
 
+#Install to run VLC-Discord Bot
+RUN pip3 install discord.py[voice]
+RUN pip3 install discord.py
+RUN pip3 install python-dotenv
 
 #Set Locale and Timezone
 ENV LC_ALL C.UTF-8
@@ -17,11 +23,18 @@ COPY docker/apache/php.ini /etc/php/7.3/apache2/php.ini
 COPY server.* /etc/apache2/ssl_keys/
 COPY letsencrypt/*.pem /etc/apache2/ssl_keys
 
-#accessible to ssh user myUsername
+
+#accessible to ssh user fey
 RUN useradd -p $(openssl passwd -1 myDockerPassword) myUsername
 RUN chown fey /etc/apache2/ssl_keys/cert1.pem
 RUN chown fey /etc/apache2/ssl_keys/privkey1.pem
 COPY docker/sshd_config /etc/ssh/sshd_config
+
+
+#Copy python files over
+RUN mkdir python
+#COPY python/discord_bot python
+
 
 ###RUN mount -t iso9660 -i ro /dev/sr0 /run/media/fey
 RUN a2enmod headers rewrite ssl proxy proxy_http proxy_wstunnel proxy_balancer lbmethod_byrequests

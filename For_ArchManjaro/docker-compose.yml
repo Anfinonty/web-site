@@ -16,6 +16,9 @@ services:
   #SQLite DB
    - ./mydatabase.sqlite:/var/www/db/mydatabase.sqlite
 
+  #python
+   - ./python:/python
+
   ports:
    - "80:80"
    - "443:443"
