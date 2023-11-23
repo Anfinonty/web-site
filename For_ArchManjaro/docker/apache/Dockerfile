@@ -5,6 +5,7 @@ FROM debian:buster-slim
 RUN apt-get update -y && apt-get install -y apache2 locales-all vim php libapache2-mod-php php-sqlite3 vlc openssh-server python3-dev python3-pip
 #RUN apt-get install -y libnetfilter-queue-dev
 RUN apt-get install -y libffi-dev
+Run apt-get install -y ffmpeg
 
 #Install to run VLC-Discord Bot
 RUN pip3 install discord.py[voice]
