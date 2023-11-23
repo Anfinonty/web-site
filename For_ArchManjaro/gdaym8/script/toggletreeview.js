@@ -53,6 +53,7 @@
 
 	e9.style.display="inline-table"; //footer ancho
 	e9.style.marginTop="-51%";
+	//e9.style.marginTop="-151%";
 
         e10.style.display="block"; //display header
 	e11.style.display="block"; //header table
@@ -96,13 +97,74 @@
 
 
 //Go to lowest part of footer in view_folder
-  function TraverseIframe(_e, down) {
+  function TraverseIframe(_e, down, silent) {
     //const txt = "https://gdaym8.site:592/php/view_folder.php?target_folder=";
     const txt = "https://gdaym8.site/php/view_folder.php?target_folder=";
     e = document.getElementById(txt.concat(_e));
+    var a=new Audio("/audio/page-down-whoosh.mp3");
+    var a2=new Audio("/audio/page-up-whoosh.mp3");
+
     if (down) {
       e.src = (txt.concat(_e)).concat('#view_folder_footer');
+      if (!silent) {a.play();}
     } else {
       e.src = (txt.concat(_e)).concat('#view_folder_header');
+      if (!silent) {a2.play();}
     }
   }
+
+
+
+//Adjust iframe size
+  function AdjustIframe(_e, down) {
+
+    //folder 
+    const txt = "https://gdaym8.site/php/view_folder.php?target_folder=";
+    var e_txt=txt.concat(_e);
+    var e = document.getElementById(e_txt);
+
+    //index.html
+    //11/11/2023 NEW! getting element within an iframe
+    var innerDoc = e.contentDocument || e.contentWindow.document;
+    var f_txt= _e.concat("_index_");
+
+    var a=new Audio("/audio/paper_flip.mp3");
+    var a2=new Audio("/audio/paper_flip_reverse.mp3");
+    var e_height = parseInt(e.height.replace("%",""));
+
+    var e_decrease_height=false;
+    if (down) { //increase height
+      a.play();
+      //e.height = "".concat(e_height+85,"%");
+      e.height = "".concat(e_height+42,"%");
+    } else if (e_height>85) { //decrease height
+      a2.play();
+      //e.height = "".concat(e_height-85,"%");
+      e.height = "".concat(e_height-42,"%");
+      e_decrease_height=true;
+    }
+
+    try { //index.html may not always be present
+      var f=innerDoc.getElementById(f_txt);
+      var f_height = parseInt(f.height.replace("%",""));
+      if (down) {
+        //f.style.height = "50%"; decrease
+        f.height = "".concat(100/(e_height/85),"%");
+      } else if (e_decrease_height) {
+        //f.style.height = "100%"; increase, whew, tons of maths here X_x 11/12/2023
+        f.height = "".concat(100*(85/(e_height-85)),"%");
+      }
+    } catch (error) {}
+
+  }
+
+
+function SnapIn(l,r) {
+  location.href=l;
+  if (r) {
+    a = new Audio("/audio/page_snap_in.mp3");
+  } else {
+    a = new Audio("/audio/page_snap_in_reverse.mp3");
+  }
+  a.play();
+}

@@ -105,13 +105,14 @@
   </form>
 
   <form method="post" id="form4" action="/php/user_act_folder.php">
-    <input type="text" placeholder="Enter Existing File" list="available_files" id="txthere4" name="txthere4">
-    <input type="submit" name="delete2" value="Delete File">
+    Enter (*) to delete similar sounding files; Img* deletes all files starting with "Img"; *.png deletes all files ending with ".png".<br>
+    <input type="text" placeholder="Enter Existing File(s)" list="available_files" id="txthere4" name="txthere4">
+    <input type="submit" name="delete2" value="Delete File(s)">
   </form>
 
   <br>
   <div id="showfiletree">
-    <?php 
+    <?php
         $self_size=GetDirectorySize($SELF_USER_FOLDER_NAME);
         echo "Space [".round($self_size/"1048576",3)."M / ".$MAX_STORAGE/"1048576"."M]<br>";
         echo "Folders [".$USER_TOTAL_FOLDER_NUM."/".$USER_MAX_FOLDER_NUM."]<br><br>";
@@ -119,9 +120,8 @@
         echo $PROTIPS[1]."<br>";
         echo $PROTIPS[2]."<br>";
         echo $PROTIPS[3]."<br>";
-        echo $PROTIPS[4]."<br><br>";
+        //echo $PROTIPS[4]."<br><br>";
         //PrintDir($SELF_USER_FOLDER_NAME,0,0);
-	//echo "Hello";
     ?>
   <!--<iframe width="100%" height="100%" src="https://gdaym8.site:592/php/view_folder.php?target_folder=/global/<?php echo $SELF_USER_NAME;?>"></iframe>-->
   <iframe width="100%" height="100%" src="https://gdaym8.site/php/view_folder.php?target_folder=/global/<?php echo $SELF_USER_NAME;?>"></iframe>
@@ -133,7 +133,7 @@
     if (isset($_POST['submit'])){
       $set_foldername=str_replace(".","_",$_POST["txthere"]);
       $set_foldername=str_replace("/","_",$set_foldername);      
-      if (mkdir($SELF_USER_FOLDER_NAME."/".$set_foldername,0777,true)) {
+      if (mkdir($SELF_USER_FOLDER_NAME."/".$set_foldername,0755,true)) {
         echo "<br> Folder Creation Successful! :D <br>";
       } else {
         echo "<br> Folder Creation Unsuccessful :( <br>";
@@ -148,7 +148,7 @@
       $set_subfoldername=str_replace(".","_",$_POST["txthere1"]);
       $set_subfoldername=str_replace("/","_",$set_subfoldername);
       if (is_dir($SELF_USER_FOLDER_NAME."/".$set_foldername)) {
-        if (mkdir($SELF_USER_FOLDER_NAME."/".$set_foldername."/".$set_subfoldername,0777,true)) {
+        if (mkdir($SELF_USER_FOLDER_NAME."/".$set_foldername."/".$set_subfoldername,0755,true)) {
           echo "<br> Subfolder Creation Successful! :D <br>";
         } else {
           echo "<br> Subfolder Creation Unsuccessful :( <br>";
@@ -193,7 +193,7 @@
                   if ($total_folder_num<$USER_MAX_FOLDER_NUM) {
                     $_f = $_f.$folders_array[$j]."/";
                     if (!file_exists($_f)) {
-                      mkdir($_f,0777,true);
+                      mkdir($_f,0755,true);
                       $total_folder_num+=1;
                     }
                   }
@@ -224,19 +224,22 @@
     $back="\.\.";
     if (isset($_POST['delete2'])){
       $set_filename=$SELF_USER_FOLDER_NAME."/".preg_replace("/{$back}/i","_",$_POST["txthere4"]);
-      if (unlink($set_filename)) {
-        echo "<br> File Deletion Successful! :D <br>";
-      } else {
-        echo "<br> File Deletion Unsuccessful :( <br>";
+      foreach (glob($set_filename) as $filename) {
+	if (unlink($filename)) {
+	  $tmp_filename = str_replace($SELF_USER_FOLDER_NAME,"",$filename);
+          echo "<br>".$filename.": File Deletion Successful! :D <br>";
+        } else {
+          echo "<br> File Deletion Unsuccessful :( <br>";
+        }
       }
       $redirect_url="https://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
       header('Location: '.$redirect_url); //go back to home
     }
   ?>
   <?php
-    for ($i=0;$i<36;$i++) {
+    /*for ($i=0;$i<36;$i++) {
       echo "<br>";
-    }
+    }*/
   ?>
 </body>
 </html>

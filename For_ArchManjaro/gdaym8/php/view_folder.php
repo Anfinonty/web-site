@@ -10,6 +10,11 @@
     $target_folder=str_replace("/..","/--",$target_folder);
     $target_folder=str_replace("\\..","\\--",$target_folder);
   }
+
+  /*$page_height=100;
+  if (!is_null($_GET['page_height'] && !empty($_GET['page_height'])) {
+    $page_height=$_GET['page_height'];
+  }*/
 ?>
 
 <!DOCTYPE HTML>
@@ -36,20 +41,21 @@
   </script>
   <link rel="stylesheet" href="<?php echo $_GET['target_folder'];?>/folder_style.css"></link>
 </head>
-<body> 
+<body>
   <script src="<?php echo $_GET['target_folder'];?>/folder_script.js"></script>
   <div id="view_folder_header"></div>
   <!--<a href='#view_folder_footer'>Dive Down</a><br>-->
 
-
+  <div height="200%">
 <?php
 
   //echo $target_folder;
   //if (is_dir($target_folder)) {http://gdaym8.site:591/php/view_folder.php?target_folder=C:/Apache2.2/htdocs/global/
-    PrintDir($target_folder,0,0);
+  PrintDir($target_folder,0,0);
   //}
   //}
 ?>
+  <div>
   <div id="view_folder_footer"></div>
   <!--<a href='#view_folder_header'>Back To Surface</a><br>-->
 </body>

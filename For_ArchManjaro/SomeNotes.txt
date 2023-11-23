@@ -1,0 +1,34 @@
+
+
+#SSH key-gen command if ssh-docker detects change in location/ip
+#to be run on server while connected via ssh
+ssh-keygen -R 172.26.0.2
+
+#Command to streaming wih HTTPS example:
+#Note: you have to be connected to docker via ssh and perform this command while in the docker
+cvlc -vvv '/var/www/html/audio/Music/Streaming' --sout '#transcode{vcodec=none,acodec=flac,ab=128,channels=2,samplerate=44100,scodec=none}:http{access=https,mux=mp3,dst=:8085}' --http-cert '/etc/apache2/ssl_keys/cert1.pem' --http-key '/etc/apache2/ssl_keys/privkey1.pem'
+
+
+
+#iptables settings on Server to open up VLC Stream Port:
+sudo iptables -t nat -A DOCKER -p tcp --dport 8085 -j DNAT --to-destination 172.26.0.2:8085
+
+sudo iptables -t nat -A POSTROUTING -p tcp -d 172.26.0.2 --dport 8085 -j MASQUERADE -s 172.26.0.2
+
+
+
+#Video IP tables lines
+sudo iptables -t nat -L --line-numbers -n
+
+
+
+#To create an SQLITE table
+sqlite3
+.open mydatabase.sqlite
+
+##Remember to chmod 777 the .sqlite table and its folder container in the docker
+##Optionally: You can do chown http mydatabase.sqlite for extra security
+	##then chmod 755 mydatabase.sqlite
+
+#Other notes:
+#On Dockerfile and docker-compose.yml, expose port 8085 like you did for 80 and 443

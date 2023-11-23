@@ -29,7 +29,7 @@ var enable_live_peers=0;
 var saved_gchat_size=0;
 var saved_list_of_user_ip_address_size=0;
 var afk_timer=0;
-var msg_cooldown=0;
+xvar msg_cooldown=0;
 
 //Misc
 let LivePeersInterval;
@@ -48,7 +48,61 @@ window.addEventListener("load", function()
     }
   }*/
 
-  function alert() {}
+//Adjust iframe size
+  function AdjustIframe(_e, down) {
+
+    //folder 
+    const txt = "https://gdaym8.site/php/view_folder.php?target_folder=";
+    var e_txt=txt.concat(_e);
+    var e = document.getElementById(e_txt);
+
+    //index.html
+    //11/11/2023 NEW! getting element within an iframe
+    var innerDoc = e.contentDocument || e.contentWindow.document;
+    var f_txt= _e.concat("_index_");
+
+    var a=new Audio("/audio/paper_flip.mp3");
+    var a2=new Audio("/audio/paper_flip_reverse.mp3");
+    var e_height = parseInt(e.height.replace("%",""));
+
+    var e_decrease_height=false;
+    if (down) { //increase height
+      a.play();
+      //e.height = "".concat(e_height+85,"%");
+      e.height = "".concat(e_height+42,"%");
+    } else if (e_height>85) { //decrease height
+      a2.play();
+      //e.height = "".concat(e_height-85,"%");
+      e.height = "".concat(e_height-42,"%");
+      e_decrease_height=true;
+    }
+
+    try { //index.html may not always be present
+      var f=innerDoc.getElementById(f_txt);
+      var f_height = parseInt(f.height.replace("%",""));
+      if (down) {
+        //f.style.height = "50%"; decrease
+        f.height = "".concat(100/(e_height/85),"%");
+      } else if (e_decrease_height) {
+        //f.style.height = "100%"; increase, whew, tons of maths here X_x 11/12/2023
+        f.height = "".concat(100*(85/(e_height-85)),"%");
+      }
+    } catch (error) {}
+
+  }
+
+
+  function SnapIn(l,r) {
+    location.href=l;
+    if (r) {
+      a = new Audio("/audio/page_snap_in.mp3");
+    } else {
+      a = new Audio("/audio/page_snap_in_reverse.mp3");
+    }
+    a.play();
+  }
+
+
 
 //GLOBALS
   var is_focus_txthere=0;
@@ -760,6 +814,7 @@ window.addEventListener("load", function()
     var dateStringUTC = new Date().toLocaleString("en-US", {timeZone: "UTC"});
     var s2 = dateStringUTC.replace(", ", " / "); // one instance only
     var timeTxt = "["+s2+"]: (UTC)";
+    try {
     var timeDisplay=document.getElementById("timeUTC");
     timeDisplay.innerHTML=timeTxt;
 
@@ -787,6 +842,7 @@ window.addEventListener("load", function()
         document.getElementById("cleartxt").click();
       }
     }
+    } catch (e) {}
   }   
 //
 //
@@ -915,7 +971,12 @@ window.addEventListener("load", function()
   InitMouseClickButtons();
   //InitAbsoluteAxisScreen();
   UpdateChat(1,1);
-  setInterval(LiveTimer, 1000);
+
+
+  try {
+    _t=document.getElementById("timeUTC");
+    setInterval(LiveTimer, 1000);
+  } catch (e) {}
 
 });
 

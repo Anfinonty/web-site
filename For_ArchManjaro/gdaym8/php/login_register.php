@@ -138,7 +138,7 @@
         $stmt->bindParam(":time",$time_now);
         $result = $stmt->execute();
 
-        $expiry_time = time()+120;
+        $expiry_time = time()+60*5;
 
 
         $hash_reg_code = password_hash($reg_code,PASSWORD_DEFAULT);
@@ -184,12 +184,12 @@
       	  $mail->IsSMTP();
       	  $mail->Host='smtp.gmail.com';
       	  $mail->SMTPAuth=true;
-      	  $mail->Username="my_email.com";
-      	  $mail->Password="my_email_password";
+      	  $mail->Username="my@gmail.com";
+      	  $mail->Password="myGmailPassword";
       	  $mail->SMTPSecure="ssl";
       	  $mail->Port=465;
 
-      	  $mail->setFrom("johndoe627862@gmail.com");
+      	  $mail->setFrom("my@gmail.com");
       	  //$mail->setFrom("Fey");
 
       	  $mail->addAddress($user_email);
@@ -198,7 +198,7 @@
 
       	  $mail->Subject="G'day M8! Here's your Registration Code! :D";
 
-      	  $mail->Body="Fey: G'day M8! Here's your Registration Code! Enter it in the Registration Section within 2 minutes to Register your Account: ".$reg_code;
+      	  $mail->Body="Fey: G'day M8! Here's your Registration Code! Enter it in the Registration Section within 5 minutes to Register your Account: ".$reg_code;
 
           if ($mail->Send()) {
           //$mail->send();

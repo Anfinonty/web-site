@@ -1,0 +1,26 @@
+<?php
+  echo "Results:<br><br>";
+
+  try {
+    $db = new SQLITE3('/var/www/db/mydatabase.sqlite');
+    $db->exec("CREATE TABLE foo (id integer,bar STRING)");
+    $db->exec("INSERT INTO foo (id,bar) VALUES (1,'Hello Database :D')");
+
+    $stmt = $db->prepare("SELECT * FROM foo");
+
+    $result = $stmt -> execute();
+
+    while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+      echo $row['id']." ".$row['bar']."<br>";
+    }
+
+    echo "End of database";
+
+
+  } catch (Exception $e) {
+    echo "<br>Error X_x<br>";
+    echo $e->getMessage();
+  }
+
+
+?>

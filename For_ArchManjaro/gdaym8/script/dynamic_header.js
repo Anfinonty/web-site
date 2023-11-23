@@ -1,14 +1,15 @@
 
 function DisplaySessionTimer() {
-  var dateStringUTC = Math.floor(Date.now()/1000);
-  var s1 = parseInt(document.getElementById("user_session_expiry").innerHTML);
-  var s2 = dateStringUTC;
-  var time_left = s1-s2;
-  if (time_left>0) {
+  //var dateStringUTC = Math.floor(Date.now()/1000);
+  //var s1 = parseInt(document.getElementById("user_session_expiry").innerHTML);
+  //var s2 = dateStringUTC;
+  //var time_left = s1-s2;
+  //Legacy
+  /*if (time_left>0) {
     document.getElementById("session_limit").innerHTML=" Recharge ("+time_left+"s remaining) ";
   } else {
     document.getElementById("session_limit").innerHTML=" Recharge ";
-  }
+  }*/
 
 
   //var dateStringUTC = new Date().toLocaleString("en-US", {timeZone: "UTC"});

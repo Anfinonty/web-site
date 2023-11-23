@@ -2,40 +2,6 @@
 //
 //
 //
-//11/08/2023: outdated
-//Hashing
-/*    function MyHash($input) {
-      $input_size=strlen($input);
-      $split_at=$input_size/2;
-      $part1="";
-      for ($i=0;$i<$split_at-1;$i++) {
-        $part1=$part1.$input[$i];
-      }
-      $part2="";
-      for ($i=$split_at;$i<$input_size;$i++) {
-        $part2=$part2.$input[$i];
-      }
-      return md5(md5($part1).md5($part2));
-    }
-
-    function MyHash2($input) {
-      $input_size=strlen($input);
-      $split_at=$input_size/2;
-      $part1="";
-      for ($i=0;$i<$split_at;$i++) {
-        $part1=$part1.$input[$i];
-      }
-      $part2="";
-      for ($i=$split_at;$i<$input_size;$i++) {
-        $part2=$part2.$input[$i];
-      }
-      return md5(md5($part1).md5($part2));
-    }*/
-//
-//
-//
-//
-//
 //Generate Random String
     function GenRandString($string_len) {
       $lechars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-!@#.*`";
@@ -62,9 +28,6 @@
 
 
 //generate user_id
-    //$USER_IP_ADDRESS = MyHash2($_SERVER['REMOTE_ADDR']);
-
-
     //$CHAT_DIR="global/lechat.txt";
     $USER_MAX_FOLDER_NUM=10;
 
@@ -75,14 +38,7 @@
     $DVD_DIR=$_SERVER['DOCUMENT_ROOT']."/dvd";
     $GLOBAL_FOLDER=$_SERVER['DOCUMENT_ROOT']."/global";
         /**/$GLOBAL_CHAT_DIR=$GLOBAL_FOLDER."/{GlobalChat}";
-        //$REG_USERS_DIR=$GLOBAL_FOLDER."/{RegisteredUsers}";
-        //$REG_EMAILS_DIR=$GLOBAL_FOLDER."/{RegisteredEmails}";
-        //$REG_Q_DIR=$GLOBAL_FOLDER."/{RegQ}";
 	/**/$SAVED_DISCS_DIR=$GLOBAL_FOLDER."/{SavedDiscs}";
-        //$SESSIONS_DIR=$GLOBAL_FOLDER."/{Sessions}";
-              //$TOKEN_DIR=$SESSIONS_DIR."/token.txt";
-              //$JUSERS_DIR=$SESSIONS_DIR."/joined_users.txt";
-              //$SELF_USER_SESSION=$SESSIONS_DIR."/".$USER_IP_ADDRESS.".txt";
 
 
   //Protips
@@ -91,9 +47,9 @@
 "Upload A style.css into your folder to change your Theme and Wallpaper.",
 "Upload A chat_icon.jpg/png/gif into your folder to set your chat icon.",
 "Upload A folder_icon.jpg/png/gif (1MB) into your folder to set your folder icon.",
+"Upload A folder_style.css to style your folder",
+"Upload A folder_script.js to make your folder perform script actions",
 
-//"This web-site's Minecraft Server goes by the same URL or IP Address.",
-//"This web-site's Minecraft Server Address is: $SERVER_IP_ADDRESS",
 "Minecraft Server 1.8.9: gdaym8.site",
 "Minecraft Server c0.30: gdaym8.site:25564",
 "This web-site's Live Updates is faster on Private Browsing modes.",
@@ -147,6 +103,7 @@
 );
 
 
+
   //Max Storage Per User
 //    $MAX_STORAGE=10485760;
 //    $MAX_STORAGE=104857600;
@@ -156,61 +113,16 @@
 
 //
 //
-//11/08/2023: outdated
-    /*function GetUsernameFromIpAddress($_ip_address) {
-      global $SESSIONS_DIR;
-      $_user_session_filename=$SESSIONS_DIR."/".$_ip_address.".txt";
-      if (file_exists($_user_session_filename)) {
-        $user_session=htmlspecialchars(strval(file_get_contents($_user_session_filename)));
-        $user_session_arr=explode(",",$user_session);
-        $user_name=$user_session_arr[3];
-
-        if ($user_name!=$_ip_address && $user_name!="") {
-          return $user_name;
-        }
-      }
-      //0= x, 1= y, 2=session expiry, 3=username
-      return $_ip_address;
-    }*/
-
 
 //Dynamic GLOBALS
     $USER_TOTAL_FOLDER_NUM=0;
     $USER_FOLDERS_ARR=array();
     $USER_FILES_ARR=array();
     $RAND_TIP=rand(0,sizeof($PROTIPS)-1);
-    //$SELF_USER_NAME=GetUsernameFromIpAddress($USER_IP_ADDRESS);
     $SESSION_USERNAME = $_SESSION["username"];
     $SELF_USER_NAME=$SESSION_USERNAME;
     $SELF_USER_FOLDER_NAME=$GLOBAL_FOLDER."/".$SELF_USER_NAME;
     $USER_SAVED_DISCS_DIR=$SAVED_DISCS_DIR."/".$SELF_USER_NAME; 
-//
-//
-//
-//
-//No Caching Attempts
-    //https://www.php.net/manual/en/function.header.php
-    //header("Cache-Control: no-cache, must-revalidate"); // HTTP 1.1.
-    //header("Pragma: no-cache"); // HTTP 1.0.
-    //header("Expires: 0"); // Proxies.
-
-    //header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-    //header("Cache-Control: post-check=0, pre-check=0", false);
-    //header("Pragma: no-cache");
-
-    //https://stackoverflow.com/questions/13640109/how-to-prevent-browser-cache-for-php-site
-    //header('Expires: Sun, 01 Jan 2014 00:00:00 GMT');
-    //header('Cache-Control: no-store, no-cache, must-revalidate');
-    //header('Cache-Control: post-check=0, pre-check=0', FALSE);
-    //header('Pragma: no-cache');
-
-    //https://stackoverflow.com/questions/49547/how-do-we-control-web-page-caching-across-all-browsers 04/19/2023
-    header("Cache-Control: no-cache, no-store, must-revalidate"); //HTTP 1.1
-    header("Pragma: no-cache"); //HTTP 1.0
-    header("Expires: 0"); //Proxies
-//  header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-//
-//
 //
 //Debug: Create Folders
     //mkdir($GLOBAL_CHAT_DIR,0777,true);
@@ -218,10 +130,13 @@
     //mkdir($REG_Q_DIR,0777,true);
     //mkdir($REG_EMAILS_DIR,0777,true);
     //mkdir($REG_USERS_DIR,0777,true);
-    mkdir($SAVED_DISCS_DIR,0755,true);
+    //mkdir($SAVED_DISCS_DIR,0755,true);
 //
 //
 //
+    if (is_dir($SELF_USER_FOLDER_NAME)) {
+      symlink($SELF_USER_FOLDER_NAME,$_SERVER['DOCUMENT_ROOT']."/".$SESSION_USERNAME);
+    }
 //Useful File-folder FUNCTIONS
     function GetDirectorySize($path){
       $bytestotal = 0;
@@ -255,7 +170,6 @@
       global $REG_EMAILS_DIR;
       global $REG_Q_DIR;
       global $SAVED_DISCS_DIR;
-      //global $SESSIONS_DIR;
       global $DVD_DIR;
       global $GLOBAL_FOLDER;
 
@@ -272,17 +186,17 @@
         $dir_size=sizeof($a);
         if (is_dir($folder)) {
 	  if ($type==0) {
-	    echo "<script src='/script/toggletreeview.js'></script>";
             if (file_exists($folder."/index.html")) {	      //only if index exists
 //	      $folder_username=str_replace("C:/Apache2.2/htdocs","",$folder);
               $folder_username=str_replace("/var/www/html","",$folder);
               echo "<div id='".$folder_username."_folder_tab'>";
 
 	      //echo "<iframe width='100%' height='100%' class='".$folder_username."' src='https://gdaym8.site:592/".$folder_username."/'></iframe>";
-	      echo "<iframe width='100%' height='100%' class='".$folder_username."' src='https://gdaym8.site/".$folder_username."/'></iframe>";
-
+	      //echo "<iframe width='100%' height='100%' class='".$folder_username."' src='https://gdaym8.site/".$folder_username."/'></iframe>";
+	      echo "<iframe width='100%' id='".$folder_username."_index_' height='100%' class='".$folder_username."' src='https://gdaym8.site/".$folder_username."/'></iframe>";
 	      echo "</div><br>";
       	    }
+	    echo "<script src='/script/toggletreeview.js'></script>";
 	  }
 	  //for each file & folder in folder
           for ($i=0;$i<$dir_size;$i++) {
@@ -563,16 +477,16 @@
 	            echo "<span id='".$div_id."_header_table' class='folder_header_span' style='display:none'>";
 		      echo "<table class='folder_header_table'>";
 		  //echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe('".$div_id."',1);location.href=\"#".$div_id."_footer_anchor\"'>Dive Down</button></td>";
-		  //echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",1);location.href=\"#".$div_id."_footer_anchor\"'>Dive Down</button></td>";
 		    echo "<td class='folder_header_part4'>";
 		    if (!$is_dvd_folder) {
-		      echo "<button id=\"".$i."_button\" style=\"width:100%\" onclick=\"location.href='#" .$i. "_button'\">#</button>";
+		      echo "<button id=\"".$i."_button\" style=\"width:100%\" onclick=\"SnapIn('#" .$i. "_button',1)\">#</button>";
 		    } else {
-		      echo "<button id=\"".$i."_dvd_button\" style=\"width:100%\" onclick=\"location.href='#" .$i. "_dvd_button'\">#</button>";
+		      echo "<button id=\"".$i."_dvd_button\" style=\"width:100%\" onclick=\"SnapIn('#" .$i. "_dvd_button',1)\">#</button>";
 		    }
+		    echo "<td class='folder_header_part4'><button style='width:100%;'class='folder_button' onclick='SnapIn(\"#".$div_id."_footer_anchor\",0)'>!</button></td>";
 		    echo "</td>";
-		    echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",1)'>↓</button></td>";
-		    echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0)'>↖</button></td>";
+		    echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",1,0)'>↓</button></td>";
+		    echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,0)'>↖</button></td>";
 		    echo "<td class='folder_header_part1'><button style='width:100%;' onclick='ToggleTreeView(\"".$div_id."\");'>=</button></td>";
 		    echo "<td class='folder_header_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
 		    echo "<td class='folder_header_part3'><div class='folder_full_dir'>".$folder_name."</div></td>";
@@ -591,15 +505,21 @@
 	            echo "<span id='".$div_id."_footer_table' class='folder_footer_span' style='display:none;'>"; //working
 		    echo "<table class='folder_footer_table'><tr>";
 		    //echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0);location.href=\"#".$div_id."_header\"'>↑</button></td>";
+		    echo "<td class='folder_footer_part3'><button style='width:100%;'class='folder_button' onclick='SnapIn(\"#".$div_id."_footer_anchor\",0)'>!</button></td>";
 		    echo "<td class='folder_footer_part3'>";
 		    if (!$is_dvd_folder) {
-		      echo "<button style='width:100%' onclick=\"location.href='#".$i."_button'\">•</button>";
+		      echo "<button style='width:100%' onclick=\"SnapIn('#".$i."_button',1)\">#</button>";
 		    } else {
-		      echo "<button style='width:100%' onclick=\"location.href='#".$i."_dvd_button'\">•</button>";
+		      echo "<button style='width:100%' onclick=\"SnapIn('#".$i."_dvd_button',1)\">#</button>";
 		    }
 		    echo "</td>";
-		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",1)'>↓</button></td>";
-		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0)'>↑</button></td>";
+		//up down a folder traversal
+		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",1,0)'>↓</button></td>";
+		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,0)'>↑</button></td>";
+		//unroll/roll iframe
+		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,1);AdjustIframe(\"".$div_id."\",1);location.href=\"#".$div_id."_footer_anchor\"'>+</button></td>";
+		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,1);AdjustIframe(\"".$div_id."\",0);location.href=\"#".$div_id."_footer_anchor\"'>-</button></td>";
+		//close folder & label
 		    echo "<td class='folder_footer_part2'><button style='width:100%;' onclick=ToggleTreeView('".$div_id."')>=</button></td>";
 		    echo "<td class='folder_footer_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
 		    echo "</tr></table>";
@@ -652,42 +572,89 @@
     }    
 
     function TheFilter($txt) {
-        $_t = htmlspecialchars($txt);        
+        $_t = $txt;        
+
+	//$_t = str_replace("$e$","<div class=''></div><div class=\"\"></div></source></audio></b></h2></style></form></button></ul></details></img></iframe></span></a></d;v></div>",$_t);
+	///$_t = str_replace("#e#","<div class=''></div><div class=\"\"></div></source></audio></b></h2></style></form></button></ul></details></img></iframe></span></a></d;v></div>",$_t);
+
+	$regex_textarea="[Tt][Ee][xX][tT][Aa][Rr][Ee][Aa]";
+	$_t = preg_replace("/{$regex_textarea}/i","tëxtarea",$_t);
+
+	$regex_table="[Tt][Aa][Bb][Ll][Ee]";
+	$_t = preg_replace("/{$regex_table}/i","täble",$_t);
+
+	//$regex_div_1="d\;v";
+	//$_t = preg_replace("/{$regex_div_1}/i","X_x",$_t);
+
+	//$regex_div_2="div";
+	//$_t = preg_replace("/{$regex_div_2}/i","d;v",$_t);
+
 	$regex_php="[Pp][Hh][Pp]";
-        $_t = preg_replace("/{$regex_php}/i",")hp",$_t);
+        $_t = preg_replace("/{$regex_php}/i","*php",$_t);
+
+	$regex_wrong_src="\<[Ss][Rr][Cc]";
+	$_t = preg_replace("/{$regex_wrong_src}/i","?_?",$_t);
+
+	$regex_gamer="[Nn][Ii][Gg]{2}[Ee][Rr]";
+        $_t = preg_replace("/{$regex_gamer}/i","buddy",$_t);
+
         $regex_meta="[mM][eE][Tt][Aa]";
-        $_t = preg_replace("/{$regex_meta}/i","m3ta",$_t);
+        $_t = preg_replace("/{$regex_meta}/i","mëta",$_t);
+
+	$regex_body="[Bb][Oo][Dd][Yy]";
+	$_t = preg_replace("/{$regex_body}/i","bódy",$_t);
+
+	$regex_object="[Oo][Bb][Jj][Ee][Cc][Tt]";
+	$_t = preg_replace("/{$regex_object}/i","obĵect",$_t);
 
         $regex_data="[dD][Aa][Tt][Aa]";
-        $_t = preg_replace("/{$regex_data}/i","d@ta",$_t);
-       
+        $_t = preg_replace("/{$regex_data}/i","däta",$_t);
+
+	$regex_autoplay="[Aa][uU][Tt][Oo][Pp][Ll][Aa][Yy]";
+	$_t = preg_replace("/{$regex_autoplay}/i","autopläy",$_t);
+
+	$regex_title="[Tt][Ii][Tt][Ll][Ee]";
+	$_t = preg_replace("/{$regex_title}/i","títle",$_t);
+
         $regex_script="[Ss][Cc][Rr][Ii][Pp][Tt]";
-        $_t = preg_replace("/{$regex_script}/i","\$cript",$_t);
+        $_t = preg_replace("/{$regex_script}/i","scrípt",$_t);
 
         $regex_xss="[Xx][Ss]{2}";
         $_t = preg_replace("/{$regex_xss}/i","X_x",$_t);
 
         $regex_cookie="[Cc][Oo]{2}[Kk][Ii][Ee]";
-        $_t = preg_replace("/{$regex_cookie}/i","c00kie",$_t);
-        
+        $_t = preg_replace("/{$regex_cookie}/i","cookíe",$_t);
+
+	$regex_hidden="[Hh][Ii][Dd]{2}[Ee][Nn]";
+        $_t = preg_replace("/{$regex_hidden}/i","hídden",$_t);
+
         $regex_java="[jJ][Aa][Vv][Aa]";
-        $_t = preg_replace("/{$regex_java}/i","j@va",$_t);
+        $_t = preg_replace("/{$regex_java}/i","jäva",$_t);
 
         $regex_onerror="[Oo][Nn][Ee][Rr]{2}[Oo][Rr]";
-        $_t = preg_replace("/{$regex_onerror}/i","0n3rr0r",$_t);
+        $_t = preg_replace("/{$regex_onerror}/i","onërror",$_t);
 
         $regex_onload="[Oo][Nn][Ll][Oo][Aa]";
-        $_t = preg_replace("/{$regex_onload}/i","0nl0a",$_t);
+        $_t = preg_replace("/{$regex_onload}/i","onloäd",$_t);
 
         $regex_onproperty="[Oo][Nn][Pp][Rr][Oo][Pp][Ee][Rr][Tt][Yy]";
-        $_t = preg_replace("/{$regex_onproperty}/i","0npr0perty",$_t);
+        $_t = preg_replace("/{$regex_onproperty}/i","onpropërty",$_t);
 
         $regex_statechange="[Ss][Tt][Aa][Tt][Ee][Cc][Hh][Aa][Nn][Gg][Ee]";
-        $_t = preg_replace("/{$regex_statechange}/i","_st@techange",$_t);
+        $_t = preg_replace("/{$regex_statechange}/i","_stätechange",$_t);
+
         $regex_marquee="[Mm][Aa][Rr][Qq][Uu][Ee]{2}";
-        $_t = preg_replace("/{$regex_marquee}/i","m@rquee",$_t);
+        $_t = preg_replace("/{$regex_marquee}/i","märquee",$_t);
+
         $regex_svg="[Ss][Vv][Gg]";
-        $_t = preg_replace("/{$regex_svg}/i","$vg",$_t);
+        $_t = preg_replace("/{$regex_svg}/i","śvg",$_t);
+
+	$regex_plaintext="[Pp][Ll][Aa][Ii][Nn][Tt][Ee][Xx][Tt]";
+	$_t = preg_replace("/{$regex_plaintext}/i","plaíntext",$_t);
+
+        $regex_iframe="\<[iI][fF][rR][aA][mM][Ee]";
+        $_t = preg_replace("/{$regex_iframe}/i","<iframe sandbox='allow-scripts allow-same-origin' ",$_t);
+
 
         $_t = str_replace("\\/>","XD",$_t); //Wrong End Sharp Bracket
         $_t = str_replace("\\u","XD",$_t); //Encoding Char
@@ -698,81 +665,6 @@
         return $_t;
     }
 
-//
-//
-//
-//11/08/2023 EXTREMELY outdated
-//SESSION
-    //Token for shared files
-    /*function TokenAvailable() {
-      global $TOKEN_DIR;
-      if (file_exists($TOKEN_DIR)) {return true;}
-      return false;
-    }
-
-    function TakeToken() {
-      global $TOKEN_DIR;
-      unlink($TOKEN_DIR);
-    }
-
-    function PutBackToken() {
-      global $TOKEN_DIR;
-      $fp=fopen($TOKEN_DIR,"w");
-      fwrite($fp,"...");
-      fclose($fp);
-    }
-
-    function WriteUpdatedSharedTxt($_dir,$_txt) {
-      if (TokenAvailable()) {
-        TakeToken();
-        $fp=fopen($_dir,"w");
-        fwrite($fp,$_txt);
-        fclose($fp);
-        PutBackToken();
-      }
-    }*/
-
-//Action for ALL USERS on join
-//
-//
-  //Delete Expired users
-   /*$session_files=scandir($SESSIONS_DIR);
-   $juser_txt="";
-   for ($i=0;$i<sizeof($session_files);$i++) {
-     $session_file_name=$session_files[$i];
-     if ($session_file_name!="token.txt" && $session_file_name!="joined_users.txt" && $session_file_name!="." && $session_file_name!="..") {
-       $session_user_ip_address=str_replace(".txt","",$session_file_name);
-       $file_content=htmlspecialchars(strval(file_get_contents($SESSIONS_DIR."/".$session_file_name)));
-       $file_content_arr=explode(",",$file_content);
-       $session_user_expiry_time=$file_content_arr[2];      
-       if (time()>$session_user_expiry_time) {//Delete expired session user
-	 $tmp_username=GetUsernameFromIpAddress($session_user_ip_address);
-	 PrintDir($SAVED_DISCS_DIR."/".$tmp_username,-1,0); //Delete folder from {SavedDiscs}
-         //unlink($SAVED_DISCS_DIR."/WEB_SITE_DISC_".$tmp_username.".zip");
-         //PrintDir($GLOBAL_FOLDER."/".GetUsernameFromIpAddress($session_user_ip_address),-1,0);//autoeject - legacy
-         unlink($SESSIONS_DIR."/".$session_file_name);
-       } else {
-         $juser_txt=$juser_txt.$session_user_ip_address."#".GetUsernameFromIpAddress($session_user_ip_address).",";
-       }
-     }
-   }
-   WriteUpdatedSharedTxt($JUSERS_DIR,$juser_txt);*/
-//
-//
-   //Brand new user based on ip,append to list
-   /*if (!in_array($USER_IP_ADDRESS.".txt",$session_files)) { 
-     if (TokenAvailable()) {//append
-        TakeToken();
-        $fp=fopen($JUSERS_DIR,"a");
-        fwrite($fp,$USER_IP_ADDRESS."#".$SELF_USER_NAME.",");
-        fclose($fp);
-        PutBackToken();
-      }//Write in /SESSIONS/ Folder
-      $short_time_expire=time()+"40"; //40 seconds
-      $fp=fopen($SELF_USER_SESSION,"w");
-      fwrite($fp,"0,0,".$short_time_expire.",".$USER_IP_ADDRESS);
-      fclose($fp);
-   }*/
 //
 //
 //
@@ -892,6 +784,10 @@
       border-width:thick;border-style:solid;
     }
 
+
+    .user_chat_box {
+      border-width:thin;border-style:solid;width:100%;max-height:480px;
+    }
   </style>";
     echo "<link rel='stylesheet' href='/global/".$SELF_USER_NAME."/style.css'>";
 //
@@ -909,42 +805,29 @@
       global $PROTIPS;
       global $RAND_TIP;
       global $SELF_USER_NAME;
-     // global $SELF_USER_SESSION;
       global $SELF_USER_FOLDER_NAME;
 
       echo "<div id='default_server_header'>";
-      echo "<a class='default_server_header_txt' href='/'>{$S}@{$S}</a>{$S}";
-      echo "<a class='default_server_header_txt' href='/global'>{$S}View Site Content{$S}</a>{$S}";
+      echo "<a class='default_server_header_txt' target='_blank' href='/'>{$S}@{$S}</a>{$S}";
+      echo "<a class='default_server_header_txt' target='_blank' href='/global'>{$S}View Site Content{$S}</a>{$S}";
+      echo "<a class='default_server_header_txt' target='_blank' href='/php/VidStream.php'>{$S}VidStream{$S}</a>{$S}";
+
       if (file_exists($SELF_USER_FOLDER_NAME)) { //User is logged in
-        echo "<a class='default_server_header_txt' href='/php/user_act_folder.php'>{$S}Disc Management{$S}</a>{$S}";
-        echo "<a class='default_server_header_txt' href='/global/".$SELF_USER_NAME."'>{$S}".$SELF_USER_NAME."{$S}</a>{$S}";
+        echo "<a class='default_server_header_txt' target='_blank' href='/php/user_act_folder.php'>{$S}Disc Management{$S}</a>{$S}";
+        echo "<a class='default_server_header_txt' target='_blank' href='/global/".$SELF_USER_NAME."'>{$S}".$SELF_USER_NAME."{$S}</a>{$S}";
         if (GetDirectorySize($SELF_USER_FOLDER_NAME)>0) {
-          echo "<a class='default_server_header_txt' href='/php/save_disc.php'>{$S}Save Disc{$S}</a>{$S}";
+          echo "<a class='default_server_header_txt' target='_blank' href='/php/save_disc.php'>{$S}Save Disc{$S}</a>{$S}";
         }
-        echo "<a class='default_server_header_txt' href='/php/are_you_sure.php'>{$S}Log Out{$S}</a>{$S}";
+        echo "<a class='default_server_header_txt' target='_blank' href='/php/are_you_sure.php'>{$S}Log Out{$S}</a>{$S}";
 
       } else { //not logged in:
-        echo "<a class='default_server_header_txt' href='/php/login_register_form.php'>{$S}Join!{$S}</a>{$S}";
+        echo "<a class='default_server_header_txt' target='_blank' href='/php/login_register_form.php'>{$S}Join!{$S}</a>{$S}";
         echo "<span id='self_ip'>{$S}u:$SELF_USER_NAME{$S}</span>{$S}";
-
-        //echo "<a class='default_server_header_txt' href='/php/insert_disc.php'>{$S}Insert Disc{$S}</a>{$S}"; //legacy
-        //echo "<a class='default_server_header_txt' href='/php/user_login.php'>{$S}Login{$S}</a>{$S}";
-        //echo "<a class='default_server_header_txt' href='/php/user_registration.php'>{$S}Get Code{$S}</a>{$S}";
-        //echo "<a class='default_server_header_txt' href='/php/user_registration2.php'>{$S}Register{$S}</a>{$S}";
       }
-      //$user_details=htmlspecialchars(strval(file_get_contents($SELF_USER_SESSION)));
-      //$user_details_arr=explode(",",$user_details);
-      //$user_time_expiry=$user_details_arr[2];
-
-      //echo "<a href='/php/recharge.php' id='session_limit'></a>"; //legacy
-      //echo "<span id='user_session_expiry' hidden>{$user_time_expiry}</span>"; //legacy
-      //echo "{$S}<span id='self_ip'>{$S}u:$USER_IP_ADDRESS{$S}</span>{$S}";
-
-      //echo "{$S}<span id='timeUTC' style='display:inline'></span>{$S}";
 
       echo "{$S}<span id='timeUser' style='display:inline'></span>{$S}";
 
-      echo "<br><div id='random_tips' style='display:inline;'>~{$S}".$PROTIPS[$RAND_TIP]."{$S}~</div>";
+      echo "<br><div id='random_tips' style='display:inline;'>".$PROTIPS[$RAND_TIP]."</div>";
       echo '<script src="/script/dynamic_header.js"></script>';
 
       echo "</div>";

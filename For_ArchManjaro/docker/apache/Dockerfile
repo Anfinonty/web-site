@@ -2,7 +2,7 @@
 FROM debian:buster-slim
 
 #Update and Install Necessary Packages
-RUN apt-get update -y && apt-get install -y apache2 locales-all vim php libapache2-mod-php php-sqlite3
+RUN apt-get update -y && apt-get install -y apache2 locales-all vim php libapache2-mod-php php-sqlite3 vlc openssh-server
 
 
 #Set Locale and Timezone
@@ -17,7 +17,11 @@ COPY docker/apache/php.ini /etc/php/7.3/apache2/php.ini
 COPY server.* /etc/apache2/ssl_keys/
 COPY letsencrypt/*.pem /etc/apache2/ssl_keys
 
-
+#accessible to ssh user myUsername
+RUN useradd -p $(openssl passwd -1 myDockerPassword) myUsername
+RUN chown fey /etc/apache2/ssl_keys/cert1.pem
+RUN chown fey /etc/apache2/ssl_keys/privkey1.pem
+COPY docker/sshd_config /etc/ssh/sshd_config
 
 ###RUN mount -t iso9660 -i ro /dev/sr0 /run/media/fey
 RUN a2enmod headers rewrite ssl proxy proxy_http proxy_wstunnel proxy_balancer lbmethod_byrequests
@@ -27,6 +31,7 @@ RUN a2dissite 000-default
 
 EXPOSE 80
 EXPOSE 443
+EXPOSE 8085
 
 #Create folder for SQLite DB
 RUN mkdir /var/www/db
