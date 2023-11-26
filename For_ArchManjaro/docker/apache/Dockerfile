@@ -5,12 +5,17 @@ FROM debian:buster-slim
 RUN apt-get update -y && apt-get install -y apache2 locales-all vim php libapache2-mod-php php-sqlite3 vlc openssh-server python3-dev python3-pip
 #RUN apt-get install -y libnetfilter-queue-dev
 RUN apt-get install -y libffi-dev
-Run apt-get install -y ffmpeg
+RUN apt-get install -y ffmpeg
+RUN apt-get install -y git-all
 
 #Install to run VLC-Discord Bot
 RUN pip3 install discord.py[voice]
 RUN pip3 install discord.py
 RUN pip3 install python-dotenv
+RUN pip3 install --upgrade --force-reinstall "git+https://github.com/ytdl-org/youtube-dl.git"
+
+#RUN pip3 install youtube_dl
+#RUN pip3 install yt-dlp
 
 #Set Locale and Timezone
 ENV LC_ALL C.UTF-8
@@ -35,6 +40,8 @@ COPY docker/sshd_config /etc/ssh/sshd_config
 #Copy python files over
 RUN mkdir python
 #COPY python/discord_bot python
+RUN mkdir /home/fey
+RUN chown fey /home/fey
 
 
 ###RUN mount -t iso9660 -i ro /dev/sr0 /run/media/fey
