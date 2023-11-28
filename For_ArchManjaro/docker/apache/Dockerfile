@@ -13,6 +13,7 @@ RUN pip3 install discord.py[voice]
 RUN pip3 install discord.py
 RUN pip3 install python-dotenv
 RUN pip3 install --upgrade --force-reinstall "git+https://github.com/ytdl-org/youtube-dl.git"
+RUN pip3 install asyncio
 
 #RUN pip3 install youtube_dl
 #RUN pip3 install yt-dlp
