@@ -31,6 +31,9 @@ sqlite3
 	##then chmod 755 mydatabase.sqlite
 
 #Other notes:
+#To begin Discord Bot, run this while in ssh 172.26.0.2 on the Dockerfile
+python3 /python/discord_bot/bot.py > pylogs &
+
 #On Dockerfile and docker-compose.yml, expose port 8085 like you did for 80 and 443
 
 #Make sure you have made the private key and cert with LetsEncrypt and copy them from etc/letsencrypt/archive/website.com/ to the docker
