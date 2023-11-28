@@ -1,8 +1,11 @@
-
 # bot.py
 import os
+import time
+import re
 import random
 import discord
+import asyncio
+#import json
 from discord.ext import commands,tasks
 from dotenv import load_dotenv
 from discord import FFmpegPCMAudio, PCMVolumeTransformer
@@ -11,24 +14,65 @@ from discord.utils import get
 import youtube_dl
 from youtube_dl import YoutubeDL
 
-FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'}
 
+#load quran dict
+Quran = {}
+with open('/python/discord_bot/Quran.txt','r') as f:
+  regex_ = r'(\d{1,3}\|\d{1,3}\|)'
+  CHAPTER={}
+  saved_chapter="1"
+  for line in f:
+    l = re.split(regex_, line)
+    V = l[1][:-1].replace("|",":")
+    _V = re.split(r'(\:)',V)
+
+    chapter_no = _V[0]
+    verse_no = _V[2]
+    verse = l[2].strip()
+
+    if (saved_chapter!=chapter_no):
+      Quran[saved_chapter] = CHAPTER
+      CHAPTER = {}
+      saved_chapter=chapter_no
+      CHAPTER[verse_no] = verse
+    else:
+      CHAPTER[verse_no] = verse
+
+    if V == "114:6":
+      break
+
+
+
+FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'}
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 
 intents = discord.Intents.all()
-#intents.message_content = True
 intents.messages = True
-#client = discord.Client(intents=intents)
-#player = None
-#global player
 bot = commands.Bot(command_prefix='!',intents=intents)
 
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
 
+@bot.event
+async def on_voice_state_update(member, before, after):
+  #if not member.id == self.bot.user.id:
+    #return
+  if before.channel is None:
+    voice = after.channel.guild.voice_client
+    time = 0
+    while True:
+      await asyncio.sleep(1)
+      time = time + 1
+      #print(time)
+      if voice.is_playing(): #set time to 0 if song is playing
+        time = 0
+      if time == 120: #disconnect after 120 seconds
+        await voice.disconnect()
+      if not voice.is_connected():
+        break
 
 
 #@bot.command(name='join', help='Tells the bot to join the voice channel')
@@ -54,16 +98,13 @@ async def on_ready():
 
 @bot.command(aliases=['v'], pass_context=True)
 async def vlc(ctx, i):
-    vlc_commands=["/var/www/html/audio/Music/Streaming/LinkinParkHybridTheory.flac","/var/www/html/audio/Music/Limp Bizkit/Chocolate Starfish and the Hot Dog Flavored Water/","/var/www/html/audio/Music/Streaming/PENDULUM.flac"]
-    _msg=["Linkin Park - Hybrid Theory","Limp Bizkit - The Chocolate Starfish and the Hot Dog Flavored Water","Pendulum - Hold Your Color, In Silico, Immersion"]
+    vlc_commands=["/var/www/html/audio/Music/Streaming/LinkinParkHybridTheory.flac","/var/www/html/audio/Music/Streaming/TCSATHDFW.flac","/var/www/html/audio/Music/Streaming/PENDULUM.flac","/var/www/html/audio/Music/Streaming/TDAGARIM.flac"]
+    _msg=["Linkin Park - Hybrid Theory","Limp Bizkit - The Chocolate Starfish and the Hot Dog Flavored Water","Pendulum - Hold Your Color, In Silico, Immersion","Brand New - The Devil And God Are Raging Inside Me"]
 
     #kill all previous vlc sessions
     try:
       os.system("pkill vlc &")
       await ctx.send("Previous VLC Sessions Ended.");
-      voice_client = ctx.message.guild.voice_client
-      if voice_client.is_connected():
-        await voice_client.disconnect()
     except:
       pass
 
@@ -71,7 +112,7 @@ async def vlc(ctx, i):
       i = int(i)
       _vlc = "cvlc -vvv '" + vlc_commands[i] + "' --sout '#transcode{vcodec=none,acodec=flac,ab=128,channels=2,samplerate=44100,scodec=none}:http{access=https,mux=mp3,dst=:8085}' --http-cert '/etc/apache2/ssl_keys/cert1.pem' --http-key '/etc/apache2/ssl_keys/privkey1.pem' &"
       os.system(_vlc)
-      await ctx.send("Now Streaming: " + _msg[i])
+      await ctx.send("Enter !p to Stream on Voice Chat. Now Streaming: " + _msg[i])
     except Exception as e:
       await ctx.send(e)
       pass
@@ -80,16 +121,24 @@ async def vlc(ctx, i):
 #https://stackoverflow.com/questions/61757011/how-to-create-a-discord-bot-that-streams-online-radio-in-python
 @bot.command(aliases=['p', 'pla'])
 async def play(ctx):
-    try:
-      channel = ctx.message.author.voice.channel
-      try: #check that channel is connected
-        player = await channel.connect()
-        player.play(FFmpegPCMAudio('https://gdaym8.site:8085'))
-      except Exception as f:
-        await ctx.send(f)
-        pass
-    except Exception as e:
-      await ctx.send(e)
+    if not ctx.message.author.voice:
+      await ctx.send("You are not connected to a voice channel.")
+      return 0
+
+    channel = ctx.message.author.voice.channel
+    try: #check that channel is connected
+      player = await channel.connect()
+      player.play(FFmpegPCMAudio('https://gdaym8.site:8085'))
+      await ctx.send("Now Streaming from https://gdaym8.site:8085");
+    except Exception as f:
+      await ctx.send("Ending previous streams. Now Streaming from https://gdaym8.site:8085");
+
+      #disconnect and reconnect
+      voice_client = ctx.message.guild.voice_client
+      if voice_client.is_connected():
+        await voice_client.disconnect()
+      player = await channel.connect()
+      player.play(FFmpegPCMAudio('https://gdaym8.site:8085'))
       pass
 
 #@bot.command(aliases=['s', 'sto'])
@@ -100,6 +149,7 @@ async def play(ctx):
 #    except Exception as e:
 #        await ctx.send(e)
 #        pass
+
 
 @bot.command(aliases=['kvlc','killvlc'])
 async def kv(ctx):
@@ -112,13 +162,13 @@ async def kv(ctx):
 
 
 
-@bot.command(aliases=['q','kill'])
+@bot.command(aliases=['kill'])
 async def k(ctx):
-  try: #try to end all audio sessions
-    os.system("pkill ffmpeg &");
-  except Exception as e:
-    await ctx.send(e)
-    pass
+  #try: #try to end all audio sessions
+    #os.system("pkill ffmpeg &");
+  #except Exception as e:
+    #await ctx.send(e)
+    #pass
 
   #leave  vc
   voice_client = ctx.message.guild.voice_client
@@ -135,16 +185,18 @@ async def h(ctx):
     he = """
 G'day m8! Here are some commands I can perform:
 !h -- You are here
-!k -- Kill current session
+!k -- Quit the Voice Chat
 !kv -- Kill vlc session
 !p -- Join Voice Chat and Play Audio Stream
-!q -- Quit the Voice Chat
-!buddy
+!buddy -- Randomly call out someone here
+!reboot -- Reboots the bot, it takes 8 seconds
+!quran <verse or phrase> -- Recites a verse or Searches a phrase from the Quran
 !s "<phrase>" -- Says requested phrase
 !v <option> -- Begin Stream with VLC
   0 = Hybrid Theory - Linkin Park
-  1 = The Chocolate Starfish and The Hot Dog Flavoured Water - Limp Bizkit
-  2 = Pendulum
+  1 = Chocolate Starfish and The Hot Dog Flavoured Water - Limp Bizkit
+  2 = Hold Your Colour, In Silico, Immersion - Pendulum
+  3 = The Devil And God Are Raging Inside Me - Brand New
 !yt <youtube link> -- Join Voice Chat and Play YouTube Video Audio
 """
     await ctx.send(he)
@@ -158,18 +210,42 @@ async def say(ctx, words):
 #https://stackoverflow.com/questions/66610012/discord-py-streaming-youtube-live-into-voice
 @bot.command(name="yt")
 async def yt(ctx, url):
+    if not ctx.message.author.voice:
+      await ctx.send("You are not connected to a voice channel.")
+      return 0
+
     YDL_OPTIONS = {'format': 'bestaudio/best', 'noplaylist':'True'}
     FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+
+   #download video 
     try:
-      channel = ctx.message.author.voice.channel
       with YoutubeDL(YDL_OPTIONS) as ydl:
         info = ydl.extract_info(url, download=False)
         I_URL = info['formats'][0]['url']
+        title = info.get('title', None)
+        await ctx.send("[YT] Now Playing: " + title)
         source = await discord.FFmpegOpusAudio.from_probe(I_URL, **FFMPEG_OPTIONS)
+    except Exception as e:
+      await ctx.send(e)
+      pass
+
+
+    channel = ctx.message.author.voice.channel
+    try:
         player = await channel.connect()
         player.play(source)
     except Exception as e: #music is already queued
-      await ctx.send("Enter !k and repeat the command to play a different song")
+      #await ctx.send(e) #+ " Enter !k and repeat the command to play a different song")
+      #leave  vc and reconnect
+      voice_client = ctx.message.guild.voice_client
+      if voice_client.is_connected():
+        await voice_client.disconnect()
+      try:
+        player = await channel.connect()
+        player.play(source)
+      except Exception as f:
+        await ctx.send(f)
+        pass
       pass
 
 
@@ -182,6 +258,69 @@ async def buddy(ctx):
   rand_int = random.randint(0,len(usernames))
   await ctx.send("<@"+usernames[rand_int]+"> :buddy:")
 
+
+
+@bot.command(name='reboot')
+async def reboot(ctx):
+  try: #disconnect
+    voice_client = ctx.message.guild.voice_client
+    if voice_client.is_connected():
+        await voice_client.disconnect()
+  except:
+    pass
+
+  await ctx.send("All Sessions Ended. Check back 8 seconds later. Rebooting....")
+  await ctx.bot.close()
+  os.system("pkill ffmpeg && pkill python3 &")
+  time.sleep(3)
+  #python3 /python/discord_bot/bot.py > pylogs &
+  os.system("python3 /python/discord_bot/bot.py &")
+
+
+
+@bot.command(aliases=['q','Q','ko','qu','Koran','Ko','Qu','koran','Quran'])
+async def quran(ctx, verse=None):
+  #await ctx.send(":")
+  global Quran
+  to_say = ""
+  if verse == None:
+    chapter = random.choice(list(Quran.items()))
+    VERSE = random.choice(list(chapter[1].items()))
+    to_say=chapter[0]+":"+VERSE[0]+" "+VERSE[1]
+    await ctx.send(to_say)
+  else:
+    _V = re.split(r'(\:)',verse)
+    if len(_V)>1: #verse and chapter
+      try:
+        to_say=_V[0]+":"+_V[2]+" "+Quran[_V[0]][_V[2]]
+        await ctx.send(to_say)
+      except:
+        await ctx.send("Sorry, chapter or verse is not found.")
+        pass
+    else: #chapter only
+      try:
+        to_say=verse+"\n"
+        for _verse in Quran[verse]:
+          next = verse+":"+_verse+" "+Quran[verse][_verse]+"\n"
+          if (len(to_say)+len(next)>2000):
+            await ctx.send(to_say)
+            to_say = next
+          else:
+            to_say = to_say + next
+        await ctx.send(to_say)
+      except:
+        to_say="Search Results for '"+verse+"': \n"
+        for chapter in Quran:
+          for _verse in Quran[chapter]:
+            next = chapter+":"+_verse+" "+Quran[chapter][_verse]+"\n"
+            if (re.search(verse,next,re.IGNORECASE)):
+              if (len(to_say)+len(next)>2000):
+                await ctx.send(to_say)
+                to_say = next
+              else:
+                to_say = to_say + next
+        await ctx.send(to_say)
+  await ctx.send(":")
 
 
 bot.run(TOKEN)
