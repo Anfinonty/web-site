@@ -15,32 +15,83 @@ import youtube_dl
 from youtube_dl import YoutubeDL
 
 
-#load quran dict
-Quran = {}
-with open('/python/discord_bot/Quran.txt','r') as f:
-  regex_ = r'(\d{1,3}\|\d{1,3}\|)'
-  CHAPTER={}
-  saved_chapter="1"
-  for line in f:
-    l = re.split(regex_, line)
-    V = l[1][:-1].replace("|",":")
-    _V = re.split(r'(\:)',V)
+class Holy:
+  Book = None
+  def __init__(self, filename):
+    self.Book = {}
+    with open(filename,'r') as f:
+      regex_ = r'(\d{1,3}\|\d{1,3}\|)'
+      CHAPTER={}
+      saved_chapter="1"
+      for line in f:
+        l = re.split(regex_, line)
+        try:
+          V = l[1][:-1].replace("|",":")
+          _V = re.split(r'(\:)',V)
 
-    chapter_no = _V[0]
-    verse_no = _V[2]
-    verse = l[2].strip()
+          chapter_no = _V[0]
+          verse_no = _V[2]
+          verse = l[2].strip()
 
-    if (saved_chapter!=chapter_no):
-      Quran[saved_chapter] = CHAPTER
-      CHAPTER = {}
-      saved_chapter=chapter_no
-      CHAPTER[verse_no] = verse
-    else:
-      CHAPTER[verse_no] = verse
+          if (saved_chapter!=chapter_no):
+            self.Book[saved_chapter] = CHAPTER
+            CHAPTER = {}
+            saved_chapter=chapter_no
+            CHAPTER[verse_no] = verse
+          else:
+            CHAPTER[verse_no] = verse
+        except:
+          self.Book[saved_chapter] = CHAPTER
+          break
 
-    if V == "114:6":
-      break
+  def get(self):
+    return self.Book
 
+  def search(self, input = None):
+    output = []
+    if input == None: #no verse input
+      chapter = random.choice(list(self.Book.items()))
+      VERSE = random.choice(list(chapter[1].items()))
+      to_say = chapter[0]+":"+VERSE[0]+" "+VERSE[1]
+      output.append(to_say)
+    else: #verse input
+      _V = re.split(r'(\:)',input)
+      if len(_V)>1: #verse and chapter
+        try:
+          to_say=_V[0]+":"+_V[2]+" "+self.Book[_V[0]][_V[2]]
+          output.append(to_say)
+        except:
+          output.append("Sorry, chapter or verse is not found.")
+          pass
+      else: #chapter only
+        try:
+          to_say=input+"\n"
+          for _verse in self.Book[input]:
+            next = input+":"+_verse+" "+self.Book[input][_verse]+"\n"
+            if (len(to_say)+len(next)>2000):
+              output.append(to_say)
+              to_say = next
+            else:
+              to_say = to_say + next
+          output.append(to_say)
+        except:
+          to_say="Search Results for '"+input+"': \n"
+          for chapter in self.Book:
+            for _verse in self.Book[chapter]:
+              next = chapter+":"+_verse+" "+self.Book[chapter][_verse]+"\n"
+              if (re.search(input,next,re.IGNORECASE)):
+                if (len(to_say)+len(next)>2000):
+                  output.append(to_say)
+                  to_say = next
+                else:
+                  to_say = to_say + next
+          output.append(to_say)
+        output.append(":")
+    return output
+
+
+Quran = Holy("/python/discord_bot/Quran.txt")
+Dhammapada = Holy("/python/discord_bot/Dhammapada.txt")
 
 
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'}
@@ -190,6 +241,7 @@ G'day m8! Here are some commands I can perform:
 !p -- Join Voice Chat and Play Audio Stream
 !buddy -- Randomly call out someone here
 !reboot -- Reboots the bot, it takes 8 seconds
+!dhammapada <verse or phrase> -- Recites a verse or Searches a phrase from the Dhammapada
 !quran <verse or phrase> -- Recites a verse or Searches a phrase from the Quran
 !s "<phrase>" -- Says requested phrase
 !v <option> -- Begin Stream with VLC
@@ -279,48 +331,19 @@ async def reboot(ctx):
 
 
 @bot.command(aliases=['q','Q','ko','qu','Koran','Ko','Qu','koran','Quran'])
-async def quran(ctx, verse=None):
-  #await ctx.send(":")
+async def quran(ctx, input=None):
   global Quran
-  to_say = ""
-  if verse == None:
-    chapter = random.choice(list(Quran.items()))
-    VERSE = random.choice(list(chapter[1].items()))
-    to_say=chapter[0]+":"+VERSE[0]+" "+VERSE[1]
-    await ctx.send(to_say)
-  else:
-    _V = re.split(r'(\:)',verse)
-    if len(_V)>1: #verse and chapter
-      try:
-        to_say=_V[0]+":"+_V[2]+" "+Quran[_V[0]][_V[2]]
-        await ctx.send(to_say)
-      except:
-        await ctx.send("Sorry, chapter or verse is not found.")
-        pass
-    else: #chapter only
-      try:
-        to_say=verse+"\n"
-        for _verse in Quran[verse]:
-          next = verse+":"+_verse+" "+Quran[verse][_verse]+"\n"
-          if (len(to_say)+len(next)>2000):
-            await ctx.send(to_say)
-            to_say = next
-          else:
-            to_say = to_say + next
-        await ctx.send(to_say)
-      except:
-        to_say="Search Results for '"+verse+"': \n"
-        for chapter in Quran:
-          for _verse in Quran[chapter]:
-            next = chapter+":"+_verse+" "+Quran[chapter][_verse]+"\n"
-            if (re.search(verse,next,re.IGNORECASE)):
-              if (len(to_say)+len(next)>2000):
-                await ctx.send(to_say)
-                to_say = next
-              else:
-                to_say = to_say + next
-        await ctx.send(to_say)
-  await ctx.send(":")
+  results = Quran.search(input)
+  for msg in results:
+    await ctx.send(msg)
+
+
+@bot.command(aliases=['d','D','Dhammapada','Dhamma','dhamma','dh','Dh'])
+async def dhammapada(ctx, input=None):
+  global Dhammapada
+  results = Dhammapada.search(input)
+  for msg in results:
+    await ctx.send(msg)
 
 
 bot.run(TOKEN)
