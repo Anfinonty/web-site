@@ -15,7 +15,7 @@ import youtube_dl
 from youtube_dl import YoutubeDL
 
 
-class Bible:
+class BibleKJV:
   book = {}
   book_title=[
 "Genesis","Exodus","Leviticus","Numbers","Deuteronomy",
@@ -73,7 +73,7 @@ class Bible:
       #C[1] is verse number
           if book_no>-1:
             if C[1] != current_verse: #new verse
-              verse[current_verse] = verse_txt
+              verse[current_verse] = verse_txt + "\n"
               current_verse = C[1]
             if C[0] != current_chapter: #new chapter
               chapter[current_chapter] = verse
@@ -124,7 +124,7 @@ class Bible:
           try:
             to_say=input+"\n"
             for _verse in self.book[_C[0]][_V[0]]:
-              next = self.book[_C[0]][_V[0]][_verse]+"\n"
+              next = "\n"+self.book[_C[0]][_V[0]][_verse]
               if (len(to_say)+len(next)>2000):
                 output.append(to_say)
                 to_say = next
@@ -132,7 +132,7 @@ class Bible:
                 to_say = to_say + next
             output.append(to_say)
           except: #book only
-            if _C[2]=='?': #random
+            if _C[2]=='$': #random
               _chapter = random.choice(list(self.book[_C[0]].items()))
               _verse = random.choice(list(_chapter[1].items()))
               to_say = "[" + _C[0] + "] " + _verse[1]
@@ -140,14 +140,24 @@ class Bible:
               to_say="Book: ["+ input+"]\n"
               for _chapter in self.book[_C[0]]:
                 for _verse in self.book[_C[0]][_chapter]:
-                  next = self.book[_C[0]][_chapter][_verse]+"\n"
+                  next = "\n"+self.book[_C[0]][_chapter][_verse]
                   if (len(to_say)+len(next)>2000):
                     output.append(to_say)
                     to_say = next
                   else:
                     to_say = to_say + next
-            else:
-              to_say = "Sorry. Chapter is not found."
+            else: #search for phrase in  a book
+              to_say="Search Results for '"+_C[2]+"' in Book [" +_C[0] + "]: \n"
+              for chapter in self.book[_C[0]]:
+                for _verse in self.book[_C[0]][chapter]:
+                  stanza =  self.book[_C[0]][chapter][_verse]
+                  next = "\n["+_C[0]+"] "+stanza
+                  if (re.search(_C[2],stanza,re.IGNORECASE)):
+                    if (len(to_say)+len(next)>2000):
+                      output.append(to_say)
+                      to_say = next
+                    else:
+                      to_say = to_say + next
             output.append(to_say)
             pass
       except:
@@ -155,8 +165,9 @@ class Bible:
         for _book in self.book:
           for chapter in self.book[_book]:
             for _verse in self.book[_book][chapter]:
-              next = "["+_book+"] "+self.book[_book][chapter][_verse]+"\n"
-              if (re.search(input,next,re.IGNORECASE)):
+              stanza = self.book[_book][chapter][_verse]
+              next = "\n["+_book+"] "+stanza
+              if (re.search(input,stanza,re.IGNORECASE)):
                 if (len(to_say)+len(next)>2000):
                   output.append(to_say)
                   to_say = next
@@ -220,7 +231,7 @@ class Holy:
         try:
           to_say=input+"\n"
           for _verse in self.Book[input]:
-            next = input+":"+_verse+" "+self.Book[input][_verse]+"\n"
+            next = "\n"+input+":"+_verse+" "+self.Book[input][_verse]+"\n"
             if (len(to_say)+len(next)>2000):
               output.append(to_say)
               to_say = next
@@ -231,7 +242,7 @@ class Holy:
           to_say="Search Results for '"+input+"': \n"
           for chapter in self.Book:
             for _verse in self.Book[chapter]:
-              next = chapter+":"+_verse+" "+self.Book[chapter][_verse]+"\n"
+              next = "\n"+chapter+":"+_verse+" "+self.Book[chapter][_verse]+"\n"
               if (re.search(input,next,re.IGNORECASE)):
                 if (len(to_say)+len(next)>2000):
                   output.append(to_say)
@@ -243,7 +254,7 @@ class Holy:
     return output
 
 
-Bible = Bible()
+Bible = BibleKJV()
 Quran = Holy("/python/discord_bot/Quran.txt")
 Dhammapada = Holy("/python/discord_bot/Dhammapada.txt")
 
@@ -396,7 +407,8 @@ G'day m8! Here are some commands I can perform:
 !buddy -- Randomly call out someone here
 !reboot -- Reboots the bot, it takes 8 seconds
 !bible <book~chapter:verse or phrase> -- Recites parts or Searches a phrase from the Bible
-  <book~?> = Recite a random stanza from a book
+  <book~$> = Recite a random stanza from a book
+  <book~<phrase>> = Returns verses with the phrase from a book
   <book~> = Recite entire book
 !dhammapada <verse or phrase> -- Recites a verse or Searches a phrase from the Dhammapada
 !quran <verse or phrase> -- Recites a verse or Searches a phrase from the Quran
