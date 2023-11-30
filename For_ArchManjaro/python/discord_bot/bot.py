@@ -118,7 +118,7 @@ class Bible:
             to_say = "[" + _C[0] + "] " + self.book[_C[0]][_V[0]][_V[2]]
             output.append(to_say)
           except:
-            output.append("Sorry. Book, chapter or verse is not found")
+            output.append("Sorry. Verse is not found")
             pass
         else: #chapter only
           try:
@@ -132,8 +132,11 @@ class Bible:
                 to_say = to_say + next
             output.append(to_say)
           except: #book only
-            try:
-              k = self.book[_C[0]][_C[2]]
+            if _C[2]=='?': #random
+              _chapter = random.choice(list(self.book[_C[0]].items()))
+              _verse = random.choice(list(_chapter[1].items()))
+              to_say = "[" + _C[0] + "] " + _verse[1]
+            elif _C[2]=='': #blank
               to_say="Book: ["+ input+"]\n"
               for _chapter in self.book[_C[0]]:
                 for _verse in self.book[_C[0]][_chapter]:
@@ -143,9 +146,8 @@ class Bible:
                     to_say = next
                   else:
                     to_say = to_say + next
-            except:
+            else:
               to_say = "Sorry. Chapter is not found."
-              pass
             output.append(to_say)
             pass
       except:
@@ -394,6 +396,8 @@ G'day m8! Here are some commands I can perform:
 !buddy -- Randomly call out someone here
 !reboot -- Reboots the bot, it takes 8 seconds
 !bible <book~chapter:verse or phrase> -- Recites parts or Searches a phrase from the Bible
+  <book~?> = Recite a random stanza from a book
+  <book~> = Recite entire book
 !dhammapada <verse or phrase> -- Recites a verse or Searches a phrase from the Dhammapada
 !quran <verse or phrase> -- Recites a verse or Searches a phrase from the Quran
 !s "<phrase>" -- Says requested phrase
