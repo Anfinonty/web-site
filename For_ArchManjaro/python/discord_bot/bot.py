@@ -15,6 +15,152 @@ import youtube_dl
 from youtube_dl import YoutubeDL
 
 
+class Bible:
+  book = {}
+  book_title=[
+"Genesis","Exodus","Leviticus","Numbers","Deuteronomy",
+"Joshua","Judges","Ruth","1 Samuel","2 Samuel",
+
+"1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra",
+"Nehemiah","Esther","Job","Psalms","Proverbs",
+
+"Ecclesiastes","Solomon","Isaiah","Jeremiah","Lamentations",
+"Ezekiel","Daniel","Hosea","Joel","Amos",
+
+"Obadiah","Jonah","Micah","Nahum","Habakkuk",
+"Zephaniah","Haggai","Zechariah","Malachi","Matthew",
+
+"Mark","Luke","John","Acts","Romans",
+"1 Corinthians","2 Corinthians","Galatians","Ephesians","Philippians",
+
+"Colossians","1 Thessalonians","2 Thessalonians","1 Timothy","2 Timothy",
+"Titus","Philemon","Hebrews","James","1 Peter",
+
+"2 Peter","1 John","2 John","3 John","Jude",
+"Revelation"]
+
+
+  def __init__(self):
+    skip_line=[5068,9123,12005,15977,19168,21329,23598,23902,23904,23906,26892,26894,26896,29345,29347,293499,29345,29347,29349,32241,32243,42245,34961,37633,40756,41671,42963,43605,46190,53793,56267,56269,56271,56966,57332,61806,66736,67217,71804,73189,73876,74130,74615,74697,74860,75241,75416,75604,75806,75932,76684,76908,79970,81941,85266,87803,90914,92110,93323,94088,94514,94869,95153,95402,95647,95772,96090,96320,96440,96500,97370,97687,97976,98163,98506,98552,98597,98684]
+    self.book = {}
+    line_no = -1
+    regex_begin = r'(^1\:1\s)'
+    regex_ = r'(\d{1,3}\:\d{1,3})'
+
+    super_line = []
+    line_no = 1
+    with open('/python/discord_bot/Bible.TXT','r') as f:
+      for line in f:
+        #if line not in in_book_tile:
+        if line_no>299 and line_no<100112 and line_no not in skip_line:
+          _l = line.strip()
+          l = re.split(regex_,_l)
+          super_line.append(l)
+        line_no = line_no+1
+
+    chapter = {}
+    verse = {}
+    current_chapter = ""
+    current_verse = ""
+    book_no = -1
+    C = None
+    verse_txt = ""
+    for i in super_line:
+      for j in i:
+        if re.search(regex_,j): #new stanza
+          C = re.split(':',j)
+      #C[0] is chapter number
+      #C[1] is verse number
+          if book_no>-1:
+            if C[1] != current_verse: #new verse
+              verse[current_verse] = verse_txt
+              current_verse = C[1]
+            if C[0] != current_chapter: #new chapter
+              chapter[current_chapter] = verse
+              verse = {}
+              current_chapter = C[0]
+          if j == "1:1": #new book
+            if book_no>61 and book_no<65: #has only 1 chapter
+              chapter["1"] = verse
+            if book_no>-1:
+              self.book[self.book_title[book_no]] = chapter
+            book_no = book_no + 1
+            verse = {}
+            chapter = {}
+            current_verse = "1"
+            current_chapter = "1"
+          verse_txt = j + " "
+        else:
+          verse_txt = verse_txt + j + " "
+
+    #final touches
+    verse[current_verse] = verse_txt
+    chapter[current_chapter] = verse
+    self.book["Revelation"] = chapter
+
+  def get(self):
+    return self.book
+
+  def search(self, input=None):
+    output = []
+    if input == None:
+      _book = random.choice(list(self.book.items()))
+      _chapter = random.choice(list(_book[1].items()))
+      _verse = random.choice(list(_chapter[1].items()))
+      to_say = "[" + _book[0] + "] " + _verse[1]
+      output.append(to_say)
+    else:
+      _C = re.split(r'(\~)',input)
+      try:
+        _V = re.split(r'(\:)',_C[2])
+        if len(_V)>1: #theres a verse
+          try:
+            to_say = "[" + _C[0] + "] " + self.book[_C[0]][_V[0]][_V[2]]
+            output.append(to_say)
+          except:
+            output.append("Sorry. Book, chapter or verse is not found")
+            pass
+        else: #chapter only
+          try:
+            to_say=input+"\n"
+            for _verse in self.book[_C[0]][_V[0]]:
+              next = self.book[_C[0]][_V[0]][_verse]+"\n"
+              if (len(to_say)+len(next)>2000):
+                output.append(to_say)
+                to_say = next
+              else:
+                to_say = to_say + next
+            output.append(to_say)
+          except: #book only
+            to_say="Book: ["+ input+"]\n"
+            for _chapter in self.book[_C[0]]:
+              for _verse in self.book[_C[0]][_chapter]:
+                next = self.book[_C[0]][_chapter][_verse]+"\n"
+                if (len(to_say)+len(next)>2000):
+                  output.append(to_say)
+                  to_say = next
+                else:
+                  to_say = to_say + next
+            output.append(to_say)
+            pass
+      except:
+        to_say="Search Results for '"+input+"': \n"
+        for _book in self.book:
+          for chapter in self.book[_book]:
+            for _verse in self.book[_book][chapter]:
+              next = "["+_book+"] "+self.book[_book][chapter][_verse]+"\n"
+              if (re.search(input,next,re.IGNORECASE)):
+                if (len(to_say)+len(next)>2000):
+                  output.append(to_say)
+                  to_say = next
+                else:
+                  to_say = to_say + next
+        output.append(to_say)
+        pass
+      output.append("X")
+    return output
+
+
 class Holy:
   Book = None
   def __init__(self, filename):
@@ -90,6 +236,7 @@ class Holy:
     return output
 
 
+Bible = Bible()
 Quran = Holy("/python/discord_bot/Quran.txt")
 Dhammapada = Holy("/python/discord_bot/Dhammapada.txt")
 
@@ -241,6 +388,7 @@ G'day m8! Here are some commands I can perform:
 !p -- Join Voice Chat and Play Audio Stream
 !buddy -- Randomly call out someone here
 !reboot -- Reboots the bot, it takes 8 seconds
+!bible <book~chapter:verse or phrase> -- Recites parts or Searches a phrase from the Bible
 !dhammapada <verse or phrase> -- Recites a verse or Searches a phrase from the Dhammapada
 !quran <verse or phrase> -- Recites a verse or Searches a phrase from the Quran
 !s "<phrase>" -- Says requested phrase
@@ -250,6 +398,8 @@ G'day m8! Here are some commands I can perform:
   2 = Hold Your Colour, In Silico, Immersion - Pendulum
   3 = The Devil And God Are Raging Inside Me - Brand New
 !yt <youtube link> -- Join Voice Chat and Play YouTube Video Audio
+
+Source Code at https://github.com/Anfinonty/web-site/tree/main/For_ArchManjaro/python/discord_bot/
 """
     await ctx.send(he)
 
@@ -344,6 +494,18 @@ async def dhammapada(ctx, input=None):
   results = Dhammapada.search(input)
   for msg in results:
     await ctx.send(msg)
+
+@bot.command(aliases=['b','Bible','B'])
+async def bible(ctx, input=None):
+  global Bible
+  results = Bible.search(input)
+  for msg in results:
+    await ctx.send(msg)
+
+@bot.command(aliases=['Bibble'])
+async def bibble(ctx, input=None):
+  msg = "https://makeagif.com/gif/aqua-teen-hunger-force-the-bibble-_1UoSi"
+  await ctx.send(msg)
 
 
 bot.run(TOKEN)
