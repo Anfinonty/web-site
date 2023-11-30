@@ -132,15 +132,20 @@ class Bible:
                 to_say = to_say + next
             output.append(to_say)
           except: #book only
-            to_say="Book: ["+ input+"]\n"
-            for _chapter in self.book[_C[0]]:
-              for _verse in self.book[_C[0]][_chapter]:
-                next = self.book[_C[0]][_chapter][_verse]+"\n"
-                if (len(to_say)+len(next)>2000):
-                  output.append(to_say)
-                  to_say = next
-                else:
-                  to_say = to_say + next
+            try:
+              k = self.book[_C[0]][_C[2]]
+              to_say="Book: ["+ input+"]\n"
+              for _chapter in self.book[_C[0]]:
+                for _verse in self.book[_C[0]][_chapter]:
+                  next = self.book[_C[0]][_chapter][_verse]+"\n"
+                  if (len(to_say)+len(next)>2000):
+                    output.append(to_say)
+                    to_say = next
+                  else:
+                    to_say = to_say + next
+            except:
+              to_say = "Sorry. Chapter is not found."
+              pass
             output.append(to_say)
             pass
       except:
