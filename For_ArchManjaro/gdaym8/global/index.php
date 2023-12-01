@@ -27,6 +27,7 @@
     }*/
   ?>
 
+  <br>Trust Other DVD Slots: <a href="http://w1.gdaym8.site">[1]</a>
   <div id='showfiletree'>
     <iframe width="100%" height="100%" src="https://gdaym8.site:592/php/view_folder.php?target_folder=/dvd">
   </div>
