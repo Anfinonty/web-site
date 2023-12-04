@@ -1,0 +1,8 @@
+<?php
+  if (isset($_POST['btnSubmit'])) {
+    file_put_contents("hello.txt",$_POST['b64data']);
+  } else {
+    echo "Post something";
+  }
+  echo "<script>window.location.href='webcam_page.php'</script>";
+?>
