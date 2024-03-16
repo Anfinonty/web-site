@@ -16,4 +16,6 @@
 
 *Ensure SSL certificates are not expired 
 
+*VLC does not work if sudo is involved 
+
 
