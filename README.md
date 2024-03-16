@@ -6,7 +6,7 @@
 
 
 
-Specific Steps to properly start discord-bot vlc streaming:
+(March-16-2024) Specific Steps to properly start discord-bot vlc streaming:
 1. sudo docker exec mywebsite2-apache-1 service ssh start
 2. ssh username@172.26.0.2
 3. python3 /python/discord_bot/discord.py &
