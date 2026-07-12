@@ -8,7 +8,7 @@
     $user_post_msg=$_POST["txthere"];
     $entered_captcha=$_POST["captcha"];
     $enter="\n";
-    $user_post_msg=preg_replace("/{$enter}/i","<br>",$user_post_msg);
+    //$user_post_msg=preg_replace("/{$enter}/i","<br>",$user_post_msg);
     $user_post_msg=ChatShortcuts($user_post_msg);
     $user_msg=$SELF_USER_NAME."\n".$date_time_now."\n".$user_post_msg."\r";//ensures no incomplete html overflow
 

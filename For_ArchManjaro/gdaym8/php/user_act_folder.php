@@ -33,6 +33,14 @@
      header('Location: '.$redirect_url); //go back to home
      exit;
    }
+
+
+   //File Create (GOTO)
+   if (isset($_POST['create_file'])) {
+     header("Location: user_edit_file.php?edit_file=".$_POST["new_filename_txt"]);
+     //echo "<br>file created<br>";
+     //header("Location: user_edit_file.php?edit_file=/index.html");
+   }
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +53,8 @@
     }
   </script>
 </head>
-<body>
+<body class="main_body">
+<div class="main_body_background"></div>
   <h2>Disc Management</h2>
   <p>Welcome Back, <?php echo $SELF_USER_NAME?>!</p>
 
@@ -93,7 +102,7 @@
   </form>
   <br>
   <?php
-    $extensions= array("html","js","css","txt","mp3","ogg","flac","wav","mid","gif","png","apng","bmp","jpg","jpeg","mkv","mp4","mpg","mpeg","mov","webm","webp","zip");
+    $extensions= array("html","js","css","txt","pdf","mp3","ogg","flac","wav","mid","gif","png","apng","bmp","jpg","jpeg","mkv","mp4","mpg","mpeg","mov","webm","webp","zip","7z", "exe");
     echo "Files Allowed: ";
     for ($i=0;$i<sizeof($extensions);$i++) {
       echo $extensions[$i].", ";
@@ -104,17 +113,33 @@
     <input type="file" id="files" name="files[]" multiple directory="" moxkitdirectory="">
   </form>
 
+  <br>
+  <form method="post" id="form6" action="/php/user_act_folder.php">
+    Files allowed: html, js, css<br>
+    <input type="text" placeholder="Enter New or Existing File" list="available_files" id="new_filename_txt" name="new_filename_txt">
+    <input type="submit" name="create_file" value="Edit or Create File">
+  </form>
+
+  <form method="post" id="form5" action="/php/user_act_folder.php">
+    <input type="text" placeholder="Enter Existing File" list="available_files" id="src_filename_txt" name="src_filename_txt">
+    <input type="text" placeholder="Rename File (No Extension)" list="available_files" id="dest_filename_txt" name="dest_filename_txt">
+    <input list="available_folders" placeholder="Enter Existing Folder" type="text" id="dest_foldername_txt" name="dest_foldername_txt" maxlength="128">
+    <input type="submit" name="move_file" value="Move or Rename File">
+  </form>
+
   <form method="post" id="form4" action="/php/user_act_folder.php">
     Enter (*) to delete similar sounding files; Img* deletes all files starting with "Img"; *.png deletes all files ending with ".png".<br>
     <input type="text" placeholder="Enter Existing File(s)" list="available_files" id="txthere4" name="txthere4">
     <input type="submit" name="delete2" value="Delete File(s)">
   </form>
 
+
+
   <br>
   <div id="showfiletree">
     <?php
         $self_size=GetDirectorySize($SELF_USER_FOLDER_NAME);
-        echo "Space [".round($self_size/"1048576",3)."M / ".$MAX_STORAGE/"1048576"."M]<br>";
+        echo "Space [".round($self_size/"1048576",3)."M / ".round($MAX_STORAGE/"1048576",3)."M]<br>";
         echo "Folders [".$USER_TOTAL_FOLDER_NUM."/".$USER_MAX_FOLDER_NUM."]<br><br>";
         echo $PROTIPS[0]."<br>";
         echo $PROTIPS[1]."<br>";
@@ -123,8 +148,8 @@
         //echo $PROTIPS[4]."<br><br>";
         //PrintDir($SELF_USER_FOLDER_NAME,0,0);
     ?>
-  <!--<iframe width="100%" height="100%" src="https://gdaym8.site:592/php/view_folder.php?target_folder=/global/<?php echo $SELF_USER_NAME;?>"></iframe>-->
-  <iframe width="100%" height="100%" src="https://gdaym8.site/php/view_folder.php?target_folder=/global/<?php echo $SELF_USER_NAME;?>"></iframe>
+  <!--<iframe width="100%" height="100%" src="https://spiderspeed.site:592/php/view_folder.php?target_folder=/global/<?php echo $SELF_USER_NAME;?>"></iframe>-->
+  <iframe width="100%" height="100%" src="https://spiderspeed.site/php/view_folder.php?target_folder=/global/<?php echo $SELF_USER_NAME;?>"></iframe>
   </div>
 
 
@@ -179,7 +204,11 @@
         $total_folder_num=$USER_TOTAL_FOLDER_NUM;
         foreach($_FILES['files']['name'] as $i => $name) {
 	  $tmp_filename=$_FILES['files']['name'][$i];
-          $file_ext=strtolower(end(explode('.',$_FILES['files']['name'][$i]))); //lwrcase
+
+          //$file_ext=strtolower(end(explode('.',$_FILES['files']['name'][$i]))); //lwrcase
+	  $filename = $_FILES['files']['name'][$i];
+	  $file_ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
           $file_size=$_FILES['files']['size'][$i];
           if ($total_size+$file_size<$MAX_STORAGE) { //Sizecheck
 	    $regex_nosymbols="/([\:\<\>\*\?\"\|\/])/";
@@ -220,9 +249,80 @@
       $redirect_url="https://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
       header('Location: '.$redirect_url); //go back to home
     }
+
+    //FILE Move
+    //https://stackoverflow.com/questions/4898534/php-copy-file-without-changing-the-last-modified-date
+    if(isset($_POST['move_file'])) {
+      $back="\.\.";
+      //get filename
+      $source_filename=$SELF_USER_FOLDER_NAME."/".preg_replace("/{$back}/i","_",$_POST["src_filename_txt"]);
+
+      //get true src filename
+      $true_source_filename_arr=explode("/",$source_filename);
+      $true_source_filename=end($true_source_filename_arr);
+      $file_extension_arr=explode(".",$true_source_filename);
+      $file_extension=end($file_extension_arr);
+      array_pop($file_extension_arr);
+      $tsrc_filename_noext=implode(".",$file_extension_arr);
+
+
+      //get dest filename
+      $dest_filename=preg_replace("/{$back}/i","_",$_POST["dest_filename_txt"]);
+      $true_dest_filename=$dest_filename;
+
+      //get dest foldername
+      $dest_foldername=$SELF_USER_FOLDER_NAME."/".preg_replace("/{$back}/i","_",$_POST["dest_foldername_txt"]);
+
+      if (empty($_POST["dest_filename_txt"]) || strlen($_POST["dest_filename_txt"])==0) { //filename is empty, only move directory, no renaming
+        $dest_filename=$tsrc_filename_noext; //no renaming, same name
+	$true_dest_filename=$dest_filename;
+      }
+
+      if (empty($_POST["dest_foldername_txt"]) || strlen($_POST["dest_foldername_txt"])==0) { //if directory is empty, only rename file
+	array_pop($true_source_filename_arr); //rebuild source dir, no file.ext
+	$dest_foldername = implode("/",$true_source_filename_arr); //no change in dir, only rename
+      }
+
+      //compound dest foldername + filename
+      $dest_filename=$dest_foldername."/".$dest_filename.".".$file_extension;
+      if (!file_exists($dest_filename)) {
+        // Get original modification time
+        $modTime = filemtime($source_filename);
+
+        // Copy the file to the new location
+        if (!empty($_POST["src_filename_txt"]) &&
+	    (!empty($_POST["dest_filename_txt"]) || !empty($_POST["dest_foldername_txt"])
+	  )) {
+	  if (isValidFilename($true_dest_filename)) {
+            if (copy($source_filename,$dest_filename)) {
+              // Apply the original modification time to the new file
+  	      if (touch($dest_filename, $modTime)) {
+                // Delete the original file
+                unlink($source_filename);
+	        echo "<br>File has been successfully moved or renamed! :D<br>";
+	      } else {
+	        echo "<br>File moving or renaming was unsuccessful :( (touch failed) <br>";
+	      }
+            } else {
+              echo "<br>File moving or renaming was unsuccessful :( (copy failed)<br>";
+	      echo "source filename:".$source_filename."<br>";
+  	      echo "dest filename:".$dest_filename."<br>";
+            }
+          } else {
+           echo "<br>File moving or renaming was unsuccessfull :( (Invalid File Name)<br>";
+          }
+        }
+      } else {
+        echo "<br>File moving or renaming was unsuccessfull :( (Filename Already Exists)<br>";
+      }
+
+      $redirect_url="https://".$_SERVER['HTTP_HOST']."/php/user_act_folder.php";
+      header('Location: '.$redirect_url); //go back to home
+    }
+
     //FILE Delete
-    $back="\.\.";
     if (isset($_POST['delete2'])){
+      $back="\.\.";
       $set_filename=$SELF_USER_FOLDER_NAME."/".preg_replace("/{$back}/i","_",$_POST["txthere4"]);
       foreach (glob($set_filename) as $filename) {
 	if (unlink($filename)) {

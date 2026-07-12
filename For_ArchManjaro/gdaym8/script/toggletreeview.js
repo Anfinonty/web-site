@@ -98,8 +98,8 @@
 
 //Go to lowest part of footer in view_folder
   function TraverseIframe(_e, down, silent) {
-    //const txt = "https://gdaym8.site:592/php/view_folder.php?target_folder=";
-    const txt = "https://gdaym8.site/php/view_folder.php?target_folder=";
+    //const txt = "https://spiderspeed.site:592/php/view_folder.php?target_folder=";
+    const txt = "https://spiderspeed.site/php/view_folder.php?target_folder=";
     e = document.getElementById(txt.concat(_e));
     var a=new Audio("/audio/page-down-whoosh.mp3");
     var a2=new Audio("/audio/page-up-whoosh.mp3");
@@ -114,12 +114,22 @@
   }
 
 
+function SnapIn(l,r) {
+  location.href=l;
+  if (r) {
+    a = new Audio("/audio/page_snap_in.mp3");
+  } else {
+    a = new Audio("/audio/page_snap_in_reverse.mp3");
+  }
+  a.play();
+}
+
 
 //Adjust iframe size
   function AdjustIframe(_e, down) {
 
     //folder 
-    const txt = "https://gdaym8.site/php/view_folder.php?target_folder=";
+    const txt = "https://spiderspeed.site/php/view_folder.php?target_folder=";
     var e_txt=txt.concat(_e);
     var e = document.getElementById(e_txt);
 
@@ -143,7 +153,6 @@
       e.height = "".concat(e_height-42,"%");
       e_decrease_height=true;
     }
-
     try { //index.html may not always be present
       var f=innerDoc.getElementById(f_txt);
       var f_height = parseInt(f.height.replace("%",""));
@@ -158,13 +167,3 @@
 
   }
 
-
-function SnapIn(l,r) {
-  location.href=l;
-  if (r) {
-    a = new Audio("/audio/page_snap_in.mp3");
-  } else {
-    a = new Audio("/audio/page_snap_in_reverse.mp3");
-  }
-  a.play();
-}

@@ -12,12 +12,64 @@
       }
       return $randString;
    }
+
+    function GenRandString2($string_len) {
+      $lechars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-";
+      $lechars_len=strlen($lechars);
+      $randString="";
+      for ($i=0;$i<$string_len;$i++) {
+	$randString.=$lechars[rand(0,($lechars_len-1))];
+      }
+      return $randString;
+   }
+//
+//
+//
+//Get first character and normalize to value between 0 to 9 inclusive
+    function getNormalizedValue($input) {
+      if (strlen($input) === 0) {
+        return null; // Handle empty string
+      }
+
+      $firstChar = substr($input, 0, 1);     // Step 1: Get first character
+      $ascii = ord($firstChar);              // Step 2: Convert to ASCII
+      $normalized = $ascii % 11;             // Step 3: Normalize to 0–10
+
+      return $normalized;
+    }
+//
+//
+//
+//check valid filename
+    function isValidFilename($filename) {
+      // Check for empty filename
+      if (empty($filename)) {
+        return false;
+      }
+
+      // Disallowed characters on most systems: / \ ? % * : | " < >
+      $pattern = '/[\/\\\\\?\%\*\:\|\"\<\>]/';
+
+      if (preg_match($pattern, $filename)) {
+        return false;
+      }
+
+      // Limit length (optional - common max filename length is 255 characters)
+      if (strlen($filename) > 255) {
+        return false;
+      }
+
+      return true;
+    }
 //
 //
 //
   session_start();
   if (!$_SESSION["username"]) { // no username
-    $_SESSION["username"]= "M8*".GenRandString(6);
+    $_SESSION["username"]= GenRandString(6);
+  }
+  if (!$_SESSION["username_cam"]) { // no username
+    $_SESSION["username_cam"]= GenRandString2(8);
   }
 //
 //
@@ -39,7 +91,7 @@
     $GLOBAL_FOLDER=$_SERVER['DOCUMENT_ROOT']."/global";
         /**/$GLOBAL_CHAT_DIR=$GLOBAL_FOLDER."/{GlobalChat}";
 	/**/$SAVED_DISCS_DIR=$GLOBAL_FOLDER."/{SavedDiscs}";
-
+        /*$WEBCAM_IMG_DIR=$GLOBAL_FOLDER."/{WebCamImg}";*/
 
   //Protips
     $PROTIPS=array(
@@ -50,12 +102,12 @@
 "Upload A folder_style.css to style your folder",
 "Upload A folder_script.js to make your folder perform script actions",
 
-"Minecraft Server 1.8.9: gdaym8.site",
-"Minecraft Server c0.30: gdaym8.site:25564",
+"Minecraft Server 1.8.9: spiderspeed.site",
+"Minecraft Server c0.30: spiderspeed.site:25564",
 "This web-site's Live Updates is faster on Private Browsing modes.",
 "HTML Works in the Chat.",
-"#i# [image/gif link] #_i# is a shortcut for embedding gifs or images.",
-"#au# [audio link] #_au# is a shortcut for embedding audio.",
+//"#i# [image/gif link] #_i# is a shortcut for embedding gifs or images.",
+//"#au# [audio link] #_au# is a shortcut for embedding audio.",
 "If the page isn't updating properly, clear your cache.",
 "Sound Effects are From www.fesliyanstudios.com.",
 "WinXP Symlink by Masatoshi Kimura https://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html",
@@ -64,6 +116,7 @@
 "Website pen-tested by clovis.",
 "HTTPS assist by Professor8404 and y4my4m.",
 "Website Phone Number: +61 8 6186 9573",
+"Website Code: <a href='https://github.com/Anfinonty/web-site'> https://github.com/Anfinonty/web-site </a>",
 
 //Misc
 //"OCT 8 2023 PENDULUM PERFORMS AT RAC ARENA - WA",
@@ -109,7 +162,11 @@
 //    $MAX_STORAGE=104857600;
 //    $MAX_STORAGE=36700160; //35MB
 //    $MAX_STORAGE=1048576000; //1000MB
-    $MAX_STORAGE=734003200; //700MB
+//    $MAX_STORAGE=734003200; //700MB
+
+// as of 09-03-2024 increased storage per user
+    $MAX_STORAGE=5043712820; //~4.7GB
+
 
 //
 //
@@ -131,9 +188,11 @@
     //mkdir($REG_EMAILS_DIR,0777,true);
     //mkdir($REG_USERS_DIR,0777,true);
     //mkdir($SAVED_DISCS_DIR,0755,true);
+    //mkdir($WEBCAM_IMG_DIR,0755,true);
 //
 //
 //
+//if logged in, create symlink
     if (is_dir($SELF_USER_FOLDER_NAME)) {
       symlink($SELF_USER_FOLDER_NAME,$_SERVER['DOCUMENT_ROOT']."/".$SESSION_USERNAME);
     }
@@ -173,7 +232,8 @@
       global $DVD_DIR;
       global $GLOBAL_FOLDER;
 
-      $hidden_folders_arr=array($REG_USERS_DIR, $REG_EMAILS_DIR, $REG_Q_DIR, $SAVED_DISCS_DIR);
+      $main_target_folder_name="";
+      $hidden_folders_arr=array($REG_USERS_DIR, $REG_EMAILS_DIR, $REG_Q_DIR);
       $dvd_folders_arr=array($DVD_DIR."/COOL_SONGS_COLLECTION/Brand New",
 			 $DVD_DIR."/COOL_SONGS_COLLECTION/Evanescence",
 			 $DVD_DIR."/COOL_SONGS_COLLECTION/Linkin Park",
@@ -186,14 +246,14 @@
         $dir_size=sizeof($a);
         if (is_dir($folder)) {
 	  if ($type==0) {
-            if (file_exists($folder."/index.html")) {	      //only if index exists
+            if (file_exists($folder."/index.html") || file_exists($folder."/Index.html")) {	      //only if index exists
 //	      $folder_username=str_replace("C:/Apache2.2/htdocs","",$folder);
               $folder_username=str_replace("/var/www/html","",$folder);
               echo "<div id='".$folder_username."_folder_tab'>";
 
-	      //echo "<iframe width='100%' height='100%' class='".$folder_username."' src='https://gdaym8.site:592/".$folder_username."/'></iframe>";
-	      //echo "<iframe width='100%' height='100%' class='".$folder_username."' src='https://gdaym8.site/".$folder_username."/'></iframe>";
-	      echo "<iframe width='100%' id='".$folder_username."_index_' height='100%' class='".$folder_username."' src='https://gdaym8.site/".$folder_username."/'></iframe>";
+	      //echo "<iframe width='100%' height='100%' class='".$folder_username."' src='https://spiderspeed.site:592/".$folder_username."/'></iframe>";
+	      //echo "<iframe width='100%' height='100%' class='".$folder_username."' src='https://spiderspeed.site/".$folder_username."/'></iframe>";
+	      echo "<iframe width='100%' id='".$folder_username."_index_' height='100%' class='".$folder_username."' src='https://spiderspeed.site/".$folder_username."/'></iframe>";
 	      echo "</div><br>";
       	    }
 	    echo "<script src='/script/toggletreeview.js'></script>";
@@ -213,6 +273,8 @@
 	          $div_id=str_replace(" ","%20",$div_id);
 	          $div_id=str_replace("'","%27",$div_id);
 	
+                  $div_id_noslash=str_replace('/','_',$div_id);
+
 	          //manual encoding
 //	          $href_filename=str_replace("C:/Apache2.2/htdocs","",$a_f);
 		  $href_filename=str_replace("/var/www/html","",$a_f);
@@ -266,7 +328,7 @@
 	            if ($is_image) {
 		      echo "<table class='image_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";	  
-		      echo "<th colspan='2' class='table_image'><img class='".$div_id." image_in_folder' id='".$href_filename."' src='".$href_filename."'></img></th>"; //show image
+		      echo "<th colspan='2' class='table_image'><img class='".$div_id_noslash." image_in_folder' id='".$href_filename."' src='".$href_filename."'></img></th>"; //show image
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_image_icon'>";
 		      if (!($file_extension=="gif" || $file_extension=="apng")) {
@@ -278,8 +340,8 @@
 		      echo "<td class='a_file_name_cell'><div class='a_file_name'><a class='filename' href='".$href_filename."'>".$a[$i]."</a></div></td>";
 		      echo "</tr>";
 		      echo "<tr class='image_metadata'><td>";
-		      if (filemtime($a_f)!=NULL) { 		//print date creation
-		        echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
+		      if (filemtime($a_f)!=NULL) { 		//print date modded
+		        echo "[".date("m/d/Y H:i:s",filemtime($a_f))."]";
 		      }
 		      if ($a_f_size!=NULL) {		//print filesize
                         echo " ".GetConvertedFilesize($a_f_size);
@@ -291,7 +353,7 @@
 		    } else if ($is_video) {
 		      echo "<table class='video_icon_main' style='display:inline-table;'>";
 		      echo "<tr>";
-		      echo "<th colspan='2' class='table_video'><video height='256px' width='auto' class='".$div_id."_video' controls><source type='video/".$file_extension."' class='".$div_id."' id='".$href_filename."' src='".$href_filename."'></video></th>";
+		      echo "<th colspan='2' class='table_video'><video height='256px' width='auto' class='".$div_id_noslash."_video' controls><source type='video/".$file_extension."' class='".$div_id_noslash."' id='".$href_filename."' src='".$href_filename."'></video></th>";
 		      echo "</tr><tr>";
 		      echo "<th rowspan='2' class='table_video_icon'>";
 	                echo "<img src='/images/".$file_extension.".bmp' class='file_icon'></img>"; //video bmp			
@@ -299,8 +361,8 @@
 		      echo "<td class='a_file_name_cell'><div class='a_file_name'><a class='file_name' href='".$href_filename."'>".$a[$i]."</a></div></td>";
 		      echo "</tr>";
 		      echo "<tr class='video_metadata'><td>";
-		      if (filemtime($a_f)!=NULL) { 		//print date creation
-		        echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
+		      if (filemtime($a_f)!=NULL) { 		//print date modified
+		        echo "[".date("m/d/Y H:i:s",filemtime($a_f))."]";
 		      }
 		      if ($a_f_size!=NULL) {		//print filesize
                         echo " ".GetConvertedFilesize($a_f_size);
@@ -321,8 +383,8 @@
 		      echo "</td></tr>";
 
 		      echo "<tr class='music_metadata'><td>";
-		      if (filemtime($a_f)!=NULL) { 		//print date creation
-		        echo " [".date("m/d/Y H:i:s",filectime($a_f))."]";
+		      if (filemtime($a_f)!=NULL) { 		//print date modded
+		        echo " [".date("m/d/Y H:i:s",filemtime($a_f))."]";
 		      }
 		      if ($a_f_size!=NULL) {		//print filesize
                         echo " ".GetConvertedFilesize($a_f_size);
@@ -331,7 +393,7 @@
 
 		      echo "<tr><td></td>";
 		      echo "<td class='music_player' colspan='2'>";                    
-     		      echo "<audio controls class='".$div_id."_audio'><source type='audio/".$file_extension."' class='".$div_id."' id='".$href_filename."' src='".$href_filename."'></audio>";//music player
+     		      echo "<audio controls class='".$div_id_noslash."_audio'><source type='audio/".$file_extension."' class='".$div_id_noslash."' id='".$href_filename."' src='".$href_filename."'></audio>";//music player
 		      echo "</td></tr>";
 		      echo "</table></div>";
 
@@ -346,8 +408,8 @@
 		        echo "<td class='a_file_name_cell'><div class='a_file_name'><a class='file_name' href='".$href_filename."'>".$a[$i]."</a></div></td>";
 		      echo "</tr>";
 		      echo "<tr class='file_metadata'><td>";
-		      if (filemtime($a_f)!=NULL) { 		//print date creation
-		        echo "[".date("m/d/Y H:i:s",filectime($a_f))."]";
+		      if (filemtime($a_f)!=NULL) { 		//print date modification
+		        echo "[".date("m/d/Y H:i:s",filemtime($a_f))."]";
 		      }
 		      if ($a_f_size!=NULL) {		//print filesize
                         echo " ".GetConvertedFilesize($a_f_size);
@@ -376,12 +438,13 @@
 	            $folder_name_arr=explode('/',$tmp_folder_name);
 	            $folder_name=end($folder_name_arr);
 
+	            //echo "<div style='display:inline-table;' id='".$div_id."_button'>";
+	            echo "<div style='display:inline-table;' id='".$div_id_noslash."_button'>";
 
-	            echo "<div style='display:inline-table;' id='".$div_id."_button'>";
 		    if (!$is_dvd_folder) {
-	              echo "<button class='folder_button' onclick='ToggleTreeView(\"" .$div_id. "\");location.href=\"#". $i ."_button\";'>";
+	              echo "<button class='folder_button' onclick='ToggleTreeView(\"" .$div_id_noslash. "\");location.href=\"#". $i ."_button\";'>";
 		    } else {
-	              echo "<button class='folder_button' onclick='ToggleTreeView(\"" .$div_id. "\");location.href=\"#". $i ."_dvd_button\";'>";
+	              echo "<button class='folder_button' onclick='ToggleTreeView(\"" .$div_id_noslash. "\");location.href=\"#". $i ."_dvd_button\";'>";
 		    }
 
 	            //Draw folder button
@@ -397,16 +460,19 @@
 		      } else {
 		        $tmp_div_id="/dvd";
 		      }
-		      //$full_folder_directories .= "<a href='https://gdaym8.site:592/php/view_folder.php?target_folder=";
+		      //$full_folder_directories .= "<a href='https://spiderspeed.site:592/php/view_folder.php?target_folder=";
 
-		      //$full_folder_directories .= "<a href='https://gdaym8.site:592/";
-		      $full_folder_directories .= "<a href='https://gdaym8.site/";
+		      //$full_folder_directories .= "<a href='https://spiderspeed.site:592/";
+		      $full_folder_directories .= "<a href='https://spiderspeed.site/";
 
 		      for ($k=0;$k<$j+1;$k++) {
 		        $tmp_subfolder_name=$folder_name_arr[$k];
 		        $tmp_subfolder_name=str_replace(" ","%20",$tmp_subfolder_name);
 	      	        $tmp_subfolder_name=str_replace("'","%27",$tmp_subfolder_name);
 		        $tmp_div_id.="/".$tmp_subfolder_name;
+                        if ($k==0 && !$is_dvd_folder) {
+			  $main_target_folder_name=$tmp_div_id;
+			}
 		      }
 		      if ($j==$n-2) {$prev_div_id=$tmp_div_id;}
 			//$full_folder_directories .= $tmp_div_id."_button'>";
@@ -422,7 +488,7 @@
 
 
 	      	//Draw Folder Icon branch
-	            echo "<table style='display:none;' class='opened_folder_branch' id='".$div_id."_branch'>";
+	            echo "<table style='display:none;' class='opened_folder_branch' id='".$div_id_noslash."_branch'>";
 	            echo "</table>";	
 
 	      	//Draw folder icon image
@@ -463,7 +529,7 @@
                     echo "<td class='folder_name'>".$folder_name." <span class='folder_sub_name'>[<a href='".$div_id."'>visit</a>]</span></td>"; //print foldername
 	              echo "</tr>";
 	              echo "<tr class='folder_metadata'><td>";
-	                echo " [".date("F/d/Y H:i:s",filectime($a_f))."]";
+	                echo " [".date("F/d/Y H:i:s",filemtime($a_f))."]";
                       echo " (".GetConvertedFilesize(GetDirectorySize($a_f)).")";
                     echo "</td></tr>";
 	            echo "</table>";
@@ -472,22 +538,22 @@
 //end of button
 ////
 ////header
-		    echo "<div style='display:none;' id='".$div_id."'>"; //begin folder
-	            echo "<div id='".$div_id."_header' style='display:none'>";//header
-	            echo "<span id='".$div_id."_header_table' class='folder_header_span' style='display:none'>";
+		    echo "<div style='display:none;' id='".$div_id_noslash."'>"; //begin folder
+	            echo "<div id='".$div_id_noslash."_header' style='display:none'>";//header
+	            echo "<span id='".$div_id_noslash."_header_table' class='folder_header_span' style='display:none'>";
 		      echo "<table class='folder_header_table'>";
 		  //echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe('".$div_id."',1);location.href=\"#".$div_id."_footer_anchor\"'>Dive Down</button></td>";
 		    echo "<td class='folder_header_part4'>";
 		    if (!$is_dvd_folder) {
-		      echo "<button id=\"".$i."_button\" style=\"width:100%\" onclick=\"SnapIn('#" .$i. "_button',1)\">#</button>";
+		      echo "<button id=\"".$i."_button\" style=\"width:100%\" class='folder_button' onclick=\"SnapIn('#" .$i. "_button',1)\">#</button>";
 		    } else {
 		      echo "<button id=\"".$i."_dvd_button\" style=\"width:100%\" onclick=\"SnapIn('#" .$i. "_dvd_button',1)\">#</button>";
 		    }
-		    echo "<td class='folder_header_part4'><button style='width:100%;'class='folder_button' onclick='SnapIn(\"#".$div_id."_footer_anchor\",0)'>!</button></td>";
+		    echo "<td class='folder_header_part4'><button style='width:100%;'class='folder_button' onclick='SnapIn(\"#".$div_id_noslash."_footer_anchor\",0)'>!</button></td>";
 		    echo "</td>";
 		    echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",1,0)'>↓</button></td>";
 		    echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,0)'>↖</button></td>";
-		    echo "<td class='folder_header_part1'><button style='width:100%;' onclick='ToggleTreeView(\"".$div_id."\");'>=</button></td>";
+		    echo "<td class='folder_header_part1'><button style='width:100%;'class='folder_button' onclick='ToggleTreeView(\"".$div_id_noslash."\");'>=</button></td>";
 		    echo "<td class='folder_header_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
 		    echo "<td class='folder_header_part3'><div class='folder_full_dir'>".$folder_name."</div></td>";
 		    echo "</table>";
@@ -496,19 +562,20 @@
 ////
 ////iframe
 	            echo "<div>";
-	            //echo "<iframe width='99%' height='85%' class='".$div_id."' id='https://gdaym8.site:592/php/view_folder.php?target_folder=".$div_id."'></iframe>";
-	            echo "<iframe width='99%' height='85%' class='".$div_id."' id='https://gdaym8.site/php/view_folder.php?target_folder=".$div_id."'></iframe>";
+	            //echo "<iframe width='99%' height='85%' class='".$div_id."' id='https://spiderspeed.site:592/php/view_folder.php?target_folder=".$div_id."'></iframe>";
+	            //echo "<iframe width='99%' height='85%' class='".$div_id."' id='https://spiderspeed.site/php/view_folder.php?target_folder=".$div_id."&target_main_folder=".$main_target_folder_name."'></iframe>";
+	            echo "<iframe width='99%' height='85%' class='".$div_id_noslash."' id='https://spiderspeed.site/php/view_folder.php?target_folder=".$div_id."'></iframe>";
 	            echo "</div>";
 ////
 ////footer
-                    echo "<span id='".$div_id."_footer' style='diplay:none;'>";
-	            echo "<span id='".$div_id."_footer_table' class='folder_footer_span' style='display:none;'>"; //working
+                    echo "<span id='".$div_id_noslash."_footer' style='diplay:none;'>";
+	            echo "<span id='".$div_id_noslash."_footer_table' class='folder_footer_span' style='display:none;'>"; //working
 		    echo "<table class='folder_footer_table'><tr>";
 		    //echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0);location.href=\"#".$div_id."_header\"'>↑</button></td>";
-		    echo "<td class='folder_footer_part3'><button style='width:100%;'class='folder_button' onclick='SnapIn(\"#".$div_id."_footer_anchor\",0)'>!</button></td>";
+		    echo "<td class='folder_footer_part3'><button style='width:100%;'class='folder_button' onclick='SnapIn(\"#".$div_id_noslash."_footer_anchor\",0)'>!</button></td>";
 		    echo "<td class='folder_footer_part3'>";
 		    if (!$is_dvd_folder) {
-		      echo "<button style='width:100%' onclick=\"SnapIn('#".$i."_button',1)\">#</button>";
+		      echo "<button style='width:100%' class='folder_button' onclick=\"SnapIn('#".$i."_button',1)\">#</button>";
 		    } else {
 		      echo "<button style='width:100%' onclick=\"SnapIn('#".$i."_dvd_button',1)\">#</button>";
 		    }
@@ -517,14 +584,17 @@
 		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",1,0)'>↓</button></td>";
 		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,0)'>↑</button></td>";
 		//unroll/roll iframe
-		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,1);AdjustIframe(\"".$div_id."\",1);location.href=\"#".$div_id."_footer_anchor\"'>+</button></td>";
-		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,1);AdjustIframe(\"".$div_id."\",0);location.href=\"#".$div_id."_footer_anchor\"'>-</button></td>";
+			//SnapIn(\"#".$div_id_noslash."_footer_anchor\",0)
+		    //echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,1);AdjustIframe(\"".$div_id."\",1);location.href=\"#".$div_id."_footer_anchor\"'>+</button></td>";
+		    //echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,1);AdjustIframe(\"".$div_id."\",0);location.href=\"#".$div_id."_footer_anchor\"'>-</button></td>";
+		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,1);AdjustIframe(\"".$div_id."\",1);SnapIn(\"#".$div_id_no_slash."_footer_anchor\",0);'>+</button></td>";
+		    echo "<td class='folder_footer_part1'><button style='width:100%;'class='folder_button' onclick='TraverseIframe(\"".$div_id."\",0,1);AdjustIframe(\"".$div_id."\",0);SnapIn(\"#".$div_id_no_slash."_footer_anchor\",0);'>-</button></td>";
 		//close folder & label
-		    echo "<td class='folder_footer_part2'><button style='width:100%;' onclick=ToggleTreeView('".$div_id."')>=</button></td>";
+		    echo "<td class='folder_footer_part2'><button style='width:100%;'class='folder_button'  onclick=ToggleTreeView('".$div_id_noslash."')>=</button></td>";
 		    echo "<td class='folder_footer_part2'><div class='folder_full_dir'>{$full_folder_directories}</div></td>";
 		    echo "</tr></table>";
 	            echo "</span>";
-	            echo "<div id='".$div_id."_footer_anchor' style='display:none;'>{$S}</div>";
+	            echo "<div id='".$div_id_noslash."_footer_anchor' style='display:none;'>{$S}</div>";
 	            //echo "<div id='".$div_id."_footer_break' style='display:none'><div class='folder_footer_break'>{$S}</div><br><br><br></div>";
 	            echo "</span>";
 	            echo "</div>";
@@ -784,12 +854,20 @@
       border-width:thick;border-style:solid;
     }
 
-
     .user_chat_box {
       border-width:thin;border-style:solid;width:100%;max-height:480px;
     }
+
   </style>";
-    echo "<link rel='stylesheet' href='/global/".$SELF_USER_NAME."/style.css'>";
+
+
+   //load personal style
+    //if (is_dir($SELF_USER_FOLDER_NAME)) {
+    if (file_exists($SELF_USER_FOLDER_NAME."/style.css")) {
+      echo "<link rel='stylesheet' href='/global/".$SELF_USER_NAME."/style.css'>";
+    } else {
+      echo "<link rel='stylesheet' href='/style/dstyle_".getNormalizedValue($SELF_USER_NAME).".css'>";
+    }
 //
 //
 //

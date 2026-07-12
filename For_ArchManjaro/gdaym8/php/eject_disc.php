@@ -10,18 +10,18 @@
   <?php 
 
     //remove zip from {SavedDiscs}
-    if (file_exists($USER_SAVED_DISCS_DIR."/WEB_SITE_DISC_".$SELF_USER_NAME.".zip")) {
-      unlink($USER_SAVED_DISCS_DIR."/WEB_SITE_DISC_".$SELF_USER_NAME.".zip");
-    }
+    //if (file_exists($USER_SAVED_DISCS_DIR."/WEB_SITE_DISC_".$SELF_USER_NAME.".zip")) {
+      //unlink($USER_SAVED_DISCS_DIR."/WEB_SITE_DISC_".$SELF_USER_NAME.".zip");
+    //}
 
     //remove own folder
     //PrintDir($SELF_USER_FOLDER_NAME,-1,0); //legacy
 
 
     //remove own folder from {SavedDiscs}
-    if (is_dir($USER_SAVED_DISCS_DIR)) {
-      PrintDir($USER_SAVED_DISCS_DIR,-1,0); 
-    }
+    //if (is_dir($USER_SAVED_DISCS_DIR)) {
+      //PrintDir($USER_SAVED_DISCS_DIR,-1,0); 
+    //}
 
     //kill session
     session_destroy(); //logout user

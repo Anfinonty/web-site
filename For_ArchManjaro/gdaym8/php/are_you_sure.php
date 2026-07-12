@@ -13,7 +13,8 @@
     //document.getElementById("default_server_header").hidden=true;
   </script>
 </head>
-<body>
+<body class="main_body">
+<div class="main_body_background"></div>
 <h1>Are you sure you want to Eject and Log Out?</h1>
 <h2>All unsaved progress will be lost.</h2>
 <a href="user_act_folder.php">&nbspBack&nbsp</a>&nbsp

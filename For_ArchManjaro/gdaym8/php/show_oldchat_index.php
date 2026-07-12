@@ -17,7 +17,7 @@
 <body>
   <div id="default_chatroom_greet">
   <h1>G'day M8!</h1>
-    Hello World! Welcome to the http://gdaym8.site web-site chat-archive! :D<br> 
+    Hello World! Welcome to the http://spiderspeed.site web-site chat-archive! :D<br> 
     <br>Below is the history of embeddings and injection attempts for educational purposes! <br>
   </div>
 

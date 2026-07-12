@@ -44,7 +44,7 @@ window.addEventListener("load", function()
   function AdjustIframe(_e, down) {
 
     //folder 
-    const txt = "https://gdaym8.site/php/view_folder.php?target_folder=";
+    const txt = "https://spiderspeed.site/php/view_folder.php?target_folder=";
     var e_txt=txt.concat(_e);
     var e = document.getElementById(e_txt);
 
@@ -193,8 +193,6 @@ window.addEventListener("load", function()
     document.getElementById('form1').reset()
   }
 
-
-
 //=================
 //
 //
@@ -206,3 +204,4 @@ window.addEventListener("load", function()
   } catch (e) {}
 
 });
+

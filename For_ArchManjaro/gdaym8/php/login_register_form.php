@@ -6,12 +6,26 @@
 
 
   /*if ($is_logged_in!=false) {
-    header("Location: https://gdaym8.site");
+    header("Location: https://spiderspeed.site");
     exit;
   }*/
 
   include $_SERVER['DOCUMENT_ROOT']."/php/user_header.php";
-  DrawNavBar(); ?>
+  DrawNavBar();
+
+//Captcha Question
+    $gen_rand_string=strval(GenRandString(8));
+    $captcha_q_arr=array("Type: ".$gen_rand_string);
+
+
+//Captcha Answers
+    $captcha_arr=array($gen_rand_string);
+    $RAND_CAPTCHA=rand(0,sizeof($captcha_q_arr)-1);
+    $_SESSION["captcha_question"]=$captcha_q_arr[$RAND_CAPTCHA];
+    $_SESSION["captcha"]=password_hash($captcha_arr[$RAND_CAPTCHA],PASSWORD_DEFAULT);
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,6 +55,15 @@ function ValidateLoginInput() {
     userPasswordErrorBox.innerHTML="Password Cannot Be Empty";
   } else {
     userPasswordErrorBox.innerHTML="";
+  }
+
+  var captcha = form.captcha.value;
+  var captchaErrorBox = document.getElementById("captchaErrorBox1");
+  if (captcha.length<1) {
+    no_error=false;
+    captchaErrorBox.innerHTML="Captcha Cannot Be Empty";
+  } else {
+    captchaErrorBox.innerHTML="";
   }
 
   return no_error;
@@ -99,6 +122,16 @@ function ValidateGetRegisterCode() {
     confirmPasswordErrorBox.innerHTML="Passwords Must Match";
   } else {
     confirmPasswordErrorBox.innerHTML="";
+  }
+
+
+  var captcha = form.captcha.value;
+  var captchaErrorBox = document.getElementById("captchaErrorBox2");
+  if (captcha.length<1) {
+    no_error=false;
+    captchaErrorBox.innerHTML="Captcha Cannot Be Empty";
+  } else {
+    captchaErrorBox.innerHTML="";
   }
 
   return no_error;
@@ -160,13 +193,24 @@ function ValidateRegistration() {
     passwordErrorBox.innerHTML="";
   }
 
+  var captcha = form.captcha.value;
+  var captchaErrorBox = document.getElementById("captchaErrorBox3");
+  if (captcha.length<1) {
+    no_error=false;
+    captchaErrorBox.innerHTML="Captcha Cannot Be Empty";
+  } else {
+    captchaErrorBox.innerHTML="";
+  }
+
   return no_error;
 }
 
 
   </script>
 </head>
-<body>
+<body class="main_body">
+<div class="main_body_background"></div>
+<div>
   <h2>Login</h2>
   <form name="form_post_login" method="post" action="login_register.php" onsubmit="return ValidateLoginInput()">
     <div>Username or Email
@@ -179,11 +223,26 @@ function ValidateRegistration() {
       <p id="userPasswordErrorBox" style="color:red"></p>
     </div>
 
+    <div class="type_captcha">Captcha
+    <p><input placeholder="Type Captcha Here" name="captcha">
+<?php
+    echo $_SESSION["captcha_question"];
+?>
+    </p>
+    <p id="captchaErrorBox1" style="color:red"></p>
+    </div>
+
+
     <div>
       <p><input type="submit" id="btnSubmitLogin" name="btnSubmitLogin" value="Submit"></p>
     </div>
-  </form>
-  <br>
+ 
+   </form>
+
+  <a target="_blank" href="/php/reset_password_form.php">Reset Password</a>
+  <br><br>
+
+
 
   <h2>Get Registration Code</h2>
   <form name="form_post_get_code" method="post" action="login_register.php" onsubmit="return ValidateGetRegisterCode()">
@@ -200,6 +259,15 @@ function ValidateRegistration() {
     <div>Retype Password
       <p><input type="password" id="inputGetCodeRetypePassword" name="inputGetCodeRetypePassword" value=""></p>
       <p id="getCodeRetypePasswordErrorBox" style="color:red"></p>
+    </div>
+
+    <div class="type_captcha">Captcha
+    <p><input placeholder="Type Captcha Here" name="captcha">
+<?php
+    echo $_SESSION["captcha_question"];
+?>
+    </p>
+    <p id="captchaErrorBox2" style="color:red"></p>
     </div>
 
     <div>
@@ -230,11 +298,22 @@ function ValidateRegistration() {
       <p id="regPasswordErrorBox" style="color:red"></p>
     </div>
 
+
+    <div class="type_captcha">Captcha
+    <p><input placeholder="Type Captcha Here" name="captcha">    
+<?php
+    echo $_SESSION["captcha_question"];
+?>
+    </p>
+    <p id="captchaErrorBox3" style="color:red"></p>
+    </div>
+
+
     <div>
       <p><input type="submit" id="btnSubmitRegister" name="btnSubmitRegister" value="Submit"></p>
    </div>
   </form>
   <br>
-
+  </div>
 </body>
 </html>

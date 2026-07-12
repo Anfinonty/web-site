@@ -15,6 +15,18 @@
 
   include $_SERVER['DOCUMENT_ROOT']."/php/user_header.php";
   DrawNavBar();
+//captcha check
+  if (isset($_POST["btnSubmitLogin"]) || isset($_POST["btnSubmitGetCode"]) || isset($_POST["btnSubmitRegister"])) {
+    $entered_captcha=$_POST["captcha"];
+    if (password_verify($entered_captcha,$_SESSION["captcha"])) {
+      //do nothing, correct captcha
+    } else {
+      echo "Captcha is incorrect D:";
+      header("Location: login_register_form.php");
+      exit;
+    }
+  }
+
 //login
   if (isset($_POST["btnSubmitLogin"])) {
     echo "<h1>Log In Status: <br></h1>";
@@ -147,7 +159,7 @@
 
         //check if email already exists in mates db
         $stmt = $db->prepare("SELECT email FROM mates WHERE email=:email");
-        $stmt->bindParam(":email",$email);
+        $stmt->bindParam(":email",$user_email);
         $result = $stmt->execute();
         $count=0;
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
@@ -184,12 +196,12 @@
       	  $mail->IsSMTP();
       	  $mail->Host='smtp.gmail.com';
       	  $mail->SMTPAuth=true;
-      	  $mail->Username="my@gmail.com";
-      	  $mail->Password="myGmailPassword";
+      	  $mail->Username="johndoe62786@gmail.com";
+      	  $mail->Password="jztnskxeqiubsfyk";
       	  $mail->SMTPSecure="ssl";
       	  $mail->Port=465;
 
-      	  $mail->setFrom("my@gmail.com");
+      	  $mail->setFrom("johndoe627862@gmail.com");
       	  //$mail->setFrom("Fey");
 
       	  $mail->addAddress($user_email);
@@ -316,6 +328,11 @@
       	  $stmt->bindParam(":username",$user_name);
       	  $stmt->bindParam(":email",$user_email);
       	  $stmt->bindParam(":password",$hashed_password);
+      	  $result = $stmt->execute();
+
+          //Delete from registration token based on email
+          $stmt = $db->prepare("DELETE FROM registration_token WHERE email=:email");
+      	  $stmt->bindParam(":email",$user_email);
       	  $result = $stmt->execute();
         }
       } else {
