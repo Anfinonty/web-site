@@ -39,7 +39,7 @@ RUN echo "${TZ}" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
 #Apache settings
 ###COPY docker/fstab /etc/fstab
 COPY docker/apache/sites-available /etc/apache2/sites-available
-COPY docker/apache/php.ini /etc/php/7.3/apache2/php.ini
+COPY docker/apache/php.ini /etc/php/7.4/apache2/php.ini
 COPY server.* /etc/apache2/ssl_keys/
 COPY letsencrypt2/spiderspeed.site/*.pem /etc/apache2/ssl_keys/
 
@@ -72,13 +72,23 @@ EXPOSE 8085
 RUN mkdir /var/www/db
 COPY ./mydatabase.sqlite /var/www/db/mydatabase.sqlite
 #Folder and Database file must be writeable to work
-RUN chmod 777 /var/www/db
-RUN chmod 777 /var/www/db/mydatabase.sqlite
+#RUN chmod 777 /var/www/db
+#RUN chmod 777 /var/www/db/mydatabase.sqlite
 
 #RUN chmod 770 /var/www/db
 #RUN chgrp http /var/www/db
 #RUN chmod 660 /var/www/db/mydatabase.sqlite
 #RUN chgrp http /var/www/db/mydatabase.sqlite
+
+
+# Set ownership to the web server group (e.g., http, www-data)
+RUN chown -R :www-data /var/www/db
+
+# Set correct permissions
+# Directory needs read/write/execute (770) so SQLite can create temporary journal files
+RUN chmod 770 /var/www/db
+# Database file needs read/write (660)
+RUN chmod 660 /var/www/db/mydatabase.sqlite
 
 
 CMD ["apachectl", "-D", "FOREGROUND"]
