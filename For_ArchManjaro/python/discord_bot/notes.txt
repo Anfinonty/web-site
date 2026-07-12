@@ -1,0 +1,1 @@
+nohup python3 /python/discord_bot/bot.py &
