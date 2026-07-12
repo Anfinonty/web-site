@@ -1,0 +1,14 @@
+
+@import url("/style/dstyle_main.css");
+
+
+/*class main_div_background - mobile friendly*/
+.main_body_background
+{
+  background-image: url('/images/website-dstyle-8.JPG');
+}
+
+.main_body
+{
+  color:white;
+}

@@ -1,0 +1,41 @@
+
+
+@import url("/style/dstyle_main.css");
+
+
+/*class main_div_background - mobile friendly*/
+/*.main_body_background*/
+/*{*/
+  /*background-color:rgba(0,0,0,0.5);*/
+  /*background-image: url('/images/website-dstyle-10.JPG');*/
+  /*background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('/images/website-dstyle-10.JPG');
+/*}*/
+
+
+/*div#default_server_header
+{
+  background-color:rgba(0,0,0,0.5);
+}*/
+
+.main_body_background
+{
+  /*background-image: url('/images/website-dstyle-10.JPG');*/
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('/images/website-dstyle-10.JPG');
+}
+
+
+/*body {
+  background-color:rgba(0,0,0,0.5);
+}*/
+
+.main_body {
+  /*-webkit-text-stroke: 0.5px black;*/
+  color: white;
+  /*font-weight:900;*/
+}
+
+.user_chat_box{
+  /*-webkit-text-stroke: 0.5px black;*/
+  color: white;
+  /*font-weight:900;*/
+}

@@ -1,0 +1,22 @@
+
+
+@import url("/style/dstyle_main.css");
+
+
+/*class main_div_background - mobile friendly*/
+.main_body_background
+{
+  background-image: url('/images/website-dstyle-9.JPG');
+}
+
+.main_body {
+  /*-webkit-text-stroke: 0.5px black;*/
+  color: white;
+  /*font-weight:900;*/
+}
+
+.user_chat_box{
+  /*-webkit-text-stroke: 0.5px black;*/
+  color: white;
+  /*font-weight:900;*/
+}

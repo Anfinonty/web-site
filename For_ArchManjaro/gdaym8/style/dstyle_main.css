@@ -1,0 +1,117 @@
+
+
+/*default bodies*/
+/*body {
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+}*/
+
+
+body {
+  background-color:rgba(0,0,0,0.5);
+}
+
+
+/*id view_post_chat_form*/
+
+/*id view_chat*/
+
+/*class user_chat_box*/
+.user_chat_box {
+  color:white !important;
+  border-width:thin !important;
+  border-style:solid !important;
+  width:100% !important;
+  max-height:480px !important;
+}
+
+.user_chat_box_dialogue, .user_chat_box_dialogue * {
+  /*font-size: 120% !important;
+  font-family: "Times New Roman", Times, serif !important;
+  line-height: 1 !important;
+  color: white !important;
+
+  white-space: pre-wrap !important;
+  word-break: break-word !important;*/
+  /*margin:0;
+  padding:0;
+  line-height:1;*/
+
+  color: white;
+  white-space:pre;
+}
+
+
+/*class main_div_background - mobile friendly*/
+.main_body_background
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  /*background-image: url('/images/website-dstyle-0.JPG');*/
+  background-size: 100% 100%;
+  z-index: -1;
+}
+
+
+
+/*.main_body
+{
+  color:white;
+}*/
+
+/*class main_body - desktop only*/
+/*.main_body {
+  background-color: #E6E6FA;
+  background-image: url('/global/skyturtle/hills-stars-night-sky.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  color: white;
+}*/
+
+
+/*How you view other's files if their folder styles are not configured*/
+/*class opened_folder_branch*/
+.opened_folder_branch {
+  color:white;
+}
+
+/*class folder_name*/
+.folder_name {
+  color:black;
+}
+
+/*class folder_metadata*/
+.folder_metadata {
+  color:black;
+}
+
+/*class folder_full_dir*/
+.folder_full_dir {
+  color:white;
+}
+
+/*class file_metadata*/
+.file_metadata {
+  color:white;
+}
+
+/*class image_metadata*/
+.image_metadata {
+  color:white;
+}
+
+/*class vide_metadata*/
+.video_metadata {
+  color:white;
+}
+
+/*class music_metadata*/
+.music_metadata {
+  color:white;
+}
