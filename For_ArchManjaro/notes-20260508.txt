@@ -1,0 +1,11 @@
+
+
+cloudflared tunnel start <tunnel>
+
+sudo cp ~/.cloudflared/config.yml /etc/cloudflared/config.yml
+
+sudo cp ~/.cloudflared/*.json /etc/cloudflared/config.yml
+
+*deleting old replicas on cloudflare appears to refresh the new ingress cloudflared rules
+
+cloudflared tunnel --config ~/.cloudflared/config.yml run &
