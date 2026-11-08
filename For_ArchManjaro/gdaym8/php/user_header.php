@@ -613,7 +613,7 @@
                   break;
               } //end switch actions
 	    } //end of . or ..
-	    if ($type!=0) { //type 0 on surface only, others are recursive
+	    if ($type!=0 && $n<11 && is_dir($a_f)) { //type 0 on surface only, others are recursive
               PrintDir($a_f,$type,$n+1);
 	    }
           } //end for loop, before loop is a div	  
